@@ -19,6 +19,12 @@
 	      (import ./host/desktop)
 	    ];
 	  };
+	  node5 = nixpkgs.lib.nixosSystem {
+	    system = "x86_64-linux";
+	    modules = [
+	      (import ./host/node5)
+	    ];
+	  };
 	};
 	packages.x86_64-linux.test = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "test" ''
 	'';
