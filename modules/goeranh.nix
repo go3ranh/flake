@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:{
+{ config, pkgs, lib, ... }: {
   config = {
     users.users.goeranh = {
       isNormalUser = true;
@@ -10,25 +10,25 @@
         dbeaver
         discord
         filezilla
-        firefox 
-        gajim 
+        firefox
+        gajim
         ghidra
         gitkraken
         gnome3.gnome-terminal
         gnome-builder
-        jetbrains.idea-community 
+        jetbrains.idea-community
         jetbrains.jdk
         libreoffice
         okular
-        poppler_utils 
+        poppler_utils
         quickemu
         rambox
         shotwell
-        signal-desktop 
+        signal-desktop
         spotify
         tailscale
-        thunderbird 
-        vieb 
+        thunderbird
+        vieb
         virt-manager
         virt-viewer
         vlc

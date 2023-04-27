@@ -3,7 +3,8 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       <home-manager/nixos>
     ];
   home-manager.users.goeranh.dconf.settings = {
@@ -20,7 +21,7 @@
       begin-resize = [ "<Alt>r" ];
       close = [ "<Shift><Super>q" ];
       maximize = [ "<Super>k" ];
-      minimize = [];
+      minimize = [ ];
       move-to-center = [ "<alt>c+m" ];
       move-to-monitor-down = [ "<Shift><Super>j" ];
       move-to-monitor-left = [ "<Shift><Super>h" ];
@@ -57,7 +58,7 @@
 
     "org/gnome/mutter" = {
       dynamic-workspaces = true;
-      experimental-features = [];
+      experimental-features = [ ];
       workspaces-only-on-primary = false;
     };
 
@@ -76,7 +77,7 @@
       email = [ "<Shift><Super>t" ];
       home = [ "<Super>e" ];
       screensaver = [ "<Primary><Super>l" ];
-      terminal = [];
+      terminal = [ ];
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {

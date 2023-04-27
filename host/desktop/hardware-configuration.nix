@@ -2,7 +2,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
@@ -11,18 +12,19 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/106e55e4-3573-4773-84a9-efd5cbd5d024";
+    {
+      device = "/dev/disk/by-uuid/106e55e4-3573-4773-84a9-efd5cbd5d024";
       fsType = "ext4";
     };
 
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/7248-DC33";
+    {
+      device = "/dev/disk/by-uuid/7248-DC33";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/b6c55388-5f12-4de1-877b-6c2f9f36a72c"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/b6c55388-5f12-4de1-877b-6c2f9f36a72c"; }];
 
   networking.useDHCP = lib.mkDefault true;
 

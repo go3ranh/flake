@@ -12,10 +12,11 @@ let
   zfsRoot.bootDevices = (import ./machine.nix).bootDevices;
   zfsRoot.mirroredEfi = "/boot/efis/";
 
-in {
+in
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-      #./dconf.nix
+    #./dconf.nix
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -45,21 +46,28 @@ in {
   services.xserver.displayManager.gdm.wayland = true;
   services.xserver.desktopManager.gnome.enable = true;
   environment.gnome.excludePackages = with pkgs.gnome; [
-    baobab      # disk usage analyzer
-    cheese      # photo booth
+    baobab # disk usage analyzer
+    cheese # photo booth
     #eog         # image viewer
     #epiphany    # web browser
-    gedit       # text editor
+    gedit # text editor
     simple-scan # document scanner
     #totem       # video player
-    yelp        # help viewer
-    evince      # document viewer
-    geary       # email client
+    yelp # help viewer
+    evince # document viewer
+    geary # email client
 
     # these should be self explanatory
-    gnome-calculator gnome-calendar gnome-clocks gnome-contacts
-    gnome-font-viewer gnome-logs gnome-maps gnome-music
-    gnome-weather pkgs.gnome-connections
+    gnome-calculator
+    gnome-calendar
+    gnome-clocks
+    gnome-contacts
+    gnome-font-viewer
+    gnome-logs
+    gnome-maps
+    gnome-music
+    gnome-weather
+    pkgs.gnome-connections
   ];
   services.xserver = {
     layout = "de";
@@ -86,41 +94,41 @@ in {
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-	  bash
-      bat 
-      cargo 
-	  clang
-	  clang-tools
-      cmake
-	  direnv
-      exa
-      fzf 
-	  gcc
-      gcc 
-      gef
-      gettext
-	  git
-      gnupg
-      gofu
-      htop 
-      iftop
-      ifuse
-      libimobiledevice
-	  libxcrypt
-      lm_sensors 
-      lsof 
-      meson
-	  neovim
-	  ninja
-      nix-direnv
-      nmap 
-      nodejs
-      rustc 
-      smartmontools
-	  tmux
-      unzip 
-      wget
-      zellij
+    bash
+    bat
+    cargo
+    clang
+    clang-tools
+    cmake
+    direnv
+    exa
+    fzf
+    gcc
+    gcc
+    gef
+    gettext
+    git
+    gnupg
+    gofu
+    htop
+    iftop
+    ifuse
+    libimobiledevice
+    libxcrypt
+    lm_sensors
+    lsof
+    meson
+    neovim
+    ninja
+    nix-direnv
+    nmap
+    nodejs
+    rustc
+    smartmontools
+    tmux
+    unzip
+    wget
+    zellij
   ];
 
   virtualisation.docker.enable = true;
@@ -209,28 +217,32 @@ in {
       fsType = "zfs";
       options = [ "X-mount.mkdir" ];
     };
-  } // (builtins.listToAttrs (map (diskName: {
-    name = zfsRoot.mirroredEfi + diskName + zfsRoot.partitionScheme.efiBoot;
-    value = {
-      device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.efiBoot;
-      fsType = "vfat";
-      options = [
-        "x-systemd.idle-timeout=1min"
-        "x-systemd.automount"
-        "noauto"
-        "nofail"
-      ];
-    };
-  }) zfsRoot.bootDevices));
+  } // (builtins.listToAttrs (map
+    (diskName: {
+      name = zfsRoot.mirroredEfi + diskName + zfsRoot.partitionScheme.efiBoot;
+      value = {
+        device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.efiBoot;
+        fsType = "vfat";
+        options = [
+          "x-systemd.idle-timeout=1min"
+          "x-systemd.automount"
+          "noauto"
+          "nofail"
+        ];
+      };
+    })
+    zfsRoot.bootDevices));
 
-  swapDevices = (map (diskName: {
-    device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.swap;
-    discardPolicy = "both";
-    randomEncryption = {
-      enable = true;
-      allowDiscards = true;
-    };
-  }) zfsRoot.bootDevices);
+  swapDevices = (map
+    (diskName: {
+      device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.swap;
+      discardPolicy = "both";
+      randomEncryption = {
+        enable = true;
+        allowDiscards = true;
+      };
+    })
+    zfsRoot.bootDevices);
 
   networking.useDHCP = lib.mkDefault true;
 
@@ -255,9 +267,10 @@ in {
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.zfsSupport = true;
   boot.loader.grub.extraInstallCommands = with builtins;
-    (toString (map (diskName:
-      "cp -r " + config.boot.loader.efi.efiSysMountPoint + "/EFI" + " "
-      + zfsRoot.mirroredEfi + diskName + zfsRoot.partitionScheme.efiBoot + "\n")
+    (toString (map
+      (diskName:
+        "cp -r " + config.boot.loader.efi.efiSysMountPoint + "/EFI" + " "
+        + zfsRoot.mirroredEfi + diskName + zfsRoot.partitionScheme.efiBoot + "\n")
       (tail zfsRoot.bootDevices)));
   boot.loader.grub.devices =
     (map (diskName: zfsRoot.devNodes + diskName) zfsRoot.bootDevices);
