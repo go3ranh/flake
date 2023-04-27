@@ -201,25 +201,6 @@ in {
     };
   };
 
-  home-manager.users.goeranh = { pkgs, ... }: {
-    home = {
-      stateVersion = "22.11";
-      file = {
-	  ".gitconfig".text = builtins.readFile /home/goeranh/projects/dotfiles/.gitconfig;
-	".config/nvim/" = {
-	  source = /home/goeranh/projects/nvim-config;
-	  recursive = true;
-	};
-	".goeranh.de".text = builtins.readFile /home/goeranh/projects/dotfiles/.goeranh.sh;
-	};
-    };
-    programs = {
-    };
-  };
-
-
-
-
   boot.initrd.availableKernelModules = [
     "ahci"
     "xhci_pci"
