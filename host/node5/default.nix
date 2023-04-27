@@ -15,7 +15,7 @@ let
 in {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-      ./dconf.nix
+      #./dconf.nix
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -168,8 +168,6 @@ in {
   # networking.firewall.allowedTCPPorts = [ 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   networking.firewall.enable = true;
-
-  system.copySystemConfiguration = true;
 
   system.stateVersion = "22.11";
 
