@@ -83,41 +83,6 @@ in {
     jack.enable = false;
   };
 
-  users.users.goeranh = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" ];
-    packages = with pkgs; [
-	  bitwarden
-	  btrfs-progs
-	  chromium
-      dbeaver
-      discord
-      filezilla
-      firefox 
-      gajim 
-      ghidra
-      gitkraken
-      gnome3.gnome-terminal
-      gnome-builder
-      jetbrains.idea-community 
-      jetbrains.jdk
-      libreoffice
-      okular
-      poppler_utils 
-      quickemu
-      rambox
-      shotwell
-      signal-desktop 
-	  spotify
-	  tailscale
-      thunderbird 
-      vieb 
-      virt-manager
-      virt-viewer
-      vlc
-    ];
-  };
-
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
@@ -179,7 +144,6 @@ in {
       package = pkgs.usbmuxd2;
     };
 
-    tailscale.enable = true;
     mysql = {
       enable = true;
       package = pkgs.mariadb;

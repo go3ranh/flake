@@ -52,23 +52,6 @@
     pulse.enable = true;
   };
 
-  users.users.goeranh = {
-    isNormalUser = true;
-    description = "Goeran Heinemann";
-    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "dialout" ];
-    packages = with pkgs; [
-      bat
-      exa
-      firefox
-      git
-      gofu
-      neovim
-      thunderbird
-      tmux
-      zellij
-    ];
-  };
-
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
