@@ -16,15 +16,19 @@
 	  desktop = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      import ./host/desktop
-	      import ./modules/goeranh.nix
+	      nixpkgs.lib.mkMerge(
+            (import ./host/desktop) 
+	        (import ./modules/goeranh.nix)
+          )
 	    ];
 	  };
 	  node5 = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      import ./host/node5
-	      import ./modules/goeranh.nix
+	      nixpkgs.lib.mkMerge(
+	        (import ./host/node5)
+	        (import ./modules/goeranh.nix)
+          )
 	    ];
 	  };
 	};
