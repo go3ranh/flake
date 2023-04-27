@@ -6,6 +6,9 @@
   };
   outputs = {self, nixpkgs}@inputs:
   {
+    nixosModules = {
+      goeranh = import ./modules/goeranh.nix;
+    };
     nixosConfigurations = {
 	  build = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
@@ -16,19 +19,15 @@
 	  desktop = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      nixpkgs.lib.mkMerge(
-            (import ./host/desktop) 
-	        (import ./modules/goeranh.nix)
-          )
+          ./host/desktop
+          self.nixosModules.goeranh
 	    ];
 	  };
 	  node5 = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      nixpkgs.lib.mkMerge(
-	        (import ./host/node5)
-	        (import ./modules/goeranh.nix)
-          )
+	      ./host/node5
+          self.nixosModules.goeranh
 	    ];
 	  };
 	};
