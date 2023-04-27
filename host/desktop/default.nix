@@ -5,6 +5,7 @@
     [
       ./hardware-configuration.nix
     ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -54,12 +55,13 @@
   users.users.goeranh = {
     isNormalUser = true;
     description = "Goeran Heinemann";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "dialout" ];
     packages = with pkgs; [
       bat
       exa
       firefox
       git
+      gofu
       neovim
       thunderbird
       tmux
@@ -73,6 +75,15 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
+
+  virtualisation = {
+    docker = {
+      enable = true;
+    };
+    libvirtd = {
+      enable = true;
+    };
+  };
 
   services.openssh.enable = true;
 
