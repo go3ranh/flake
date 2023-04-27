@@ -10,19 +10,21 @@
 	  build = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      (import ./host/build)
+	      import ./host/build
 	    ];
 	  };
 	  desktop = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      (import ./host/desktop)
+	      import ./host/desktop
+	      import ./modules/goeranh.nix
 	    ];
 	  };
 	  node5 = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      (import ./host/node5)
+	      import ./host/node5
+	      import ./modules/goeranh.nix
 	    ];
 	  };
 	};
