@@ -13,10 +13,10 @@
 	      (import ./host/build)
 	    ];
 	  };
-	  build2 = nixpkgs.lib.nixosSystem {
+	  desktop = nixpkgs.lib.nixosSystem {
 	    system = "x86_64-linux";
 	    modules = [
-	      (import ./host/build)
+	      (import ./host/desktop)
 	    ];
 	  };
 	};
