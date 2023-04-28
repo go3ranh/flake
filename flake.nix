@@ -5,10 +5,10 @@
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
   };
   outputs = { self, nixpkgs }@inputs:
-  let 
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
-	lib = nixpkgs.lib;
-  in
+    let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      lib = nixpkgs.lib;
+    in
     {
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
@@ -37,7 +37,7 @@
       };
       formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
-	  legacyPackages = nixpkgs.legacyPackages;
-      packages = import ./packages.nix { inherit inputs lib self;};
-  };
+      legacyPackages = nixpkgs.legacyPackages;
+      packages = import ./packages.nix { inherit inputs lib self; };
+    };
 }
