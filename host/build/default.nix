@@ -81,7 +81,6 @@ in
     postgresql = {
       package = pkgs.postgresql_15;
       enable = true;
-      upgrade.stopServices = [ "hydra-evaluator" "hydra-queue-worker" "hydra-server" ];
     };
     nginx = {
       enable = true;
