@@ -20,6 +20,12 @@
             ./host/build
           ];
         };
+        host = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/host
+          ];
+        };
         desktop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
