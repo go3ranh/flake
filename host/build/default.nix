@@ -1,4 +1,8 @@
 { inputs, config, pkgs, ... }:
+let
+  hostname = "nixbuild";
+  domainname = "tailf0ec0.ts.net";
+in
 {
   imports =
     [
@@ -12,7 +16,7 @@
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
 
-  networking.hostName = "nixbuild";
+  networking.hostName = "${hostname}";
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Berlin";
@@ -69,14 +73,17 @@
     };
     hydra = {
       enable = true;
-      hydraURL = "http://nixbuild";
+      hydraURL = "https://${hostname}.${domainname}";
       notificationSender = "build@goeran";
     };
     nginx = {
       enable = true;
       virtualHosts = {
-        "nixbuild" = {
+        "${hostname}.${domainname}" = {
           default = true;
+          sslCertificate = "/var/lib/nixbuild.tailf0ec0.ts.net.crt";
+          sslCertificateKey = "/var/lib/nixbuild.tailf0ec0.ts.net.key";
+          forceSSL = true;
           locations."/".proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
         };
       };
