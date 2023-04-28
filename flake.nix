@@ -5,6 +5,10 @@
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
   };
   outputs = { self, nixpkgs }@inputs:
+  let 
+    pkgs = nixpkgs.legacyPackages.x86_64-linux;
+	lib = nixpkgs.lib;
+  in
     {
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
@@ -32,16 +36,7 @@
         };
       };
       formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-      packages.x86_64-linux.test = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "test" ''
-        	'';
-      #packages = inputs.nixpkgs.lib.attrsets.mapAttrs
-      #  ((system: pkgs:
-      #    {
-      #	  #"${system}-test" =
-      #	  "${system}-test" = pkgs.writeShellScriptBin "${system}-test" ''
-      #		echo "test"
-      #	  '';
-      #	}
-      #  ) (builtins.getAttr self.nixosConfigurations));
-    };
+
+      packages = import ./packages.nix;
+  };
 }
