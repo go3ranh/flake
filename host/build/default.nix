@@ -67,6 +67,19 @@
     tailscale = {
       enable = true;
     };
+	hydra = {
+	  enable = true;
+	  hydraURL = "http://nixbuild";
+	};
+	nginx = {
+	  enable = true;
+	  virtualHosts = {
+	    "nixbuild" = {
+		  default = true;
+		  locations."/".proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
+	    };
+	  };
+	};
   };
 
   programs = {
