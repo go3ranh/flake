@@ -81,12 +81,14 @@ in
     postgresql = {
       package = pkgs.postgresql_15;
       enable = true;
-      ensureUsers = {
-        name = "hydra";
-        ensurePermissions = {
-          "DATABASE hydra" = "ALL PRIVILEGES";
-        };
-      };
+      ensureUsers = [
+        {
+          name = "hydra";
+          ensurePermissions = {
+            "DATABASE hydra" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
     nginx = {
       enable = true;
