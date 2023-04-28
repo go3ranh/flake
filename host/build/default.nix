@@ -118,4 +118,5 @@ in
     networking.firewall.enable = true;
 
     system.stateVersion = "22.11"; # Did you read the comment?
-  }
+  };
+}
