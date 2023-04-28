@@ -75,6 +75,7 @@ in
       enable = true;
       hydraURL = "https://${hostname}.${domainname}";
       notificationSender = "build@goeran";
+	  useSubstitutes = true;
     };
     nginx = {
       enable = true;
