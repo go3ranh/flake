@@ -69,11 +69,6 @@ lib.attrsets.mapAttrs
         "${name}-nixos-rebuild" = pkgs.writeScriptBin "${name}-nixos-rebuild" ''
           #!${pkgs.runtimeShell} -e
 
-          if nix eval .#nixosConfigurations.${name}.config.c3d2.deployment.server &>/dev/null; then
-            echo "microvms cannot be updated with nixos-rebuild. Use nix run .#microvm-update-${name}"
-            exit 2
-          fi
-
           [[ $(ssh ${target} cat /etc/hostname) == ${name} ]]
           nix copy --no-check-sigs --to ssh-ng://${target} ${inputPaths}
 
