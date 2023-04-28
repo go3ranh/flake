@@ -73,7 +73,7 @@ in
     };
     hydra = {
       enable = true;
-      hydraURL = "https://${hostname}.${domainname}";
+      hydraURL = "https://nixbuild.tailf0ec0.ts.net/";
       notificationSender = "build@goeran";
 	  useSubstitutes = true;
 	  listenHost = "*";
