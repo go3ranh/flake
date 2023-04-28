@@ -73,10 +73,10 @@ in
     };
     hydra = {
       enable = true;
-      hydraURL = "https://nixbuild.tailf0ec0.ts.net/";
+      hydraURL = "https://${hostname}.${domainname}";
       notificationSender = "build@goeran";
-	  useSubstitutes = true;
-	  listenHost = "*";
+      useSubstitutes = true;
+      listenHost = "*";
     };
     nginx = {
       enable = true;
@@ -86,7 +86,10 @@ in
           sslCertificate = "/var/lib/nixbuild.tailf0ec0.ts.net.crt";
           sslCertificateKey = "/var/lib/nixbuild.tailf0ec0.ts.net.key";
           forceSSL = true;
-          locations."/".proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
+            recommendedProxySettings = true;
+          };
         };
       };
     };
