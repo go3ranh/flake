@@ -87,36 +87,36 @@ in
           "DATABASE hydra" = "ALL PRIVILEGES";
         };
       };
-      nginx = {
-        enable = true;
-        virtualHosts = {
-          "${hostname}.${domainname}" = {
-            default = true;
-            sslCertificate = "/var/lib/nixbuild.tailf0ec0.ts.net.crt";
-            sslCertificateKey = "/var/lib/nixbuild.tailf0ec0.ts.net.key";
-            forceSSL = true;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
-              recommendedProxySettings = true;
-            };
+    };
+    nginx = {
+      enable = true;
+      virtualHosts = {
+        "${hostname}.${domainname}" = {
+          default = true;
+          sslCertificate = "/var/lib/nixbuild.tailf0ec0.ts.net.crt";
+          sslCertificateKey = "/var/lib/nixbuild.tailf0ec0.ts.net.key";
+          forceSSL = true;
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
+            recommendedProxySettings = true;
           };
         };
       };
     };
+  };
 
-    programs = {
-      git = {
-        enable = true;
-      };
-
-      neovim = {
-        enable = true;
-      };
+  programs = {
+    git = {
+      enable = true;
     };
 
-    networking.firewall.allowedTCPPorts = [ 22 80 443 ];
-    networking.firewall.enable = true;
-
-    system.stateVersion = "22.11"; # Did you read the comment?
+    neovim = {
+      enable = true;
+    };
   };
+
+  networking.firewall.allowedTCPPorts = [ 22 80 443 ];
+  networking.firewall.enable = true;
+
+  system.stateVersion = "22.11"; # Did you read the comment?
 }
