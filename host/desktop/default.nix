@@ -69,6 +69,12 @@
   };
 
   services.openssh.enable = true;
+  programs = {
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+	};
+  };
 
   networking.firewall.allowedTCPPorts = [ 22 ];
   networking.firewall.enable = true;
