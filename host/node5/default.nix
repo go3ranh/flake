@@ -22,6 +22,7 @@ in
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   systemd.services.zfs-mount.enable = false;
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   networking.hostName = "node5";
   networking.networkmanager.enable = true;
