@@ -120,6 +120,7 @@ in
     lsof
     meson
     neovim
+	ripgrep
     ninja
     nix-direnv
     nmap
