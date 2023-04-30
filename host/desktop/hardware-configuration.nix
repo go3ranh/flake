@@ -17,6 +17,12 @@
       fsType = "ext4";
     };
 
+  fileSystems."/home/goeranh/ssd" =
+    {
+      device = "/dev/disk/by-uuid/b803d9e3-5244-4d33-bac5-f50290e83ee6";
+      fsType = "ext4";
+    };
+
   fileSystems."/boot/efi" =
     {
       device = "/dev/disk/by-uuid/7248-DC33";
