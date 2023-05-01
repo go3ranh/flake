@@ -57,7 +57,7 @@
       unzip
       wget
       zellij
-	];
+    ];
 
     services.tailscale.enable = true;
   };
