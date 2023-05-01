@@ -79,7 +79,7 @@
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
-	};
+    };
   };
 
   networking.firewall.allowedTCPPorts = [ 22 ];

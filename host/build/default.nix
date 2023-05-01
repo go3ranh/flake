@@ -89,9 +89,9 @@ in
           };
         }
       ];
-	  ensureDatabases = [
-	    "hydra"
-	  ];
+      ensureDatabases = [
+        "hydra"
+      ];
     };
     nginx = {
       enable = true;
