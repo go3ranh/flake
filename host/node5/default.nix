@@ -95,23 +95,10 @@ in
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    bash
-    bat
     cargo
     clang
     clang-tools
     cmake
-    direnv
-    exa
-    fzf
-    gcc
-    gcc
-    gef
-    gettext
-    git
-    gnupg
-    gofu
-    htop
     iftop
     ifuse
     libimobiledevice
@@ -119,18 +106,10 @@ in
     lm_sensors
     lsof
     meson
-    neovim
-    ripgrep
     ninja
-    nix-direnv
-    nmap
     nodejs
     rustc
     smartmontools
-    tmux
-    unzip
-    wget
-    zellij
   ];
 
   virtualisation.docker.enable = true;

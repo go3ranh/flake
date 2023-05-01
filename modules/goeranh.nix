@@ -35,6 +35,30 @@
       ];
     };
 
+    environment.systemPackages = with pkgs; config.environment.systemPackages ++ [
+      bash
+      bat
+      direnv
+      exa
+      fzf
+      gcc
+      gef
+      gettext
+      git
+      gitui
+      gnupg
+      gofu
+      htop
+      neovim
+      nix-direnv
+      nmap
+      ripgrep
+      tmux
+      unzip
+      wget
+      zellij
+	];
+
     services.tailscale.enable = true;
   };
 }
