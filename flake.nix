@@ -25,7 +25,7 @@
             ./host/build
             {
               _module.args.nixinate = {
-                host = "desktop";
+                host = "nixbuild";
                 sshUser = "goeranh";
                 buildOn = "remote";
                 substituteOnTarget = true;
@@ -47,8 +47,8 @@
             self.nixosModules.goeranh
             {
               _module.args.nixinate = {
-                host = "itchy.scratchy.com";
-                sshUser = "matthew";
+                host = "desktop";
+                sshUser = "goeranh";
                 buildOn = "remote"; # valid args are "local" or "remote"
                 substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
                 hermetic = false;
