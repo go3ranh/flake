@@ -35,7 +35,7 @@
       ];
     };
 
-    environment.systemPackages = with pkgs; config.environment.systemPackages ++ [
+    environment.systemPackages = with pkgs; [
       bash
       bat
       direnv
