@@ -113,7 +113,7 @@ in
   ];
 
   virtualisation.docker.enable = true;
-  virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enable = true;
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
   services.fwupd.enable = true;
