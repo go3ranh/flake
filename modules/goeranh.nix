@@ -1,28 +1,28 @@
-{ config, pkgs, lib, ... }: 
-  with lib;
-  let 
-    cfg = config.goeranh;
-  in
+{ config, pkgs, lib, ... }:
+with lib;
+let
+  cfg = config.goeranh;
+in
 {
   options.goeranh = {
     desktop = mkOption {
       type = types.bool;
-	  default = false;
-	  example = true;
-	  description = "install gnome desktop witch customizations";
-	};
-	development = mkOption {
+      default = false;
+      example = true;
+      description = "install gnome desktop witch customizations";
+    };
+    development = mkOption {
       type = types.bool;
-	  default = false;
-	  example = true;
-	  description = "install my dev tools";
-	};
-	gaming = mkOption {
+      default = false;
+      example = true;
+      description = "install my dev tools";
+    };
+    gaming = mkOption {
       type = types.bool;
-	  default = false;
-	  example = true;
-	  description = "install steam, etc";
-	};
+      default = false;
+      example = true;
+      description = "install steam, etc";
+    };
   };
   config = {
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -30,11 +30,11 @@
       isNormalUser = true;
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" ];
       packages = builtins.concatLists [
-	    (with pkgs; [
+        (with pkgs; [
           btrfs-progs
           tailscale
-        ]) 
-	    (if cfg.desktop then with pkgs; [
+        ])
+        (if cfg.desktop then with pkgs; [
           bitwarden
           chromium
           dbeaver
@@ -56,8 +56,8 @@
           virt-manager
           virt-viewer
           vlc
-	    ] else [] )
-	    (if cfg.development then with pkgs; [
+        ] else [ ])
+        (if cfg.development then with pkgs; [
           cargo
           clang
           clang-tools
@@ -74,16 +74,16 @@
           ninja
           nodejs
           rustc
-	    ] else [] )
+        ] else [ ])
         (if cfg.gaming then with pkgs; [
           lutris
           wine
           wine-wayland
-	    ] else [] )
-	  ];
+        ] else [ ])
+      ];
     };
 
-	programs.steam = mkIf cfg.gaming {
+    programs.steam = mkIf cfg.gaming {
       enable = true;
       remotePlay.openFirewall = true;
     };

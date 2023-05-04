@@ -58,7 +58,7 @@ in
 
   goeranh = {
     desktop = true;
-	development = true;
+    development = true;
   };
 
   nixpkgs.config.allowUnfree = true;

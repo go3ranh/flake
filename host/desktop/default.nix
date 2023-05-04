@@ -43,8 +43,8 @@
   };
 
   goeranh = {
-	desktop = true;
-	gaming = true;
+    desktop = true;
+    gaming = true;
   };
 
   virtualisation = {
