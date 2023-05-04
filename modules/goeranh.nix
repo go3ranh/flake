@@ -25,6 +25,7 @@
 	};
   };
   config = {
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
     users.users.goeranh = {
       isNormalUser = true;
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" ];
