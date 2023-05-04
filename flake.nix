@@ -34,12 +34,6 @@
             }
           ];
         };
-        # host = nixpkgs.lib.nixosSystem {
-        #   system = "x86_64-linux";
-        #   modules = [
-        #     ./host/host
-        #   ];
-        # };
         desktop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
@@ -47,7 +41,7 @@
             self.nixosModules.goeranh
             {
               _module.args.nixinate = {
-                host = "desktop";
+                host = "192.168.178.43";
                 sshUser = "goeranh";
                 buildOn = "remote"; # valid args are "local" or "remote"
                 substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
