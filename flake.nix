@@ -77,6 +77,6 @@
       formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
       #legacyPackages = nixpkgs.legacyPackages;
-      #packages = import ./packages.nix { inherit inputs lib self; };
+      packages.x86_64-linux = import ./packages.nix { inherit inputs pkgs lib self; };
     };
 }
