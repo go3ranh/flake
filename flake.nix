@@ -50,6 +50,22 @@
             }
           ];
         };
+        laptop1 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/laptop1
+            self.nixosModules.goeranh
+            {
+              _module.args.nixinate = {
+                host = "192.168.178.158";
+                sshUser = "goeranh";
+                buildOn = "remote";
+                substituteOnTarget = true;
+                hermetic = false;
+              };
+            }
+          ];
+        };
         node5 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
