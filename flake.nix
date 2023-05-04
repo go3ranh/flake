@@ -92,6 +92,22 @@
               php82Packages.composer
             ];
           };
+          rustshell = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              cargo
+              rustc
+              gef
+            ];
+          };
+          cshell = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              clang
+              clang-tools
+              cmake
+              gcc
+              gef
+            ];
+          };
         };
       };
     };

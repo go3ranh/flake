@@ -58,12 +58,6 @@ in
           vlc
         ] else [ ])
         (if cfg.development then with pkgs; [
-          cargo
-          clang
-          clang-tools
-          cmake
-          gcc
-          gef
           ghidra
           gitkraken
           gnome-builder
@@ -73,7 +67,6 @@ in
           meson
           ninja
           nodejs
-          rustc
         ] else [ ])
         (if cfg.gaming then with pkgs; [
           lutris
