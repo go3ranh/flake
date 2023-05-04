@@ -51,7 +51,7 @@ in
       enable = true;
     };
     hydra = {
-      enable = true;
+      enable = false;
       hydraURL = "https://${hostname}.${domainname}";
       notificationSender = "build@goeran";
       useSubstitutes = true;
