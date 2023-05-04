@@ -28,51 +28,53 @@
     users.users.goeranh = {
       isNormalUser = true;
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" ];
-      packages = with pkgs; [
-        btrfs-progs
-        tailscale
-      ] // 
-	  (if cfg.desktop then [
-        bitwarden
-        chromium
-        dbeaver
-        discord
-        filezilla
-        firefox
-        gajim
-        gnome3.gnome-terminal
-        libreoffice
-        okular
-        poppler_utils
-        quickemu
-        rambox
-        shotwell
-        signal-desktop
-        spotify
-        thunderbird
-        vieb
-        virt-manager
-        virt-viewer
-        vlc
-	  ] else [] ) //
-	  (if cfg.development then [
-        cargo
-        clang
-        clang-tools
-        cmake
-        gcc
-        gef
-        ghidra
-        gitkraken
-        gnome-builder
-        jetbrains.idea-community
-        jetbrains.jdk
-        libxcrypt
-        meson
-        ninja
-        nodejs
-        rustc
-	  ] else [] );
+      packages = builtins.concatLists [
+	    (with pkgs; [
+          btrfs-progs
+          tailscale
+        ]) 
+	    (if cfg.desktop then with pkgs; [
+          bitwarden
+          chromium
+          dbeaver
+          discord
+          filezilla
+          firefox
+          gajim
+          gnome3.gnome-terminal
+          libreoffice
+          okular
+          poppler_utils
+          quickemu
+          rambox
+          shotwell
+          signal-desktop
+          spotify
+          thunderbird
+          vieb
+          virt-manager
+          virt-viewer
+          vlc
+	    ] else [] )
+	    (if cfg.development then with pkgs; [
+          cargo
+          clang
+          clang-tools
+          cmake
+          gcc
+          gef
+          ghidra
+          gitkraken
+          gnome-builder
+          jetbrains.idea-community
+          jetbrains.jdk
+          libxcrypt
+          meson
+          ninja
+          nodejs
+          rustc
+	    ] else [] )
+	  ];
     };
 
     environment.systemPackages = with pkgs; [
