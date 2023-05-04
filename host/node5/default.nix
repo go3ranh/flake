@@ -42,40 +42,6 @@ in
     LC_TIME = "de_DE.UTF-8";
   };
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  environment.gnome.excludePackages = with pkgs.gnome; [
-    baobab # disk usage analyzer
-    cheese # photo booth
-    #eog         # image viewer
-    #epiphany    # web browser
-    gedit # text editor
-    simple-scan # document scanner
-    #totem       # video player
-    yelp # help viewer
-    evince # document viewer
-    geary # email client
-
-    # these should be self explanatory
-    gnome-calculator
-    gnome-calendar
-    gnome-clocks
-    gnome-contacts
-    gnome-font-viewer
-    gnome-logs
-    gnome-maps
-    gnome-music
-    gnome-weather
-    pkgs.gnome-connections
-  ];
-  services.xserver = {
-    layout = "de";
-    xkbVariant = "";
-  };
-
-  console.keyMap = "de";
 
   services.printing.enable = false;
 
@@ -92,23 +58,19 @@ in
     jack.enable = false;
   };
 
+  goeranh = {
+    desktop = true;
+	development = true;
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    cargo
-    clang
-    clang-tools
-    cmake
     iftop
     ifuse
     libimobiledevice
-    libxcrypt
     lm_sensors
     lsof
-    meson
-    ninja
-    nodejs
-    rustc
     smartmontools
   ];
 

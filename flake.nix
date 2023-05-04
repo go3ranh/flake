@@ -19,7 +19,7 @@
       };
       apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
-        build = nixpkgs.lib.nixosSystem {
+        build = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/build
@@ -34,7 +34,7 @@
             }
           ];
         };
-        desktop = nixpkgs.lib.nixosSystem {
+        desktop = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/desktop
@@ -50,7 +50,7 @@
             }
           ];
         };
-        laptop1 = nixpkgs.lib.nixosSystem {
+        laptop1 = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/laptop1
@@ -66,7 +66,7 @@
             }
           ];
         };
-        node5 = nixpkgs.lib.nixosSystem {
+        node5 = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/node5
