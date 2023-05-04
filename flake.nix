@@ -23,6 +23,7 @@
           system = "x86_64-linux";
           modules = [
             ./host/build
+            self.nixosModules.goeranh
             {
               _module.args.nixinate = {
                 host = "nixbuild";
