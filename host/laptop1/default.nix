@@ -16,6 +16,10 @@
 
   time.timeZone = "Europe/Berlin";
 
+  goeranh = {
+    desktop = true;
+  };
+
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
