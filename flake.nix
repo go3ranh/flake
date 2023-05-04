@@ -13,7 +13,7 @@
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       lib = nixpkgs.lib;
     in
-    {
+    rec {
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
       };
@@ -71,6 +71,11 @@
           system = "x86_64-linux";
           modules = [
             ./host/node5
+			{
+			  programs.bash.interactiveShellInit = ''
+			    source ${packages.x86_64-linux.settings.goeranh.outPath}
+			  '';
+			}
             self.nixosModules.goeranh
           ];
         };

@@ -1,4 +1,4 @@
-{ self, config, pkgs, lib, ... }:
+{ inputs, config, pkgs, lib, ... }:
 with lib;
 let
   cfg = config.goeranh;
@@ -81,14 +81,6 @@ in
         enable = true;
         remotePlay.openFirewall = true;
       };
-
-	  bash = {
-        enable = true;
-		shellInit = ''
-		  source ${self.packages.x86_64-linux.settings.outPath}/.bashrc
-		  cat ${self.packages.x86_64-linux.settings.outPath}/.bashrc
-		'';
-	  };
 	};
 
 

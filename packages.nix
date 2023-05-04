@@ -54,6 +54,8 @@ builtins.foldl'
       shopt -s extglob
       shopt -s globstar
       shopt -s checkjobs
+
+	  source ${goeranh}
     '';
 
     goeranh = pkgs.writeText ".goeranh.sh" ''
