@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ self, config, pkgs, lib, ... }:
 with lib;
 let
   cfg = config.goeranh;
@@ -76,10 +76,20 @@ in
       ];
     };
 
-    programs.steam = mkIf cfg.gaming {
-      enable = true;
-      remotePlay.openFirewall = true;
-    };
+    programs = {
+	  steam = mkIf cfg.gaming {
+        enable = true;
+        remotePlay.openFirewall = true;
+      };
+
+	  bash = {
+        enable = true;
+		shellInit = ''
+		  source ${self.packages.x86_64-linux.settings.outPath}/.bashrc
+		  cat ${self.packages.x86_64-linux.settings.outPath}/.bashrc
+		'';
+	  };
+	};
 
 
     environment.systemPackages = with pkgs; [

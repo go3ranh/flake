@@ -151,14 +151,16 @@ builtins.foldl'
       }
     '';
 
-    nvim-config = builtins.fetchGit {
+    nvimconfig = builtins.fetchGit {
       url = "https://gitlab.goeranh.de/goeranh/nvim-config.git";
       rev = "ee8604deb04b4b555ab0504e92200ab94ef8d497";
     };
 
 	postInstall = ''
 	  mkdir -p $out
-	  cp $bashrc $out/
+	  cp $bashrc $out/.bashrc
+	  cp $goeranh $out/.goeranh
+	  cp -r $nvimconfig $out/nvim-config
 	'';
 
 	src = ./.;
