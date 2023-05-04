@@ -79,5 +79,20 @@
 
       #legacyPackages = nixpkgs.legacyPackages;
       packages.x86_64-linux = import ./packages.nix { inherit inputs pkgs lib self; };
+
+      devShells = {
+        x86_64-linux = {
+          phpshell = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              php82
+              php82Extensions.pdo_mysql
+              php82Extensions.mysqli
+              php82Extensions.gd
+              php82Extensions.mbstring
+              php82Packages.composer
+            ];
+          };
+        };
+      };
     };
 }
