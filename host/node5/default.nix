@@ -19,8 +19,6 @@ in
     #./dconf.nix
   ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   systemd.services.zfs-mount.enable = false;
   systemd.services.NetworkManager-wait-online.enable = false;
 
