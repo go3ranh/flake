@@ -75,8 +75,19 @@
           nodejs
           rustc
 	    ] else [] )
+        (if cfg.gaming then with pkgs; [
+          lutris
+          wine
+          wine-wayland
+	    ] else [] )
 	  ];
     };
+
+	programs.steam = mkIf cfg.gaming {
+      enable = true;
+      remotePlay.openFirewall = true;
+    };
+
 
     environment.systemPackages = with pkgs; [
       bash
@@ -132,6 +143,8 @@
       layout = "de";
       xkbVariant = "";
     };
+    nixpkgs.config.allowUnfree = true;
+    networking.firewall.enable = true;
 
     console.keyMap = "de";
 
