@@ -29,15 +29,6 @@
     LC_TIME = "de_DE.UTF-8";
   };
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver = {
-    layout = "de";
-    xkbVariant = "";
-  };
-
-  console.keyMap = "de";
 
   services.printing.enable = true;
 
@@ -51,18 +42,10 @@
     pulse.enable = true;
   };
 
-  nixpkgs.config.allowUnfree = true;
-
-  environment.systemPackages = with pkgs; [
-    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #  wget
-    lutris
-    wine
-    wine-wayland
-    neovim
-    htop
-    git
-  ];
+  goeranh = {
+	desktop = true;
+	gaming = true;
+  };
 
   virtualisation = {
     docker = {
@@ -74,15 +57,8 @@
   };
 
   services.openssh.enable = true;
-  programs = {
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-    };
-  };
 
   networking.firewall.allowedTCPPorts = [ 22 ];
-  networking.firewall.enable = true;
 
   system.stateVersion = "22.11"; # Did you read the comment?
 

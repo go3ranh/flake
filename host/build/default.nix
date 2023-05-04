@@ -34,26 +34,6 @@ in
     LC_TIME = "de_DE.UTF-8";
   };
 
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "de";
-    xkbVariant = "";
-  };
-
-  # Configure console keymap
-  console.keyMap = "de";
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.goeranh = {
-    isNormalUser = true;
-    description = "Goeran Heinemann";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
-    packages = with pkgs; [ ];
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
     vim
     zellij
@@ -120,7 +100,6 @@ in
   };
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 ];
-  networking.firewall.enable = true;
 
   system.stateVersion = "22.11"; # Did you read the comment?
 }
