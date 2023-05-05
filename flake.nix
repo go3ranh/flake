@@ -71,11 +71,11 @@
           system = "x86_64-linux";
           modules = [
             ./host/node5
-			{
-			  programs.bash.interactiveShellInit = ''
-			    source ${packages.x86_64-linux.settings.goeranh.outPath}
-			  '';
-			}
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
             self.nixosModules.goeranh
           ];
         };

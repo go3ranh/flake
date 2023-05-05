@@ -29,33 +29,33 @@ builtins.foldl'
   (builtins.attrNames self.nixosConfigurations)
   // {
   settings = pkgs.stdenv.mkDerivation rec {
-	name = "settings";
-	description = "goeranh settings / dotfiles";
+    name = "settings";
+    description = "goeranh settings / dotfiles";
     bashrc = pkgs.writeText ".bashrc" ''
-      if command -v fzf-share >/dev/null; then
-      source "$(fzf-share)/key-bindings.bash"
-      source "$(fzf-share)/completion.bash"
-      fi
-      function pkgsearch (){
-      nix-env -qa | fzf
-      }
+            if command -v fzf-share >/dev/null; then
+            source "$(fzf-share)/key-bindings.bash"
+            source "$(fzf-share)/completion.bash"
+            fi
+            function pkgsearch (){
+            nix-env -qa | fzf
+            }
 
-      export XDG_CONFIG_HOME="/home/goeranh/.config"
-      export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
-      export GOPATH="/home/goeranh/gitprojects"
+            export XDG_CONFIG_HOME="/home/goeranh/.config"
+            export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
+            export GOPATH="/home/goeranh/gitprojects"
 
-      eval "$(direnv hook bash)"
-      source ~/.goeranh.de
-      HISTFILESIZE=100000
-      HISTSIZE=10000
+            eval "$(direnv hook bash)"
+            source ~/.goeranh.de
+            HISTFILESIZE=100000
+            HISTSIZE=10000
 
-      shopt -s histappend
-      shopt -s checkwinsize
-      shopt -s extglob
-      shopt -s globstar
-      shopt -s checkjobs
+            shopt -s histappend
+            shopt -s checkwinsize
+            shopt -s extglob
+            shopt -s globstar
+            shopt -s checkjobs
 
-	  source ${goeranh}
+      	  source ${goeranh}
     '';
 
     goeranh = pkgs.writeText ".goeranh.sh" ''
@@ -158,13 +158,13 @@ builtins.foldl'
       rev = "ee8604deb04b4b555ab0504e92200ab94ef8d497";
     };
 
-	postInstall = ''
-	  mkdir -p $out
-	  cp $bashrc $out/.bashrc
-	  cp $goeranh $out/.goeranh
-	  cp -r $nvimconfig $out/nvim-config
-	'';
+    postInstall = ''
+      	  mkdir -p $out
+      	  cp $bashrc $out/.bashrc
+      	  cp $goeranh $out/.goeranh
+      	  cp -r $nvimconfig $out/nvim-config
+      	'';
 
-	src = ./.;
+    src = ./.;
   };
 }

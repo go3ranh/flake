@@ -77,11 +77,11 @@ in
     };
 
     programs = {
-	  steam = mkIf cfg.gaming {
+      steam = mkIf cfg.gaming {
         enable = true;
         remotePlay.openFirewall = true;
       };
-	};
+    };
 
 
     environment.systemPackages = with pkgs; [
