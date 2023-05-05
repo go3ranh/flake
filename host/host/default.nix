@@ -72,8 +72,6 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 3001 ];
 
-  system.copySystemConfiguration = true;
-
   system.stateVersion = "22.11";
 
 }
