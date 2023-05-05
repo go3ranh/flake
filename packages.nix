@@ -29,13 +29,12 @@ builtins.foldl'
   (builtins.attrNames self.nixosConfigurations)
   // {
   settings = pkgs.stdenv.mkDerivation rec {
+    buildInputs = [ pkgs.fzf ];
     name = "settings";
     description = "goeranh settings / dotfiles";
     bashrc = pkgs.writeText ".bashrc" ''
-            if command -v fzf-share >/dev/null; then
-            source "$(fzf-share)/key-bindings.bash"
-            source "$(fzf-share)/completion.bash"
-            fi
+            source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/key-bindings.bash"
+            source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/completion.bash"
             function pkgsearch (){
             nix-env -qa | fzf
             }
