@@ -5,11 +5,12 @@ let
 in
 rec {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
-nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -40,8 +41,8 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
     openssh = {
       enable = true;
       extraConfig = ''
-        MaxAuthTries 10
-	PubkeyAuthentication yes
+                MaxAuthTries 10
+        	PubkeyAuthentication yes
       '';
       #passwordAuthentication = false;
     };
@@ -52,18 +53,18 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
           sslCertificate = "/var/lib/nixhost.tailf0ec0.ts.net.crt";
           sslCertificateKey = "/var/lib/nixhost.tailf0ec0.ts.net.key";
           forceSSL = true;
-	  locations = {
-	    "/" = {
+          locations = {
+            "/" = {
               proxyPass = "http://localhost:3000/";
-	    };
-	  };
-	};
+            };
+          };
+        };
       };
     };
     gitea = {
       enable = true;
       database = {
-      	type = "postgres";
+        type = "postgres";
       };
       domain = "${hostname}.${domainname}";
       rootUrl = "https://${hostname}.${domainname}/";
