@@ -117,6 +117,14 @@
         };
       };
       formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+      hydraJobs =
+        nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob) (
+          let
+            getBuildEntryPoint = _: nixosSystem:
+              nixosSystem.config.system.build.toplevel;
+          in
+          nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
+        );
 
       #legacyPackages = nixpkgs.legacyPackages;
       packages.x86_64-linux = import ./packages.nix { inherit inputs pkgs lib self; };
