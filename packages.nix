@@ -77,6 +77,7 @@ builtins.foldl'
       alias ng="./node_modules/@angular/cli/bin/ng.js"
       #alias nyxt="/home/goeranh/programs/nyxt/usr/local/bin/nyxt"
       export EDITOR="vim"
+      alias open="xdg-open"
 
       [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
