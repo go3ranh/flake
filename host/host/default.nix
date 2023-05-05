@@ -33,7 +33,7 @@ rec {
     };
     hydra = {
       enable = true;
-      hydraURL = "https://${hostname}.${domainname}/hydra";
+      hydraURL = "https://${hostname}.${domainname}/";
       port = 3001;
       useSubstitutes = true;
       notificationSender = "goeran@karsdorf.net";
@@ -41,8 +41,8 @@ rec {
     openssh = {
       enable = true;
       extraConfig = ''
-                MaxAuthTries 10
-        	PubkeyAuthentication yes
+        MaxAuthTries 10
+        PubkeyAuthentication yes
       '';
       #passwordAuthentication = false;
     };
@@ -58,7 +58,7 @@ rec {
               proxyPass = "http://localhost:3000/";
               recommendedProxySettings = true;
             };
-            "/hydra" = {
+            "/" = {
               recommendedProxySettings = true;
               proxyPass = "http://localhost:3001";
             };
@@ -78,7 +78,7 @@ rec {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 22 80 443 3001 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 443 ];
 
   system.stateVersion = "22.11";
 
