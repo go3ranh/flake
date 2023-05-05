@@ -25,8 +25,34 @@
             ./host/build
             self.nixosModules.goeranh
             {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
+            {
               _module.args.nixinate = {
                 host = "nixbuild";
+                sshUser = "goeranh";
+                buildOn = "remote";
+                substituteOnTarget = true;
+                hermetic = false;
+              };
+            }
+          ];
+        };
+        host = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/host
+            self.nixosModules.goeranh
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
+            {
+              _module.args.nixinate = {
+                host = "nixhost";
                 sshUser = "goeranh";
                 buildOn = "remote";
                 substituteOnTarget = true;
@@ -40,6 +66,11 @@
           modules = [
             ./host/desktop
             self.nixosModules.goeranh
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
             {
               _module.args.nixinate = {
                 host = "192.168.178.43";
@@ -56,6 +87,11 @@
           modules = [
             ./host/laptop1
             self.nixosModules.goeranh
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
             {
               _module.args.nixinate = {
                 host = "192.168.178.158";
