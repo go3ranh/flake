@@ -33,7 +33,7 @@ rec {
     };
     hydra = {
       enable = true;
-      hydraURL = "https://${hostname}.${domainname}:3001/";
+      hydraURL = "https://${hostname}.${domainname}/hydra";
       port = 3001;
       useSubstitutes = true;
       notificationSender = "goeran@karsdorf.net";
@@ -54,8 +54,13 @@ rec {
           sslCertificateKey = "/var/lib/nixhost.tailf0ec0.ts.net.key";
           forceSSL = true;
           locations = {
-            "/" = {
+            "/gitea/" = {
               proxyPass = "http://localhost:3000/";
+              recommendedProxySettings = true;
+            };
+            "/hydra" = {
+              recommendedProxySettings = true;
+              proxyPass = "http://localhost:3001";
             };
           };
         };
@@ -66,8 +71,10 @@ rec {
       database = {
         type = "postgres";
       };
-      domain = "${hostname}.${domainname}";
-      rootUrl = "https://${hostname}.${domainname}/";
+	  settings.server = {
+        DOMAIN = "${hostname}.${domainname}";
+        ROOT_URL = "https://${hostname}.${domainname}/gitea";
+	  };
     };
   };
 
