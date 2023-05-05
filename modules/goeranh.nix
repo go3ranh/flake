@@ -84,6 +84,9 @@ in
         enable = true;
         remotePlay.openFirewall = true;
       };
+	  bash = {
+		enableCompletion = true;
+	  };
     };
 
 
