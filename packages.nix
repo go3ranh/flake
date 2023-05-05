@@ -44,7 +44,6 @@ builtins.foldl'
             export GOPATH="/home/goeranh/gitprojects"
 
             eval "$(direnv hook bash)"
-            source ~/.goeranh.de
             HISTFILESIZE=100000
             HISTSIZE=10000
 
@@ -53,11 +52,9 @@ builtins.foldl'
             shopt -s extglob
             shopt -s globstar
             shopt -s checkjobs
-
-      	  source ${goeranh}
     '';
 
-    goeranh = pkgs.writeText ".goeranh.sh" ''
+    goeranh = pkgs.writeText ".goeranh" ''
       alias :q="exit"
       alias :Q="exit"
       alias tml="tmux ls"
