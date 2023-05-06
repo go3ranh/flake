@@ -40,6 +40,9 @@ in
     tmux
     htop
     wget
+	gcc
+	cargo
+	rustc
   ];
 
   virtualisation.docker.enable = true;
@@ -51,11 +54,11 @@ in
       enable = true;
     };
     hydra = {
-      enable = false;
-      hydraURL = "https://${hostname}.${domainname}";
-      notificationSender = "build@goeran";
+      enable = true;
+      hydraURL = "https://${hostname}.${domainname}/";
+      port = 3001;
       useSubstitutes = true;
-      listenHost = "*";
+      notificationSender = "goeran@karsdorf.net";
     };
     postgresql = {
       package = pkgs.postgresql_15;
@@ -76,13 +79,14 @@ in
       enable = true;
       virtualHosts = {
         "${hostname}.${domainname}" = {
-          default = true;
-          sslCertificate = "/var/lib/nixbuild.tailf0ec0.ts.net.crt";
-          sslCertificateKey = "/var/lib/nixbuild.tailf0ec0.ts.net.key";
+          sslCertificate = "/var/lib/nixhost.tailf0ec0.ts.net.crt";
+          sslCertificateKey = "/var/lib/nixhost.tailf0ec0.ts.net.key";
           forceSSL = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
-            recommendedProxySettings = true;
+          locations = {
+            "/" = {
+              recommendedProxySettings = true;
+              proxyPass = "http://localhost:3001";
+            };
           };
         };
       };
