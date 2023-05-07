@@ -177,7 +177,6 @@ sort-column='name'
 sort-directories-first=false
 sort-order='ascending'
 type-format='category'
-window-position=(26, 23)
 
 [org/virt-manager/virt-manager/confirm]
 forcepoweroff=false
