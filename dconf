@@ -1,9 +1,6 @@
 [org/gnome/desktop/calendar]
 show-weekdate=true
 
-[org/gnome/desktop/input-sources]
-sources=[('xkb', 'de')]
-
 [org/gnome/desktop/interface]
 color-scheme='default'
 enable-hot-corners=false
