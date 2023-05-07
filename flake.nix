@@ -162,6 +162,11 @@
               gef
             ];
           };
+          vmshell = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              nixos-shell
+            ];
+          };
         };
       };
     };
