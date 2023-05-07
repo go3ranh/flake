@@ -165,7 +165,6 @@ sort-directories-first=false
 sort-order='ascending'
 type-format='category'
 view-type='list'
-window-size=(888, 659)
 
 [org/gtk/settings/file-chooser]
 date-format='regular'
@@ -179,7 +178,6 @@ sort-directories-first=false
 sort-order='ascending'
 type-format='category'
 window-position=(26, 23)
-window-size=(1203, 902)
 
 [org/virt-manager/virt-manager/confirm]
 forcepoweroff=false
