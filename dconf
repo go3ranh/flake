@@ -3,7 +3,6 @@ show-weekdate=true
 
 [org/gnome/desktop/input-sources]
 sources=[('xkb', 'de')]
-xkb-options=['terminate:ctrl_alt_bksp']
 
 [org/gnome/desktop/interface]
 color-scheme='default'
