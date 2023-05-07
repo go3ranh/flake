@@ -154,6 +154,9 @@ builtins.foldl'
       url = "https://gitlab.goeranh.de/goeranh/nvim-config.git";
       rev = "ee8604deb04b4b555ab0504e92200ab94ef8d497";
     };
+    dconf = pkgs.writeShellScriptBin "apply-dconf" ''
+	  echo ${builtins.readFile ./dconf} | dconf load /
+    '';
 
     postInstall = ''
       	  mkdir -p $out
