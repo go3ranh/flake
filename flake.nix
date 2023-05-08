@@ -26,7 +26,7 @@
             self.nixosModules.goeranh
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${packages.x86_64-linux.settings.bashrc.outPath}
                 source ${packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
@@ -48,7 +48,7 @@
             self.nixosModules.goeranh
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${packages.x86_64-linux.settings.bashrc.outPath}
                 source ${packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
@@ -70,7 +70,7 @@
             self.nixosModules.goeranh
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${packages.x86_64-linux.settings.bashrc.outPath}
                 source ${packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
@@ -92,7 +92,7 @@
             self.nixosModules.goeranh
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${packages.x86_64-linux.settings.bashrc.outPath}
                 source ${packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
