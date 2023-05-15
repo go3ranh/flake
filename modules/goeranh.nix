@@ -65,6 +65,8 @@ in
           gitkraken
           gnome-builder
           jetbrains.idea-community
+          jetbrains.webstorm
+          jetbrains.phpstorm
           jetbrains.jdk
           libxcrypt
           meson
