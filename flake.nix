@@ -85,6 +85,28 @@
             }
           ];
         };
+        hypr = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/hypr
+            self.nixosModules.goeranh
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.bashrc.outPath}
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
+            {
+              _module.args.nixinate = {
+                host = "192.168.122.208";
+                sshUser = "goeranh";
+                buildOn = "remote"; # valid args are "local" or "remote"
+                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
+                hermetic = false;
+              };
+            }
+          ];
+        };
         laptop1 = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
