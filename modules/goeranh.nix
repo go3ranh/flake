@@ -130,6 +130,7 @@ in
 	    pamixer
 	    brightnessctl
 	    foot
+	    kitty
 	    kanshi
 		pavucontrol
 		dunst
@@ -219,24 +220,32 @@ in
 			'';
             dunst = pkgs.writeText "dunst-config" (builtins.readFile ./dunst);
             kanshiConfig = pkgs.writeText "kanshi-config" ''
-              profile {
-              	output eDP-1 disable
-              	output "BNQ BenQ GL2460 X8G01675SL0" mode 1920x1080 position 0,1080
-              	output "AOC 2460G4 0x00007D1E" mode 1920x1080 position 0,0
-              	output "Dell Inc. DELL U2414H 292K478E03ML" mode 1920x1080 position 1920,0
-              }
-              
-              profile {
-              	output "Sharp Corporation 0x14F9" mode 1920x1200 position 0,0
-              }
+profile docked{
+	#output "Sharp Corporation 0x14F9 " disable
+	#output "AOC 2460G4 0x00007D1E " mode 1920x1080 position 0,0
+	#output "Dell Inc. DELL U2414H 292K478E03ML " mode 1920x1080 position 1920,0
+	output eDP-1 disable
+	output DP-5 mode 1920x1080 position 0,0
+	output DP-6 mode 1920x1080 position 1920,0
+}
+
+profile laptop{
+	output eDP-1 mode 1920x1200 position 0,0
+}
+
+profile stura1{
+	output eDP-1 mode 1920x1200 position 0,1080 scale 1
+	output DP-1 mode 1920x1080 position 0,0 scale 1
+
+}
 			'';
             hyprConfig = pkgs.writeText "greetd-hyprland-config" ''
               exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
               exec-once = ${pkgs.waybar}/bin/waybar # --config ${wayBar}
-              exec-once = kanshi -c ${kanshiConfig}
+              exec-once = sleep 3; kanshi --config ${kanshiConfig} 2>&1> ~/klog
               exec-once = dunst -config ${dunst}
 
-              monitor=eDP-1,1920x1200@60,0x0,1
+              #monitor=eDP-1,1920x1200@60,0x0,1
               #monitor=DP-6,1920x1080@60,0x0,1
 
               input {
@@ -265,7 +274,7 @@ in
 			  $ssmod = SUPERSHIFT
 			  $scmod = CTRLSUPER
 			  $csmod = CTRLSHIFT
-              bind = $mainMod, RETURN, exec, foot
+              bind = $mainMod, RETURN, exec, gnome-terminal
               bind = $mainMod, D, exec, ${pkgs.wofi}/bin/wofi --show drun -I -m -i
 			  bind = $ssmod, Q, killactive,
               bind = $camod, E, exec, wlogout
@@ -306,6 +315,17 @@ in
               bind = $mainMod, 8, workspace, 8
               bind = $mainMod, 9, workspace, 9
               bind = $mainMod, 0, workspace, 10
+
+              bind = $mainMod SHIFT, 1, movetoworkspace, 1
+              bind = $mainMod SHIFT, 2, movetoworkspace, 2
+              bind = $mainMod SHIFT, 3, movetoworkspace, 3
+              bind = $mainMod SHIFT, 4, movetoworkspace, 4
+              bind = $mainMod SHIFT, 5, movetoworkspace, 5
+              bind = $mainMod SHIFT, 6, movetoworkspace, 6
+              bind = $mainMod SHIFT, 7, movetoworkspace, 7
+              bind = $mainMod SHIFT, 8, movetoworkspace, 8
+              bind = $mainMod SHIFT, 9, movetoworkspace, 9
+              bind = $mainMod SHIFT, 0, movetoworkspace, 10
 
               # common modals
               windowrule = float,title:^(Open)$
