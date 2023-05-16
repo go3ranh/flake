@@ -71,10 +71,10 @@ rec {
       database = {
         type = "postgres";
       };
-	  settings.server = {
+      settings.server = {
         DOMAIN = "${hostname}.${domainname}";
         ROOT_URL = "https://${hostname}.${domainname}/gitea";
-	  };
+      };
     };
   };
 

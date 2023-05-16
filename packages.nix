@@ -33,25 +33,25 @@ builtins.foldl'
     name = "settings";
     description = "goeranh settings / dotfiles";
     bashrc = pkgs.writeText ".bashrc" ''
-            source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/key-bindings.bash"
-            source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/completion.bash"
-            function pkgsearch (){
-            nix-env -qa | fzf
-            }
+      source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/key-bindings.bash"
+      source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/completion.bash"
+      function pkgsearch (){
+      nix-env -qa | fzf
+      }
 
-            export XDG_CONFIG_HOME="/home/goeranh/.config"
-            export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
-            export GOPATH="/home/goeranh/gitprojects"
+      export XDG_CONFIG_HOME="/home/goeranh/.config"
+      export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
+      export GOPATH="/home/goeranh/gitprojects"
 
-            eval "$(direnv hook bash)"
-            HISTFILESIZE=100000
-            HISTSIZE=10000
+      eval "$(direnv hook bash)"
+      HISTFILESIZE=100000
+      HISTSIZE=10000
 
-            shopt -s histappend
-            shopt -s checkwinsize
-            shopt -s extglob
-            shopt -s globstar
-            shopt -s checkjobs
+      shopt -s histappend
+      shopt -s checkwinsize
+      shopt -s extglob
+      shopt -s globstar
+      shopt -s checkjobs
     '';
 
     goeranh = pkgs.writeText ".goeranh" ''
@@ -155,7 +155,7 @@ builtins.foldl'
       rev = "ee8604deb04b4b555ab0504e92200ab94ef8d497";
     };
     dconf = pkgs.writeShellScriptBin "apply-dconf" ''
-	  echo "${builtins.readFile ./dconf}" | dconf load /
+      	  echo "${builtins.readFile ./dconf}" | dconf load /
     '';
 
     postInstall = ''

@@ -40,9 +40,9 @@ in
     tmux
     htop
     wget
-	gcc
-	cargo
-	rustc
+    gcc
+    cargo
+    rustc
   ];
 
   virtualisation.docker.enable = true;

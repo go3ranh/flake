@@ -11,6 +11,12 @@ in
       example = true;
       description = "install gnome desktop witch customizations";
     };
+    hypr = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "install hyprland";
+    };
     development = mkOption {
       type = types.bool;
       default = false;
@@ -86,13 +92,14 @@ in
         enable = true;
         remotePlay.openFirewall = true;
       };
-	  bash = {
-		enableCompletion = true;
-	  };
+      bash = {
+        enableCompletion = true;
+      };
     };
 
 
     environment.systemPackages = with pkgs; [
+      pciutils
       bash
       bat
       direnv
@@ -146,6 +153,96 @@ in
       layout = "de";
       xkbVariant = "";
     };
+
+
+    #environment.systemPackages = with pkgs; [
+    #  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  #  wget
+    #  seatd
+    #  pciutils
+    #  kitty
+    #  gnome-console
+    #  firefox
+    #];
+
+    programs.hyprland = mkIf cfg.hypr {
+      enable = true;
+    };
+
+    xdg.portal = mkIf cfg.hypr {
+      enable = true;
+      wlr.enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+      ];
+    };
+
+    security.polkit.enable = mkIf cfg.hypr true;
+
+    services.dbus = mkIf cfg.hypr {
+      enable = true;
+    };
+    services.greetd = mkIf cfg.hypr {
+      enable = true;
+      package = pkgs.tuigreet;
+      settings = {
+        default_session =
+          let
+            hyprConfig = pkgs.writeText "greetd-hyprland-config" ''
+              exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+              exec-once = ${pkgs.waybar}/bin/waybar
+
+              monitor=eDP-1,1920x1200@60,0x0,1
+
+              input {
+                kb_layout = de
+                follow_mouse = 1
+                sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+              }
+              animations {
+                enabled = false
+              }
+              general {
+                gaps_in=5
+                gaps_out=5
+                border_size=1
+                col.active_border=0xff7D4045
+                col.inactive_border=0xff382D2E
+                no_border_on_floating = false
+                layout = dwindle
+                no_cursor_warps = true
+              }
+			  $mainMod = SUPER
+              bind = $mainMod, Return, exec, ${pkgs.kitty}/bin/kitty
+              bind = $mainMod, D, exec, ${pkgs.wofi}/bin/wofi --show drun -I -m -i
+			  bind = SUPERSHIFT, Q, killactive,
+              bind = SUPERALT, E, exit,
+			  bind = $mainMod, V, togglefloating,
+
+              bind = $mainMod, 1, workspace, 1
+              bind = $mainMod, 2, workspace, 2
+              bind = $mainMod, 3, workspace, 3
+              bind = $mainMod, 4, workspace, 4
+              bind = $mainMod, 5, workspace, 5
+              bind = $mainMod, 6, workspace, 6
+              bind = $mainMod, 7, workspace, 7
+              bind = $mainMod, 8, workspace, 8
+              bind = $mainMod, 9, workspace, 9
+              bind = $mainMod, 0, workspace, 10
+            '';
+            hyprLaunch = pkgs.writeShellScriptBin "hyprland-launcher" ''
+              #!/bin/sh
+              export WLR_RENDERER_ALLOW_SOFTWARE=1
+              exec ${pkgs.hyprland.outPath}/bin/Hyprland --config ${hyprConfig}
+            '';
+          in
+          {
+            command = "${pkgs.greetd.tuigreet}/bin/tuigreet --cmd ${hyprLaunch}/bin/hyprland-launcher";
+            user = "greeter";
+          };
+      };
+    };
+
     nixpkgs.config.allowUnfree = true;
     networking.firewall.enable = true;
 

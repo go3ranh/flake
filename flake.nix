@@ -7,8 +7,12 @@
       url = "github:matthewcroughan/nixinate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, nixpkgs, nixinate }@inputs:
+  outputs = { self, nixpkgs, nixinate, hyprland }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       lib = nixpkgs.lib;
@@ -90,6 +94,7 @@
           modules = [
             ./host/hypr
             self.nixosModules.goeranh
+            inputs.hyprland.nixosModules.default
             {
               programs.bash.interactiveShellInit = ''
                 source ${packages.x86_64-linux.settings.bashrc.outPath}
