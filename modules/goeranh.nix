@@ -43,7 +43,7 @@ in
           btrfs-progs
           tailscale
         ])
-        (if cfg.desktop then with pkgs; [
+        (if cfg.desktop || cfg.hypr then with pkgs; [
           bitwarden
           chromium
           dbeaver
@@ -79,6 +79,8 @@ in
           ninja
           nodejs
         ] else [ ])
+        (if cfg.hypr then with pkgs; [
+        ] else [ ])
         (if cfg.gaming then with pkgs; [
           lutris
           wine
@@ -98,27 +100,40 @@ in
     };
 
 
-    environment.systemPackages = with pkgs; [
-      pciutils
-      bash
-      bat
-      direnv
-      exa
-      fzf
-      gettext
-      git
-      gitui
-      gnupg
-      gofu
-      htop
-      neovim
-      nix-direnv
-      nmap
-      ripgrep
-      tmux
-      unzip
-      wget
-      zellij
+    environment.systemPackages = builtins.concatLists [
+      (with pkgs; [
+        bash
+        bat
+        direnv
+        exa
+        fzf
+        gettext
+        git
+        gitui
+        gnupg
+        gofu
+        htop
+        neovim
+        nix-direnv
+        nmap
+        ripgrep
+        tmux
+        unzip
+        wget
+        zellij
+      ])
+      (if cfg.hypr then with pkgs; [
+        pciutils
+        gnome.nautilus
+        wlogout
+        swaylock
+	    pamixer
+	    brightnessctl
+	    foot
+	    kanshi
+		pavucontrol
+		dunst
+      ] else [ ])
     ];
 
     environment.gnome.excludePackages = mkIf cfg.desktop [
@@ -178,6 +193,13 @@ in
     };
 
     security.polkit.enable = mkIf cfg.hypr true;
+    security.pam.services.swaylock = mkIf cfg.hypr {
+      text = ''
+        auth include login
+      '';
+    };
+
+    services.hardware.bolt.enable = mkIf cfg.hypr true;
 
     services.dbus = mkIf cfg.hypr {
       enable = true;
@@ -188,19 +210,45 @@ in
       settings = {
         default_session =
           let
+            wayBar = pkgs.writeText "waybar-config" ''
+              "wlr/workspaces": {
+                   "format": "{icon}",
+                   "on-scroll-up": "hyprctl dispatch workspace e+1",
+                   "on-scroll-down": "hyprctl dispatch workspace e-1"
+              }
+			'';
+            dunst = pkgs.writeText "dunst-config" (builtins.readFile ./dunst);
+            kanshiConfig = pkgs.writeText "kanshi-config" ''
+              profile {
+              	output eDP-1 disable
+              	output "BNQ BenQ GL2460 X8G01675SL0" mode 1920x1080 position 0,1080
+              	output "AOC 2460G4 0x00007D1E" mode 1920x1080 position 0,0
+              	output "Dell Inc. DELL U2414H 292K478E03ML" mode 1920x1080 position 1920,0
+              }
+              
+              profile {
+              	output "Sharp Corporation 0x14F9" mode 1920x1200 position 0,0
+              }
+			'';
             hyprConfig = pkgs.writeText "greetd-hyprland-config" ''
               exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-              exec-once = ${pkgs.waybar}/bin/waybar
+              exec-once = ${pkgs.waybar}/bin/waybar # --config ${wayBar}
+              exec-once = kanshi -c ${kanshiConfig}
+              exec-once = dunst -config ${dunst}
 
               monitor=eDP-1,1920x1200@60,0x0,1
+              #monitor=DP-6,1920x1080@60,0x0,1
 
               input {
                 kb_layout = de
                 follow_mouse = 1
                 sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+				touchpad {
+			      natural_scroll = true
+				}
               }
               animations {
-                enabled = false
+                enabled = true
               }
               general {
                 gaps_in=5
@@ -213,11 +261,40 @@ in
                 no_cursor_warps = true
               }
 			  $mainMod = SUPER
-              bind = $mainMod, Return, exec, ${pkgs.kitty}/bin/kitty
+			  $camod = CTRLALT
+			  $ssmod = SUPERSHIFT
+			  $scmod = CTRLSUPER
+			  $csmod = CTRLSHIFT
+              bind = $mainMod, RETURN, exec, foot
               bind = $mainMod, D, exec, ${pkgs.wofi}/bin/wofi --show drun -I -m -i
-			  bind = SUPERSHIFT, Q, killactive,
-              bind = SUPERALT, E, exit,
+			  bind = $ssmod, Q, killactive,
+              bind = $camod, E, exec, wlogout
 			  bind = $mainMod, V, togglefloating,
+			  bind = $scmod, L, exec, swaylock
+			  bind = $ssmod, F, exec, firefox
+			  bind = $ssmod, T, exec, thunderbird
+			  bind = $ssmod, V, exec, virt-manager
+			  bind = $ssmod, R, exec, rambox
+			  bind = $ssmod, S, exec, signal
+			  bind = $mainMod, E, exec, nautilus
+
+			  bind=$mainMod,H,movefocus,l
+              bind=$mainMod,L,movefocus,r
+              bind=$mainMod,K,movefocus,u
+              bind=$mainMod,J,movefocus,d
+			  bind=$csmod,h,splitratio,-0.1
+              bind=$csmod,l,splitratio,+0.1
+              #bind=SUPERCONTROL,h,splitratio,-0.1
+              #bind=SUPERCONTROL,l,splitratio,+0.1
+              bind=$camod,F,fullscreen
+              bind=$camod,V, exec, pavucontrol
+
+
+			  bind=,XF86AudioRaiseVolume,exec,pamixer -ui 5
+              bind=,XF86AudioLowerVolume,exec,pamixer -ud 5
+              bind=,XF86AudioMute,exec,pamixer -t
+			  bind=$mainMod,F6,exec,brightnessctl set 2%-
+              bind=$mainMod,F7,exec,brightnessctl set +2%
 
               bind = $mainMod, 1, workspace, 1
               bind = $mainMod, 2, workspace, 2
@@ -229,6 +306,16 @@ in
               bind = $mainMod, 8, workspace, 8
               bind = $mainMod, 9, workspace, 9
               bind = $mainMod, 0, workspace, 10
+
+              # common modals
+              windowrule = float,title:^(Open)$
+              windowrule = float,title:^(Choose Files)$
+              windowrule = float,title:^(Save As)$
+              windowrule = float,title:^(Confirm to replace files)$
+              windowrule = float,title:^(File Operation Progress)$
+
+			  windowrule = center,pavucontrol
+              windowrule = float,pavucontrol
             '';
             hyprLaunch = pkgs.writeShellScriptBin "hyprland-launcher" ''
               #!/bin/sh
