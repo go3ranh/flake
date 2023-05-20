@@ -2,6 +2,30 @@
 with lib;
 let
   cfg = config.goeranh;
+  kanshiConfig = pkgs.writeText "kanshi-config" ''
+    profile docked{
+    	#output "Sharp Corporation 0x14F9 " disable
+    	#output "AOC 2460G4 0x00007D1E " mode 1920x1080 position 0,0
+    	#output "Dell Inc. DELL U2414H 292K478E03ML " mode 1920x1080 position 1920,0
+    	output eDP-1 disable
+    	output DP-5 mode 1920x1080 position 0,0
+    	output DP-6 mode 1920x1080 position 1920,0
+    }
+    
+    profile laptop{
+    	output eDP-1 mode 1920x1200 position 0,0 scale 1
+    }
+    
+    profile stura1{
+    	output eDP-1 mode 1920x1200 position 0,1080 scale 1
+    	output DP-1 mode 1920x1080 position 0,0 scale 1
+    }
+    
+    profile stura2{
+    	output eDP-1 mode 1920x1200 position 0,1080 scale 1
+    	output DP-5 mode 1920x1080 position 0,0 scale 1
+    }
+  '';
 in
 {
   options.goeranh = {
@@ -201,6 +225,8 @@ in
     };
 
     services.hardware.bolt.enable = mkIf cfg.hypr true;
+	hardware.bluetooth.enable = mkIf cfg.hypr true;
+	services.blueman.enable = mkIf cfg.hypr true;
 
     services.dbus = mkIf cfg.hypr {
       enable = true;
@@ -219,30 +245,11 @@ in
               }
 			'';
             dunst = pkgs.writeText "dunst-config" (builtins.readFile ./dunst);
-            kanshiConfig = pkgs.writeText "kanshi-config" ''
-profile docked{
-	#output "Sharp Corporation 0x14F9 " disable
-	#output "AOC 2460G4 0x00007D1E " mode 1920x1080 position 0,0
-	#output "Dell Inc. DELL U2414H 292K478E03ML " mode 1920x1080 position 1920,0
-	output eDP-1 disable
-	output DP-5 mode 1920x1080 position 0,0
-	output DP-6 mode 1920x1080 position 1920,0
-}
-
-profile laptop{
-	output eDP-1 mode 1920x1200 position 0,0
-}
-
-profile stura1{
-	output eDP-1 mode 1920x1200 position 0,1080 scale 1
-	output DP-1 mode 1920x1080 position 0,0 scale 1
-
-}
-			'';
             hyprConfig = pkgs.writeText "greetd-hyprland-config" ''
               exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
               exec-once = ${pkgs.waybar}/bin/waybar # --config ${wayBar}
-              exec-once = sleep 3; kanshi --config ${kanshiConfig} 2>&1> ~/klog
+              #exec-once = sleep 3; kanshi --config ${kanshiConfig} 2>&1> ~/klog
+              exec-once = sleep 3; systemctl --user start kanshi.service
               exec-once = dunst -config ${dunst}
 
               #monitor=eDP-1,1920x1200@60,0x0,1
@@ -347,6 +354,13 @@ profile stura1{
             command = "${pkgs.greetd.tuigreet}/bin/tuigreet --cmd ${hyprLaunch}/bin/hyprland-launcher";
             user = "greeter";
           };
+      };
+    };
+    systemd.user.services.kanshi = mkIf cfg.hypr {
+      description = "kanshi daemon";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = ''${pkgs.kanshi}/bin/kanshi -c /home/goeranh/kanshitest'';
       };
     };
 

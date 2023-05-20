@@ -57,8 +57,8 @@ in
   };
 
   goeranh = {
-    #desktop = true;
-    hypr = true;
+    desktop = true;
+    #hypr = true;
     development = true;
   };
 
