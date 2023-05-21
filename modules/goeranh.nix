@@ -68,7 +68,7 @@ in
           tailscale
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
-          bitwarden
+          #bitwarden # nodejs 16 deprecated
           chromium
           dbeaver
           discord
