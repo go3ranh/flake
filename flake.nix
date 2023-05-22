@@ -139,16 +139,23 @@
           modules = [
             ./host/node5
             {
-              programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
-              '';
+              programs = {
+                bash.interactiveShellInit = ''
+                  source ${packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${packages.x86_64-linux.settings.goeranh.outPath}
+                '';
+			    neovim.configure = {
+                  customRC = ''
+                    dofile('${packages.x86_64-linux.settings.nvimconfig.outPath}/init.lua')
+                  '';
+			    };
+			  };
             }
             self.nixosModules.goeranh
           ];
         };
       };
-      formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
       hydraJobs =
         nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob) (
           let
