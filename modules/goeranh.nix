@@ -77,6 +77,7 @@ in
           gajim
           gnome3.gnome-terminal
           libreoffice
+          logseq
           okular
           poppler_utils
           quickemu
