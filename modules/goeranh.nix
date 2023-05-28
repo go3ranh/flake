@@ -91,13 +91,15 @@ in
           vlc
         ] else [ ])
         (if cfg.development then with pkgs; [
+          binwalk
+          file
           ghidra
           gitkraken
           gnome-builder
           jetbrains.idea-community
-          jetbrains.webstorm
-          jetbrains.phpstorm
           jetbrains.jdk
+          jetbrains.phpstorm
+          jetbrains.webstorm
           libxcrypt
           meson
           ninja
