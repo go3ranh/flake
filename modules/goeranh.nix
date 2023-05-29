@@ -35,6 +35,12 @@ in
       example = true;
       description = "install gnome desktop witch customizations";
     };
+    server = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "apply server settings";
+    };
     hypr = mkOption {
       type = types.bool;
       default = false;
@@ -59,7 +65,7 @@ in
     users.users.goeranh = {
       isNormalUser = true;
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" ];
-      openssh.authorizedKeys.keys = [
+      openssh.authorizedKeys.keys = mkIf cfg.server [
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaU3idFwbk0uY4jooS9dwdBvNLnWfgFRmc7hkSeubSAWnT5J6NM8L8NZrT1ZoiYfebsKmwIn111BGfohZkC6wA= homelab key goeranh"
       ];
       packages = builtins.concatLists [
