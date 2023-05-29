@@ -11,8 +11,9 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
-  outputs = { self, nixpkgs, nixinate, hyprland }@inputs:
+  outputs = { self, nixpkgs, nixinate, hyprland, nixos-hardware }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       lib = nixpkgs.lib;
@@ -72,6 +73,7 @@
           modules = [
             ./host/pitest
             self.nixosModules.goeranh
+			nixos-hardware.nixosModules.raspberry-pi-4
             {
               programs.bash.interactiveShellInit = ''
                 source ${packages.x86_64-linux.settings.bashrc.outPath}
