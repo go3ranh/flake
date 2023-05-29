@@ -378,9 +378,9 @@ in
 
     console.keyMap = "de";
 
-	services.openssh = mkIf cfg.server {
-	  enable = true;
-	};
+    services.openssh = mkIf cfg.server {
+      enable = true;
+    };
     services.tailscale.enable = true;
   };
 }

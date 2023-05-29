@@ -72,13 +72,23 @@
           system = "aarch64-linux";
           modules = [
             ./host/pitest
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
-			nixos-hardware.nixosModules.raspberry-pi-4
+            nixos-hardware.nixosModules.raspberry-pi-4
             {
               programs.bash.interactiveShellInit = ''
                 source ${packages.x86_64-linux.settings.bashrc.outPath}
                 source ${packages.x86_64-linux.settings.goeranh.outPath}
               '';
+            }
+            {
+              _module.args.nixinate = {
+                host = "192.168.178.2";
+                sshUser = "goeranh";
+                buildOn = "local"; # valid args are "local" or "remote"
+                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
+                hermetic = false;
+              };
             }
           ];
         };

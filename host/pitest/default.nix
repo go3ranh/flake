@@ -39,10 +39,12 @@
     tmp.useTmpfs = true;
     tmp.tmpfsSize = "80%";
   };
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
+  fileSystems."/" = lib.mkForce {
+    device = "/dev/disk/by-label/NIXOS_SD";
     fsType = "ext4";
   };
+
+  users.users.goeranh.initialPassword = "test";
 
   goeranh = {
     server = true;
@@ -50,7 +52,14 @@
 
   networking = {
     hostName = "pitest"; # Define your hostname.
-    useDHCP = true;
+    useDHCP = false;
+    interfaces.eth0.ipv4.addresses = [{
+      address = "192.168.178.2";
+      prefixLength = 24;
+    }];
+    defaultGateway = "192.168.178.1";
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
+
     firewall.enable = true;
   };
 
@@ -66,30 +75,20 @@
       trusted-users = [ "client" ];
     };
   };
-  # kernel 32bit personality patch from Ubuntu
-  # boot.kernelPatches = [
-  #   rec {
-  #     name = "compat_uts_machine";
-  #     patch = pkgs.fetchpatch {
-  #       inherit name;
-  #       url = "https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy/patch/?id=c1da50fa6eddad313360249cadcd4905ac9f82ea";
-  #       sha256 = "sha256-mpq4YLhobWGs+TRKjIjoe5uDiYLVlimqWUCBGFH/zzU=";
-  #     };
-  #   }
-  # ];
 
   environment.systemPackages = with pkgs; [
     libraspberrypi
     raspberrypi-eeprom
     vim
+    tmux
     wget
-    libva-utils
   ];
 
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
   };
+  sdImage.compressImage = false;
 
   console.keyMap = "de";
 
@@ -99,6 +98,7 @@
       Storage=volatile
     '';
   };
+  virtualisation.libvirtd.enable = true;
 
   systemd = {
     services.nix-daemon.serviceConfig = {
