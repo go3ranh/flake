@@ -13,14 +13,14 @@
     # repeat https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/default.nix#L20
     # to overwrite audio module
     kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
-    loader.raspberryPi = {
-      enable = true;
-      version = 4;
-      firmwareConfig = ''
-        gpu_mem=256
-        dtparam=audio=on
-      '';
-    };
+    # loader.raspberryPi = {
+    #   enable = true;
+    #   version = 4;
+    #   firmwareConfig = ''
+    #     gpu_mem=256
+    #     dtparam=audio=on
+    #   '';
+    # };
 
     kernelParams = lib.mkForce [
       "snd_bcm2835.enable_headphones=1"
@@ -36,17 +36,21 @@
       "compat_uts_machine=armv6l"
     ];
 
-    tmpOnTmpfs = true;
-    tmpOnTmpfsSize = "80%";
+    tmp.useTmpfs = true;
+    tmp.tmpfsSize = "80%";
   };
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
   };
 
+  goeranh = {
+    server = true;
+  };
+
   networking = {
     hostName = "pitest"; # Define your hostname.
-    useDHCP = false;
+    useDHCP = true;
     firewall.enable = true;
   };
 
@@ -94,10 +98,6 @@
     journald.extraConfig = ''
       Storage=volatile
     '';
-
-    openssh = {
-      enable = true;
-    };
   };
 
   systemd = {
