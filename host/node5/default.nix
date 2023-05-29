@@ -115,6 +115,7 @@ in
     };
   };
 
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot.initrd.availableKernelModules = [
     "ahci"
     "xhci_pci"
