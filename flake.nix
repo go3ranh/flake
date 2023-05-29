@@ -144,12 +144,12 @@
                   source ${packages.x86_64-linux.settings.bashrc.outPath}
                   source ${packages.x86_64-linux.settings.goeranh.outPath}
                 '';
-			    neovim.configure = {
+                neovim.configure = {
                   customRC = ''
                     dofile('${packages.x86_64-linux.settings.nvimconfig.outPath}/init.lua')
                   '';
-			    };
-			  };
+                };
+              };
             }
             self.nixosModules.goeranh
           ];
