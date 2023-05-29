@@ -67,6 +67,19 @@
             }
           ];
         };
+        pitest = lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            ./host/pitest
+            self.nixosModules.goeranh
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.bashrc.outPath}
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
+          ];
+        };
         desktop = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
