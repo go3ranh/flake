@@ -51,7 +51,7 @@
   };
 
   networking = {
-    hostName = "pitest"; # Define your hostname.
+    hostName = "nixpi1"; # Define your hostname.
     useDHCP = false;
     interfaces.eth0.ipv4.addresses = [{
       address = "192.168.178.5";
@@ -59,8 +59,10 @@
     }];
     defaultGateway = "192.168.178.1";
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
-
-    firewall.enable = true;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 80 443 ];
+    };
   };
 
   nix = {
@@ -93,6 +95,18 @@
   console.keyMap = "de";
 
   services = {
+    gitea = {
+      enable = true;
+      package = pkgs.forgejo;
+      settings = {
+        server = {
+          HTTP_ADDR = "127.0.0.1";
+        };
+      };
+    };
+    nginx = {
+      enable = true;
+    };
     # Do not log to flash:
     journald.extraConfig = ''
       Storage=volatile
