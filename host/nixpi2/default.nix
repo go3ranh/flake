@@ -51,7 +51,7 @@
   };
 
   networking = {
-    hostName = "pitest"; # Define your hostname.
+    hostName = "nixpi2"; # Define your hostname.
     useDHCP = false;
     interfaces.eth0.ipv4.addresses = [{
       address = "192.168.178.6";
