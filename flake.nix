@@ -2,7 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "flake:nixpkgs/nixos-unstable";
+    nixpkgs.url = "flake:nixpkgs/nixos-23.05";
     nixinate = {
       url = "github:matthewcroughan/nixinate";
       inputs.nixpkgs.follows = "nixpkgs";
