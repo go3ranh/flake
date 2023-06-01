@@ -25,28 +25,6 @@
       };
       apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
-        build = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/build
-            self.nixosModules.goeranh
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "nixbuild";
-                sshUser = "goeranh";
-                buildOn = "remote";
-                substituteOnTarget = true;
-                hermetic = false;
-              };
-            }
-          ];
-        };
         host = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
