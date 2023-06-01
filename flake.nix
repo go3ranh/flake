@@ -12,9 +12,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { self, nixpkgs, nixinate, hyprland, nixos-hardware, flake-utils }@inputs:
+  outputs = { self, nixpkgs, nixinate, hyprland, nixos-hardware }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       lib = nixpkgs.lib;
@@ -240,7 +239,7 @@
         );
 
       #legacyPackages = nixpkgs.legacyPackages;
-      packages.x86_64-linux = import ./packages.nix { inherit inputs pkgs lib self flake-utils; };
+      packages.x86_64-linux = import ./packages.nix { inherit inputs pkgs lib self; };
 
       devShells = {
         x86_64-linux = {
