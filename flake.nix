@@ -75,15 +75,15 @@
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
             nixos-hardware.nixosModules.raspberry-pi-4
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
+            #{
+            #  programs.bash.interactiveShellInit = ''
+            #    source ${packages.x86_64-linux.settings.bashrc.outPath}
+            #    source ${packages.x86_64-linux.settings.goeranh.outPath}
+            #  '';
+            #}
             {
               _module.args.nixinate = {
-                host = "192.168.178.2";
+                host = "pitest";
                 sshUser = "goeranh";
                 buildOn = "remote"; # valid args are "local" or "remote"
                 substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
@@ -99,15 +99,15 @@
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
             nixos-hardware.nixosModules.raspberry-pi-4
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
+            #{
+            #  programs.bash.interactiveShellInit = ''
+            #    source ${packages.x86_64-linux.settings.bashrc.outPath}
+            #    source ${packages.x86_64-linux.settings.goeranh.outPath}
+            #  '';
+            #}
             {
               _module.args.nixinate = {
-                host = "192.168.178.5";
+                host = "nixpi1";
                 sshUser = "goeranh";
                 buildOn = "remote"; # valid args are "local" or "remote"
                 substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
