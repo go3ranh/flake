@@ -1,4 +1,12 @@
 { config, pkgs, lib, ... }:
+let
+  hostname = "nixpi1";
+  domain = "tailf0ec0.ts.net";
+  #adDomain = "goeranh.de";
+  #staticIp = "192.168.178.5";
+  #adNetbiosName = "goeranhdomain";
+  #adWorkgroup = "goeranh";
+in
 {
   hardware.enableRedistributableFirmware = true;
   powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
@@ -10,17 +18,7 @@
   };
 
   boot = {
-    # repeat https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/default.nix#L20
-    # to overwrite audio module
     kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
-    # loader.raspberryPi = {
-    #   enable = true;
-    #   version = 4;
-    #   firmwareConfig = ''
-    #     gpu_mem=256
-    #     dtparam=audio=on
-    #   '';
-    # };
 
     kernelParams = lib.mkForce [
       "snd_bcm2835.enable_headphones=1"
@@ -44,14 +42,13 @@
     fsType = "ext4";
   };
 
-  users.users.goeranh.initialPassword = "test";
-
   goeranh = {
     server = true;
   };
 
   networking = {
-    hostName = "nixpi1"; # Define your hostname.
+    hostName = hostname;
+    domain = domain;
     useDHCP = false;
     interfaces.eth0.ipv4.addresses = [{
       address = "192.168.178.5";
@@ -61,7 +58,7 @@
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [ 80 139 443 445 636 8443 ];
     };
   };
 
@@ -94,19 +91,66 @@
 
   console.keyMap = "de";
 
+  # Rebuild Samba with LDAP, MDNS and Domain Controller support
+  #nixpkgs.overlays = [
+  #  (self: super: {
+  #    samba = (super.samba.override {
+  #      enableLDAP = true;
+  #      enableMDNS = true;
+  #      enableDomainController = true;
+  #      enableProfiling = true;
+  #    }).overrideAttrs (finalAttrs: previousAttrs: {
+  #      pythonPath = with super; [ python3Packages.dnspython tdb ldb talloc ];
+  #    });
+  #  })
+  #];
+
   services = {
-    gitea = {
+    openssh = {
       enable = true;
-      package = pkgs.forgejo;
-      settings = {
-        server = {
-          HTTP_ADDR = "127.0.0.1";
-        };
+    };
+    kanidm = {
+      enableServer = true;
+      unixSettings.pam_allowed_login_groups = [
+        "goeranh"
+      ];
+      serverSettings = {
+        tls_key = "/var/lib/${config.networking.fqdn}.key";
+        tls_chain = "/var/lib/${config.networking.fqdn}.crt";
+        domain = "${config.networking.domain}";
+        bindaddress = "0.0.0.0:8443";
+        ldapbindaddress = "0.0.0.0:636";
+        origin = "https://${config.networking.fqdn}";
       };
+
+      enablePam = true;
+      enableClient = true;
+      clientSettings.uri = "https://${config.networking.fqdn}:8443";
+
     };
-    nginx = {
-      enable = true;
-    };
+    #samba = {
+    #  enable = true;
+    #  enableNmbd = false;
+    #  enableWinbindd = false;
+    #  configText = ''
+    #    # Global parameters
+    #    [global
+    #        dns forwarder = ${staticIp}
+    #        netbios name = ${adNetbiosName}
+    #        realm = ${lib.toUpper adDomain}
+    #        server role = active directory domain controller
+    #        workgroup = ${adWorkgroup}
+    #        idmap_ldb:use rfc2307 = yes
+    #
+    #    [sysvol]
+    #        path = /var/lib/samba/sysvol
+    #        read only = No
+    #
+    #    [netlogon]
+    #        path = /var/lib/samba/sysvol/${adDomain}/scripts
+    #        read only = No
+    #  '';
+    #};
     # Do not log to flash:
     journald.extraConfig = ''
       Storage=volatile
@@ -114,13 +158,40 @@
   };
   virtualisation.libvirtd.enable = true;
 
+  #environment.etc = {
+  #  resolvconf = {
+  #    text = ''
+  #      search ${adDomain}
+  #      nameserver ${staticIp}
+  #    '';
+  #  };
+  #};
   systemd = {
-    services.nix-daemon.serviceConfig = {
-      LimitNOFILE = lib.mkForce 8192;
-      CPUWeight = 5;
-      MemoryHigh = "4G";
-      MemoryMax = "6G";
-      MemorySwapMax = "0";
+    services = {
+      nix-daemon.serviceConfig = {
+        LimitNOFILE = lib.mkForce 8192;
+        CPUWeight = 5;
+        MemoryHigh = "4G";
+        MemoryMax = "6G";
+        MemorySwapMax = "0";
+      };
+      #samba-smbd.enable = false;
+      #resolvconf.enable = false;
+      #samba = {
+      #  description = "Samba Service Daemon";
+      #  requiredBy = [ "samba.target" ];
+      #  partOf = [ "samba.target" ];
+
+      #  serviceConfig = {
+      #    ExecStart = "${pkgs.samba}/sbin/samba --foreground --no-process-group";
+      #    ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      #    LimitNOFILE = 16384;
+      #    PIDFile = "/run/samba.pid";
+      #    Type = "notify";
+      #    NotifyAccess = "all"; #may not do anything...
+      #  };
+      #  unitConfig.RequiresMountsFor = "/var/lib/samba";
+      #};
     };
   };
 
