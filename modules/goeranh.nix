@@ -107,8 +107,11 @@ in
           jetbrains.jdk
           jetbrains.phpstorm
           jetbrains.webstorm
+          jetbrains.clion
           libxcrypt
           meson
+          gnumake
+          cmake
           ninja
           nodejs
         ] else [ ])
