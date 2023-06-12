@@ -79,11 +79,12 @@ in
     lm_sensors
     lsof
     smartmontools
-	vscode
-	platformio
-	python3
-	gcc
-	clang
+    vscode
+    platformio
+    python3
+    python3Packages.pip
+    gcc
+    clang
   ];
 
   virtualisation.docker.enable = true;
