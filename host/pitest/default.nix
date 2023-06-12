@@ -44,16 +44,9 @@
     fsType = "ext4";
   };
 
-  users.ldap = {
-    enable = true;
-    useTLS = true;
-    server = "ldaps://nixpi1.tailf0ec0.ts.net";
-    base = "dc=tailf0ec0,dc=ts,dc=net";
-    bind = {
-      policy = "soft";
-      distinguishedName = "cn=admin,dc=tailf0ec0,dc=ts,dc=net";
-      passwordFile = "/var/lib/smbpasswd";
-    };
+  fileSystems."/home/goeranh/ssd" = lib.mkForce {
+    device = "/dev/disk/by-label/store";
+    fsType = "btrfs";
   };
 
   goeranh = {
