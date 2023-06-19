@@ -24,6 +24,9 @@ in
 
   networking.hostName = "node5";
   networking.networkmanager.enable = true;
+  networking.hosts = {
+    "127.0.0.2" = [ "youtube.com" ];
+  };
 
   time.timeZone = "Europe/Berlin";
 
