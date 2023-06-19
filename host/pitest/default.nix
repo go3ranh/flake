@@ -102,6 +102,7 @@
     '';
   };
   virtualisation.libvirtd.enable = true;
+  virtualisation.podman.enable = true;
 
   systemd = {
     services.nix-daemon.serviceConfig = {
