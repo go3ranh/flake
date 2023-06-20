@@ -64,7 +64,7 @@ in
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
     users.users.goeranh = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" ];
+      extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" "plugdev" ];
       openssh.authorizedKeys.keys = mkIf cfg.server [
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaU3idFwbk0uY4jooS9dwdBvNLnWfgFRmc7hkSeubSAWnT5J6NM8L8NZrT1ZoiYfebsKmwIn111BGfohZkC6wA= homelab key goeranh"
       ];
