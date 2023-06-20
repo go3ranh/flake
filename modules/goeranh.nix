@@ -72,7 +72,7 @@ in
         (with pkgs; [
           btrfs-progs
           tailscale
-		  dig
+          dig
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
           #bitwarden # nodejs 16 deprecated
