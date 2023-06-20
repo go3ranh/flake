@@ -73,6 +73,8 @@ in
     development = true;
   };
 
+  hardware.hackrf.enable = true;
+
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
