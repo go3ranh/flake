@@ -73,6 +73,7 @@ in
           btrfs-progs
           tailscale
           dig
+          rsync
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
           #bitwarden # nodejs 16 deprecated
