@@ -64,6 +64,7 @@
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
     firewall.enable = true;
+    firewall.allowedTCPPorts = [ 80 443 ];
   };
 
   nix = {
@@ -100,6 +101,16 @@
     journald.extraConfig = ''
       Storage=volatile
     '';
+    invoiceplane = {
+      sites = {
+        "pitest" = {
+          enable = true;
+          database = {
+            createLocally = true;
+          };
+        };
+      };
+    };
   };
   virtualisation.libvirtd.enable = true;
   virtualisation.podman.enable = true;
