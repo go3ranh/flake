@@ -55,6 +55,7 @@
 
   networking = {
     hostName = "pitest"; # Define your hostname.
+	nftables.enable = true;
     useDHCP = false;
     interfaces.eth0.ipv4.addresses = [{
       address = "192.168.178.2";
@@ -64,7 +65,7 @@
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [ 80 ];
   };
 
   nix = {
