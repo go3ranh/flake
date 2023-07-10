@@ -55,7 +55,8 @@
 
   networking = {
     hostName = "pitest"; # Define your hostname.
-	nftables.enable = true;
+    domain = "tailf0ec0.ts.net";
+    nftables.enable = true;
     useDHCP = false;
     interfaces.eth0.ipv4.addresses = [{
       address = "192.168.178.2";
@@ -108,6 +109,20 @@
           enable = true;
           database = {
             createLocally = true;
+          };
+        };
+      };
+    };
+    nginx = {
+      virtualHosts = {
+        "${config.networking.fqdn}" = {
+          locations = {
+            "/" = {
+              proxyPass = "http://localhost:8081";
+            };
+            "/invoices/" = {
+              proxyPass = "http://localhost:8080";
+            };
           };
         };
       };
