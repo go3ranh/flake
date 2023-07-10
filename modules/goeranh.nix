@@ -78,6 +78,7 @@ in
         (if cfg.desktop || cfg.hypr then with pkgs; [
           #bitwarden # nodejs 16 deprecated
           chromium
+          obsidian
           dbeaver
           discord
           filezilla
