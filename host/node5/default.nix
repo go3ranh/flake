@@ -32,6 +32,16 @@ in
       };
       startAt = "daily";
     };
+    var-snapshot = {
+      path = [
+        pkgs.zfs
+      ];
+      script = "zfs snap -r rpool/nixos/var@$(date +%d-%m-%Y-%H-%M)";
+      serviceConfig = {
+        User = config.users.users.goeranh.name;
+      };
+      startAt = "weekly";
+    };
   };
 
   networking.hostName = "node5";
