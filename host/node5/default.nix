@@ -20,7 +20,7 @@ in
   ];
 
   systemd.services = {
-    zfs-mount.enable = true;
+    zfs-mount.enable = false;
     NetworkManager-wait-online.enable = false;
     home-snapshot = {
       path = [
