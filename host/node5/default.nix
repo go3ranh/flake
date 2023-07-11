@@ -19,8 +19,20 @@ in
     #./dconf.nix
   ];
 
-  systemd.services.zfs-mount.enable = false;
-  systemd.services.NetworkManager-wait-online.enable = false;
+  systemd.services = {
+    zfs-mount.enable = false;
+    NetworkManager-wait-online.enable = false;
+    home-snapshot = {
+      path = [
+        pkgs.zfs
+      ];
+      script = "zfs snap rpool/nixos/home@$(date +%d-%m-%Y-%H-%M)";
+      serviceConfig = {
+        User = config.users.users.goeranh.name;
+      };
+      startAt = "daily";
+    };
+  };
 
   networking.hostName = "node5";
   networking.networkmanager.enable = true;
