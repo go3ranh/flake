@@ -125,23 +125,23 @@ in
       package = pkgs.usbmuxd2;
     };
 
-    mysql = {
-      enable = true;
-      package = pkgs.mariadb;
-      ensureDatabases = [
-        "shop"
-        "datanature"
-      ];
-      ensureUsers = [
-        {
-          name = "goeranh";
-          ensurePermissions = {
-            "shop.*" = "ALL PRIVILEGES";
-            "datanature.*" = "ALL PRIVILEGES";
-          };
-        }
-      ];
-    };
+    #mysql = {
+    #  enable = true;
+    #  package = pkgs.mariadb;
+    #  ensureDatabases = [
+    #    "shop"
+    #    "datanature"
+    #  ];
+    #  ensureUsers = [
+    #    {
+    #      name = "goeranh";
+    #      ensurePermissions = {
+    #        "shop.*" = "ALL PRIVILEGES";
+    #        "datanature.*" = "ALL PRIVILEGES";
+    #      };
+    #    }
+    #  ];
+    #};
   };
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
