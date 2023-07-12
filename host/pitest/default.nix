@@ -151,6 +151,25 @@
       MemoryMax = "6G";
       MemorySwapMax = "0";
     };
+    #network = {
+    #  enable = true;
+    #  networks."10-lan" = {
+    #    enable = true;
+    #    matchConfig.Name = "eth0";
+    #    address = [ "192.168.178.2/24" ];
+    #    gateway = [ "192.168.178.1" ];
+    #    dns = [ "1.1.1.1" "9.9.9.9" ];
+    #    routes = [
+    #      { routeConfig.Gateway = "192.168.178.1"; }
+    #      {
+    #        routeConfig = {
+    #          Gateway = "192.168.178.1";
+    #          GatewayOnLink = true;
+    #        };
+    #      }
+    #    ];
+    #  };
+    #};
   };
 
   system.stateVersion = "22.11"; # Did you read the comment?
