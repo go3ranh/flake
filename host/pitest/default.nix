@@ -66,7 +66,7 @@
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 80 ];
+    firewall.allowedTCPPorts = [ 80 2222 3000 ];
   };
 
   nix = {
@@ -111,6 +111,18 @@
             createLocally = true;
           };
         };
+      };
+    };
+    gitea = {
+      settings = {
+        enable = true;
+        #service.DISABLE_REGISTRATION = true;
+        server = {
+          SSH_PORT = "2222";
+          ROOT_URL = "https://${config.networking.hostname}:3000/";
+        };
+        #package = pkgs.forgejo;
+        #lfs.enable = true;
       };
     };
     nginx = {
