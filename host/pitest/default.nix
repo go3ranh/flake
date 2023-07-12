@@ -66,7 +66,7 @@
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 80 6080 ];
+    firewall.allowedTCPPorts = [ 80 ];
   };
 
   nix = {
@@ -126,26 +126,6 @@
           };
         };
       };
-    };
-    hound = {
-      enable = true;
-      config = ''
-        {
-          "max-concurrent-indexers" : 2,
-          "dbpath" : "${config.services.hound.home}/data",
-          "repos" : {
-            "nixpkgs": {
-              "url" : "https://www.github.com/NixOS/nixpkgs.git"
-            },
-            "platformio-esp-test": {
-              "url" : "https://gitlab.goeranh.de/goeranh/platformio-esp-test"
-            },
-            "flakeathome": {
-              "url" : "https://gitlab.goeranh.de/goeranh/flakeathome"
-            }
-          }
-        }
-      '';
     };
   };
   virtualisation.libvirtd.enable = true;
