@@ -30,7 +30,7 @@ in
       serviceConfig = {
         User = config.users.users.goeranh.name;
       };
-      startAt = "daily";
+      startAt = "hourly";
     };
     var-snapshot = {
       path = [
