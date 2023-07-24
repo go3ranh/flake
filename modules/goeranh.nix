@@ -136,6 +136,35 @@ in
       bash = {
         enableCompletion = true;
       };
+      tmux = {
+        enable = true;
+        terminal = "screen-256color";
+        keyMode = "vi";
+        historyLimit = 50000;
+        escapeTime = 50;
+        baseIndex = 1;
+        plugins = with pkgs.tmuxPlugins; [
+          sidebar # prefix + tab / backspace
+          fingers # quick copy paste prefix + f
+        ];
+        extraConfig = ''
+          bind '§' splitw -hc '#{pane_current_path}'
+          bind -n M-z resize-pane -Z
+
+          bind -n M-h select-pane -L
+          bind -n M-l select-pane -R
+          bind -n M-k select-pane -U
+          bind -n M-j select-pane -D
+          bind -n M-H select-pane -L
+          bind -n M-L select-pane -R
+          bind -n M-K select-pane -U
+          bind -n M-J select-pane -D
+          bind h select-pane -L
+          bind j select-pane -D
+          bind k select-pane -U
+          bind l select-pane -R
+        '';
+      };
     };
 
 
