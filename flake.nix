@@ -3,6 +3,10 @@
 
   inputs = {
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
+	microvm = {
+      url = "github:astro/microvm.nix";
+	  inputs.nixpkgs.follows = "nixpkgs";
+	};
     nixinate = {
       url = "github:matthewcroughan/nixinate";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,7 +17,7 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
-  outputs = { self, nixpkgs, nixinate, hyprland, nixos-hardware }@inputs:
+  outputs = { self, nixpkgs, microvm, nixinate, hyprland, nixos-hardware }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       lib = nixpkgs.lib;
