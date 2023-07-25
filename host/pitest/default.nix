@@ -103,25 +103,25 @@
     journald.extraConfig = ''
       Storage=volatile
     '';
-    invoiceplane = {
-      sites = {
-        "pitest" = {
-          enable = true;
-          database = {
-            createLocally = true;
-          };
-        };
-      };
-    };
+    #invoiceplane = {
+    #  sites = {
+    #    "pitest" = {
+    #      enable = true;
+    #      database = {
+    #        createLocally = true;
+    #      };
+    #    };
+    #  };
+    #};
     gitea = {
       settings = {
         enable = true;
         #service.DISABLE_REGISTRATION = true;
         server = {
           SSH_PORT = "2222";
-          ROOT_URL = "https://${config.networking.hostname}:3000/";
+          ROOT_URL = "https://${config.networking.fqdn}";
         };
-        #package = pkgs.forgejo;
+        package = pkgs.forgejo;
         #lfs.enable = true;
       };
     };
@@ -134,6 +134,9 @@
             };
             "/invoices/" = {
               proxyPass = "http://localhost:8080";
+            };
+            "/git/" = {
+              proxyPass = "http://localhost:3000";
             };
           };
         };
