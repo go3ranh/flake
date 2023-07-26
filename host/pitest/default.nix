@@ -66,7 +66,7 @@
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 80 2222 3000 ];
+    firewall.allowedTCPPorts = [ 80 443 ];
   };
 
   nix = {
@@ -114,29 +114,34 @@
     #  };
     #};
     gitea = {
+      enable = true;
       settings = {
-        enable = true;
+        #enable = true;
         #service.DISABLE_REGISTRATION = true;
         server = {
-          SSH_PORT = "2222";
-          ROOT_URL = "https://${config.networking.fqdn}";
+          SSH_PORT = 2222;
+          ROOT_URL = "https://${config.networking.fqdn}/git/";
         };
-        package = pkgs.forgejo;
+        #package = pkgs.forgejo;
         #lfs.enable = true;
       };
     };
     nginx = {
+      enable = true;
       virtualHosts = {
         "${config.networking.fqdn}" = {
+          sslCertificate = "/var/lib/pitest.tailf0ec0.ts.net.crt";
+          sslCertificateKey = "/var/lib/pitest.tailf0ec0.ts.net.key";
+          forceSSL = true;
           locations = {
             "/" = {
               proxyPass = "http://localhost:8081";
             };
-            "/invoices/" = {
-              proxyPass = "http://localhost:8080";
-            };
             "/git/" = {
               proxyPass = "http://localhost:3000";
+              extraConfig = ''
+                rewrite ^/git(.*)$ $1 break;
+              '';
             };
           };
         };
