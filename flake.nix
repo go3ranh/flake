@@ -3,10 +3,10 @@
 
   inputs = {
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
-	microvm = {
+    microvm = {
       url = "github:astro/microvm.nix";
-	  inputs.nixpkgs.follows = "nixpkgs";
-	};
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixinate = {
       url = "github:matthewcroughan/nixinate";
       inputs.nixpkgs.follows = "nixpkgs";
