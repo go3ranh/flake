@@ -150,6 +150,13 @@ in
         extraConfig = ''
           bind '§' splitw -hc '#{pane_current_path}'
           bind -n M-z resize-pane -Z
+          #open copy mode y
+          bind -n y copy-mode
+          #vi scrolling
+          set-window-option -g mode-keys vi
+          #u/f pageup/pagedown
+          bind -T copy-mode u send -X page-up
+          bind -T copy-mode f send -X page-down
 
           bind -n M-h select-pane -L
           bind -n M-l select-pane -R
