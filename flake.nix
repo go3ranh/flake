@@ -26,7 +26,7 @@
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
       };
-      apps = nixinate.nixinate.x86_64-linux self;
+      #apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
         build = lib.nixosSystem {
           system = "x86_64-linux";
@@ -94,6 +94,15 @@
                 hermetic = false;
               };
             }
+          ];
+        };
+        networking-test = lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            ./host/networking-test
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            self.nixosModules.goeranh
+            nixos-hardware.nixosModules.raspberry-pi-4
           ];
         };
         nixpi1 = lib.nixosSystem {
@@ -233,14 +242,14 @@
         };
       };
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-      hydraJobs =
-        nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob) (
-          let
-            getBuildEntryPoint = _: nixosSystem:
-              nixosSystem.config.system.build.toplevel;
-          in
-          nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-        );
+      #hydraJobs =
+      #  nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob) (
+      #    let
+      #      getBuildEntryPoint = _: nixosSystem:
+      #        nixosSystem.config.system.build.toplevel;
+      #    in
+      #    nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
+      #  );
 
       #legacyPackages = nixpkgs.legacyPackages;
       packages.x86_64-linux = import ./packages.nix { inherit inputs pkgs lib self; };
