@@ -111,10 +111,15 @@
     gitea = {
       enable = true;
       settings = {
-        #service.DISABLE_REGISTRATION = true;
+        service.DISABLE_REGISTRATION = true;
         server = {
-          SSH_PORT = 2222;
           ROOT_URL = "https://${config.networking.fqdn}/git/";
+          WORK_PATH= "/var/lib/gitea";
+		  DISABLE_SSH = false;
+		  DOMAIN = "${config.networking.fqdn}";
+		  SSH_DOMAIN = "${config.networking.fqdn}";
+		  SSH_PORT = 2222;
+		  START_SSH_SERVER = true;
         };
         #package = pkgs.forgejo;
       };
@@ -169,7 +174,7 @@
 
       networking.firewall = {
         enable = true;
-        allowedTCPPorts = [ 80 ];
+        allowedTCPPorts = [ 80 2222 ];
       };
 
       # Manually configure nameserver. Using resolved inside the container seems to fail
