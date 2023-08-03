@@ -61,7 +61,17 @@ in
     };
   };
   config = {
-    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    nix = {
+      settings = {
+        experimental-features = [ "nix-command" "flakes" ];
+        auto-optimise-store = true;
+      };
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 30d";
+      };
+    };
     users.users.goeranh = {
       isNormalUser = true;
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" "plugdev" ];
@@ -135,6 +145,9 @@ in
       };
       bash = {
         enableCompletion = true;
+        shellInit = ''
+          alias nrepl="nix repl --file /etc/nixos/repl.nix"
+        '';
       };
       tmux = {
         enable = true;
@@ -174,68 +187,79 @@ in
       };
     };
 
+    environment = {
+      gnome.excludePackages = mkIf cfg.desktop [
+        pkgs.gnome.baobab # disk usage analyzer
+        pkgs.gnome.cheese # photo booth
+        #eog         # image viewer
+        #epiphany    # web browser
+        pkgs.gnome.gedit # text editor
+        pkgs.gnome.simple-scan # document scanner
+        #totem       # video player
+        pkgs.gnome.yelp # help viewer
+        pkgs.gnome.evince # document viewer
+        pkgs.gnome.geary # email client
 
-    environment.systemPackages = builtins.concatLists [
-      (with pkgs; [
-        bash
-        bat
-        direnv
-        exa
-        fzf
-        gettext
-        git
-        gitui
-        gnupg
-        gofu
-        htop
-        neovim
-        nix-direnv
-        nmap
-        ripgrep
-        tmux
-        unzip
-        wget
-        zellij
-      ])
-      (if cfg.hypr then with pkgs; [
-        pciutils
-        gnome.nautilus
-        wlogout
-        swaylock
-        pamixer
-        brightnessctl
-        foot
-        kitty
-        kanshi
-        pavucontrol
-        dunst
-      ] else [ ])
-    ];
-
-    environment.gnome.excludePackages = mkIf cfg.desktop [
-      pkgs.gnome.baobab # disk usage analyzer
-      pkgs.gnome.cheese # photo booth
-      #eog         # image viewer
-      #epiphany    # web browser
-      pkgs.gnome.gedit # text editor
-      pkgs.gnome.simple-scan # document scanner
-      #totem       # video player
-      pkgs.gnome.yelp # help viewer
-      pkgs.gnome.evince # document viewer
-      pkgs.gnome.geary # email client
-
-      # these should be self explanatory
-      pkgs.gnome.gnome-calculator
-      pkgs.gnome.gnome-calendar
-      pkgs.gnome.gnome-clocks
-      pkgs.gnome.gnome-contacts
-      pkgs.gnome.gnome-font-viewer
-      pkgs.gnome.gnome-logs
-      pkgs.gnome.gnome-maps
-      pkgs.gnome.gnome-music
-      pkgs.gnome.gnome-weather
-      pkgs.gnome-connections
-    ];
+        # these should be self explanatory
+        pkgs.gnome.gnome-calculator
+        pkgs.gnome.gnome-calendar
+        pkgs.gnome.gnome-clocks
+        pkgs.gnome.gnome-contacts
+        pkgs.gnome.gnome-font-viewer
+        pkgs.gnome.gnome-logs
+        pkgs.gnome.gnome-maps
+        pkgs.gnome.gnome-music
+        pkgs.gnome.gnome-weather
+        pkgs.gnome-connections
+      ];
+      systemPackages = builtins.concatLists
+        [
+          (with pkgs; [
+            bash
+            bat
+            direnv
+            exa
+            fzf
+            gettext
+            git
+            gitui
+            gnupg
+            gofu
+            htop
+            neovim
+            nix-direnv
+            nmap
+            ripgrep
+            tmux
+            unzip
+            wget
+            zellij
+          ])
+          (if cfg.hypr then with pkgs; [
+            pciutils
+            gnome.nautilus
+            wlogout
+            swaylock
+            pamixer
+            brightnessctl
+            foot
+            kitty
+            kanshi
+            pavucontrol
+            dunst
+          ] else [ ])
+        ];
+      etc = {
+        "nixos/repl.nix" = {
+          text = ''
+            {
+              pkgs = import <nixpkgs> {};
+              lib = import <nixpkgs/lib>;
+            }
+          '';
+        };
+      };
+    };
     services.xserver = mkIf cfg.desktop {
       enable = true;
       displayManager.gdm.enable = true;
@@ -244,17 +268,6 @@ in
       layout = "de";
       xkbVariant = "";
     };
-
-
-    #environment.systemPackages = with pkgs; [
-    #  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #  #  wget
-    #  seatd
-    #  pciutils
-    #  kitty
-    #  gnome-console
-    #  firefox
-    #];
 
     programs.hyprland = mkIf cfg.hypr {
       enable = true;
