@@ -151,7 +151,7 @@ in
           bind '§' splitw -hc '#{pane_current_path}'
           bind -n M-z resize-pane -Z
           #open copy mode y
-          bind -n y copy-mode
+          bind y copy-mode
           #vi scrolling
           set-window-option -g mode-keys vi
           #u/f pageup/pagedown
