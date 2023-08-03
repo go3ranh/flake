@@ -66,7 +66,12 @@
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [ 80 443 2222 ];
+    nat = {
+      enable = true;
+      internalInterfaces = [ "ve-+" ];
+      externalInterface = "eth0";
+    };
   };
 
   nix = {
@@ -103,27 +108,15 @@
     journald.extraConfig = ''
       Storage=volatile
     '';
-    #invoiceplane = {
-    #  sites = {
-    #    "pitest" = {
-    #      enable = true;
-    #      database = {
-    #        createLocally = true;
-    #      };
-    #    };
-    #  };
-    #};
     gitea = {
       enable = true;
       settings = {
-        #enable = true;
         #service.DISABLE_REGISTRATION = true;
         server = {
           SSH_PORT = 2222;
           ROOT_URL = "https://${config.networking.fqdn}/git/";
         };
         #package = pkgs.forgejo;
-        #lfs.enable = true;
       };
     };
     nginx = {
@@ -143,9 +136,46 @@
                 rewrite ^/git(.*)$ $1 break;
               '';
             };
+            "/invoices/" = {
+              proxyPass = "http://10.0.0.2/";
+            };
           };
         };
       };
+    };
+  };
+
+  containers.invoiceplane = {
+    autoStart = true;
+    privateNetwork = true;
+    hostAddress = "10.0.0.1";
+    localAddress = "10.0.0.2";
+    config = { config, pkgs, ... }: {
+
+      services.invoiceplane = {
+        sites = {
+          "10.0.0.2" = {
+            enable = true;
+            #port = 81;
+            #proxyPathPrefix = "/invoices";
+            database = {
+              createLocally = true;
+            };
+          };
+        };
+      };
+
+      system.stateVersion = "23.05";
+
+      networking.firewall = {
+        enable = true;
+        allowedTCPPorts = [ 80 ];
+      };
+
+      # Manually configure nameserver. Using resolved inside the container seems to fail
+      # currently
+      environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
+
     };
   };
   virtualisation.libvirtd.enable = true;
