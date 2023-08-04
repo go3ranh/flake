@@ -114,15 +114,16 @@
         service.DISABLE_REGISTRATION = true;
         server = {
           ROOT_URL = "https://${config.networking.fqdn}/git/";
-          WORK_PATH= "/var/lib/gitea";
-		  DISABLE_SSH = false;
-		  DOMAIN = "${config.networking.fqdn}";
-		  SSH_DOMAIN = "${config.networking.fqdn}";
-		  SSH_PORT = 2222;
-		  START_SSH_SERVER = true;
+          WORK_PATH = "/var/lib/gitea";
+          DISABLE_SSH = false;
+          DOMAIN = "${config.networking.fqdn}";
+          SSH_DOMAIN = "${config.networking.fqdn}";
+          SSH_PORT = 2222;
+          START_SSH_SERVER = true;
         };
-        #package = pkgs.forgejo;
+        log.LEVEL = "Warn";
       };
+      package = pkgs.forgejo;
     };
     nginx = {
       enable = true;
