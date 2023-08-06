@@ -1,5 +1,4 @@
 {
-  disko.devices = {
     disk = {
       a = {
         type = "disk";
@@ -137,5 +136,5 @@
         };
       };
     };
-  };
-}
+  }
+

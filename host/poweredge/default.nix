@@ -12,9 +12,7 @@ in
 
 
   # Bootloader.
-  disko.devices = import ./disk-config.nix {
-    lib = lib;
-  };
+  disko.devices = import ./disk-config.nix;
   boot.loader.grub = {
     devices = [ "/dev/sda" ];
     efiSupport = true;
@@ -26,7 +24,8 @@ in
 
   networking = {
     hostName = "${hostname}";
-    interfaces.eno1.addresses = [
+    hostId = "7a3ce441";
+    interfaces."eno1".ipv6.addresses = [
       {
         address = "192.168.178.123";
         prefixLength = 24;

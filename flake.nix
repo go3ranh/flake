@@ -138,6 +138,7 @@
           modules = [
             ./host/poweredge
             self.nixosModules.goeranh
+            disko.nixosModules.disko
             {
               programs.bash.interactiveShellInit = ''
                 source ${packages.x86_64-linux.settings.bashrc.outPath}
