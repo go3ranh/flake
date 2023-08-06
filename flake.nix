@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
+    #nixpkgs.url = "github:go3ranh/nixpkgs/invoiceplane-change-port";
     microvm = {
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
