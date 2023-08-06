@@ -17,8 +17,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, nixpkgs, microvm, nixinate, hyprland, nixos-hardware }@inputs:
+  outputs = { self, nixpkgs, microvm, nixinate, hyprland, nixos-hardware, disko }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       lib = nixpkgs.lib;
@@ -122,6 +126,28 @@
               _module.args.nixinate = {
                 host = "192.168.178.158";
                 sshUser = "goeranh";
+                buildOn = "remote";
+                substituteOnTarget = true;
+                hermetic = false;
+              };
+            }
+          ];
+        };
+        poweredge = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/poweredge
+            self.nixosModules.goeranh
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${packages.x86_64-linux.settings.bashrc.outPath}
+                source ${packages.x86_64-linux.settings.goeranh.outPath}
+              '';
+            }
+            {
+              _module.args.nixinate = {
+                host = "192.168.178.123";
+                sshUser = "root";
                 buildOn = "remote";
                 substituteOnTarget = true;
                 hermetic = false;
