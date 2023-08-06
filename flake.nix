@@ -26,52 +26,8 @@
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
       };
-      #apps = nixinate.nixinate.x86_64-linux self;
+      apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
-        build = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/build
-            self.nixosModules.goeranh
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "nixbuild";
-                sshUser = "goeranh";
-                buildOn = "remote";
-                substituteOnTarget = true;
-                hermetic = false;
-              };
-            }
-          ];
-        };
-        host = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/host
-            self.nixosModules.goeranh
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "nixhost";
-                sshUser = "goeranh";
-                buildOn = "remote";
-                substituteOnTarget = true;
-                hermetic = false;
-              };
-            }
-          ];
-        };
         pitest = lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
@@ -103,54 +59,6 @@
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
             nixos-hardware.nixosModules.raspberry-pi-4
-          ];
-        };
-        nixpi1 = lib.nixosSystem {
-          system = "aarch64-linux";
-          modules = [
-            ./host/nixpi1
-            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-            self.nixosModules.goeranh
-            nixos-hardware.nixosModules.raspberry-pi-4
-            #{
-            #  programs.bash.interactiveShellInit = ''
-            #    source ${packages.x86_64-linux.settings.bashrc.outPath}
-            #    source ${packages.x86_64-linux.settings.goeranh.outPath}
-            #  '';
-            #}
-            {
-              _module.args.nixinate = {
-                host = "nixpi1";
-                sshUser = "goeranh";
-                buildOn = "remote"; # valid args are "local" or "remote"
-                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
-                hermetic = false;
-              };
-            }
-          ];
-        };
-        nixpi2 = lib.nixosSystem {
-          system = "aarch64-linux";
-          modules = [
-            ./host/nixpi2
-            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-            self.nixosModules.goeranh
-            nixos-hardware.nixosModules.raspberry-pi-4
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "192.168.178.6";
-                sshUser = "goeranh";
-                buildOn = "remote"; # valid args are "local" or "remote"
-                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
-                hermetic = false;
-              };
-            }
           ];
         };
         desktop = lib.nixosSystem {
