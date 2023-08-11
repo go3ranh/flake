@@ -158,6 +158,7 @@
     localAddress = "10.0.0.2";
     config = { config, pkgs, ... }: {
 
+      nix.settings.experimental-features = [ "nix-command" "flakes" ];
       services.invoiceplane = {
         sites = {
           "10.0.0.2" = {
