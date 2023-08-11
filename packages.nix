@@ -167,4 +167,37 @@ builtins.foldl'
 
     src = ./.;
   };
+  proxmark = pkgs.stdenv.mkDerivation rec {
+    pname = "proxmark3-rrg";
+    version = "4.16191";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "RfidResearchGroup";
+      repo = "proxmark3";
+      rev = "v${version}";
+      sha256 = "sha256-l0aDp0s9ekUUHqkzGfVoSIf/4/GN2uiVGL/+QtKRCOs=";
+    };
+
+    nativeBuildInputs = with pkgs; [ pkg-config gcc-arm-embedded ];
+    buildInputs = with pkgs; [ zlib bluez5 readline bzip2 openssl ];
+
+    makeFlags = [
+      "PLATFORM=PM3GENERIC"
+      "PLATFORM_EXTRAS="
+    ];
+
+    installPhase = ''
+	  mkdir -p $out/misc
+	  cp -r * $out/misc
+      install -Dt $out/bin client/proxmark3
+      install -Dt $out/firmware bootrom/obj/bootrom.elf armsrc/obj/fullimage.elf
+    '';
+
+    meta = with lib; {
+      description = "Client for proxmark3, powerful general purpose RFID tool";
+      homepage = "https://rfidresearchgroup.com/";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ nyanotech ];
+    };
+  };
 }
