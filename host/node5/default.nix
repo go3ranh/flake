@@ -20,6 +20,7 @@ in
   ];
 
   systemd.services = {
+    ModemManager.enable = false;
     zfs-mount.enable = false;
     NetworkManager-wait-online.enable = false;
     home-snapshot = {
@@ -29,6 +30,17 @@ in
       script = "zfs snap rpool/nixos/home@$(date +%d-%m-%Y-%H-%M)";
       serviceConfig = {
         User = config.users.users.goeranh.name;
+      };
+      startAt = "hourly";
+    };
+    home-backup = {
+      path = [
+        pkgs.zfs
+        pkgs.openssh
+      ];
+      script = ./backup;
+      serviceConfig = {
+        User = config.users.users.root.name;
       };
       startAt = "hourly";
     };
@@ -100,6 +112,7 @@ in
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    usbutils
     iftop
     ifuse
     libimobiledevice
@@ -112,15 +125,15 @@ in
     python3Packages.pip
     gcc
     clang
-  ];
+  ];# ++ [ self.packages.x86_64-linux.proxmark ];
 
   virtualisation.docker = {
     enable = true;
-    storageDriver = "zfs";
   };
   #virtualisation.virtualbox.host.enable = true;
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
+  programs.gnupg.agent.pinentryFlavor = "gnome3";
   services.fwupd.enable = true;
 
   programs.git.enable = true;
@@ -138,23 +151,23 @@ in
       package = pkgs.usbmuxd2;
     };
 
-    #mysql = {
-    #  enable = true;
-    #  package = pkgs.mariadb;
-    #  ensureDatabases = [
-    #    "shop"
-    #    "datanature"
-    #  ];
-    #  ensureUsers = [
-    #    {
-    #      name = "goeranh";
-    #      ensurePermissions = {
-    #        "shop.*" = "ALL PRIVILEGES";
-    #        "datanature.*" = "ALL PRIVILEGES";
-    #      };
-    #    }
-    #  ];
-    #};
+    mysql = {
+      enable = true;
+      package = pkgs.mariadb;
+      ensureDatabases = [
+        "shop"
+        "datanature"
+      ];
+      ensureUsers = [
+        {
+          name = "goeranh";
+          ensurePermissions = {
+            "shop.*" = "ALL PRIVILEGES";
+            "datanature.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
+    };
   };
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];

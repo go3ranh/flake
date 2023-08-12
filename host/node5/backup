@@ -1,0 +1,11 @@
+#!/run/current-system/sw/bin/bash
+
+net=$(ip a | grep "192\.168\.178")
+if [ $? -ne 0 ]; then
+	exit 1
+fi
+
+remote=$(ssh pvehome "zfs list -t snap -r rpool/backup/node5 | tail -n 1 | awk '{print \$1}' | awk -F'@' '{print \$2}'")
+local=$(zfs list -t snap -r rpool/nixos/home | tail -n 1 | awk '{print $1}')
+
+zfs send --raw -i rpool/nixos/home@$remote $local | ssh pvehome "zfs recv rpool/backup/node5"
