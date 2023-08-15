@@ -25,6 +25,8 @@
   outputs = { self, nixpkgs, microvm, nixinate, hyprland, nixos-hardware, disko }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
+      pkgsarm64 = nixpkgs.legacyPackages.aarch64-linux;
       lib = nixpkgs.lib;
     in
     rec {
@@ -188,7 +190,8 @@
       #  );
 
       #legacyPackages = nixpkgs.legacyPackages;
-      packages.x86_64-linux = import ./packages.nix { inherit inputs pkgs lib self; };
+      packages.x86_64-linux = import ./packages.nix { inherit inputs lib self pkgsx86; };
+      packages.aarch64-linux = import ./packages.nix { inherit inputs lib self pkgsarm64; };
 
       devShells = {
         x86_64-linux = {
@@ -225,5 +228,5 @@
           };
         };
       };
-    };
+    }pkgs;
 }

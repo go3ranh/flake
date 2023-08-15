@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, self }:
+{ inputs, lib, self, archpkgs }:
 builtins.foldl'
   (result: name:
     let
@@ -13,14 +13,14 @@ builtins.foldl'
       # Generate a small script for copying this flake to the
       # remote machine and bulding and switching there.
       # Can be run with `nix run c3d2#…-nixos-rebuild switch`
-      "${name}-ssh" = pkgs.writeScriptBin "${name}-ssh" ''
-        #!${pkgs.runtimeShell} -e
+      "${name}-ssh" = archpkgs.writeScriptBin "${name}-ssh" ''
+        #!${archpkgs.runtimeShell} -e
 
         ssh ${target}
       '';
 
-      "${name}-ssh-A" = pkgs.writeScriptBin "${name}-ssh" ''
-        #!${pkgs.runtimeShell} -e
+      "${name}-ssh-A" = archpkgs.writeScriptBin "${name}-ssh" ''
+        #!${archpkgs.runtimeShell} -e
 
         ssh ${target} -A
       '';
@@ -28,13 +28,13 @@ builtins.foldl'
   { }
   (builtins.attrNames self.nixosConfigurations)
   // {
-  settings = pkgs.stdenv.mkDerivation rec {
-    buildInputs = [ pkgs.fzf ];
+  settings = archpkgs.stdenv.mkDerivation rec {
+    buildInputs = [ archpkgs.fzf ];
     name = "settings";
     description = "goeranh settings / dotfiles";
-    bashrc = pkgs.writeText ".bashrc" ''
-      source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/key-bindings.bash"
-      source "${inputs.nixpkgs.legacyPackages.x86_64-linux.fzf.outPath}/share/fzf/completion.bash"
+    bashrc = archpkgs.writeText ".bashrc" ''
+      source "${archpkgs.fzf.outPath}/share/fzf/key-bindings.bash"
+      source "${archpkgs.fzf.outPath}/share/fzf/completion.bash"
       function pkgsearch (){
       nix-env -qa | fzf
       }
@@ -54,7 +54,7 @@ builtins.foldl'
       shopt -s checkjobs
     '';
 
-    goeranh = pkgs.writeText ".goeranh" ''
+    goeranh = archpkgs.writeText ".goeranh" ''
       alias :q="exit"
       alias :Q="exit"
       alias tml="tmux ls"
@@ -154,7 +154,7 @@ builtins.foldl'
       url = "https://gitlab.goeranh.de/goeranh/nvim-config.git";
       rev = "ee8604deb04b4b555ab0504e92200ab94ef8d497";
     };
-    dconf = pkgs.writeShellScriptBin "apply-dconf" ''
+    dconf = archpkgs.writeShellScriptBin "apply-dconf" ''
       	  echo "${builtins.readFile ./dconf}" | dconf load /
     '';
 
@@ -167,19 +167,19 @@ builtins.foldl'
 
     src = ./.;
   };
-  proxmark = pkgs.stdenv.mkDerivation rec {
+  proxmark = archpkgs.stdenv.mkDerivation rec {
     pname = "proxmark3-rrg";
     version = "4.16191";
 
-    src = pkgs.fetchFromGitHub {
+    src = archpkgs.fetchFromGitHub {
       owner = "RfidResearchGroup";
       repo = "proxmark3";
       rev = "v${version}";
       sha256 = "sha256-l0aDp0s9ekUUHqkzGfVoSIf/4/GN2uiVGL/+QtKRCOs=";
     };
 
-    nativeBuildInputs = with pkgs; [ pkg-config gcc-arm-embedded ];
-    buildInputs = with pkgs; [ zlib bluez5 readline bzip2 openssl ];
+    nativeBuildInputs = with archpkgs; [ pkg-config gcc-arm-embedded ];
+    buildInputs = with archpkgs; [ zlib bluez5 readline bzip2 openssl ];
 
     makeFlags = [
       "PLATFORM=PM3GENERIC"
@@ -187,10 +187,10 @@ builtins.foldl'
     ];
 
     installPhase = ''
-	  mkdir -p $out/misc
-	  cp -r * $out/misc
-      install -Dt $out/bin client/proxmark3
-      install -Dt $out/firmware bootrom/obj/bootrom.elf armsrc/obj/fullimage.elf
+      	  mkdir -p $out/misc
+      	  cp -r * $out/misc
+            install -Dt $out/bin client/proxmark3
+            install -Dt $out/firmware bootrom/obj/bootrom.elf armsrc/obj/fullimage.elf
     '';
 
     meta = with lib; {
