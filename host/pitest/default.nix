@@ -151,38 +151,40 @@
     };
   };
 
-  containers.invoiceplane = {
-    autoStart = true;
-    privateNetwork = true;
-    hostAddress = "10.0.0.1";
-    localAddress = "10.0.0.2";
-    config = { config, pkgs, ... }: {
+  containers = {
+    invoiceplane = {
+      autoStart = true;
+      privateNetwork = true;
+      hostAddress = "10.0.0.1";
+      localAddress = "10.0.0.2";
+      config = { config, pkgs, ... }: {
 
-      nix.settings.experimental-features = [ "nix-command" "flakes" ];
-      services.invoiceplane = {
-        sites = {
-          "10.0.0.2" = {
-            enable = true;
-            #port = 81;
-            #proxyPathPrefix = "/invoices";
-            database = {
-              createLocally = true;
+        nix.settings.experimental-features = [ "nix-command" "flakes" ];
+        services.invoiceplane = {
+          sites = {
+            "10.0.0.2" = {
+              enable = true;
+              #port = 81;
+              #proxyPathPrefix = "/invoices";
+              database = {
+                createLocally = true;
+              };
             };
           };
         };
+
+        system.stateVersion = "23.05";
+
+        networking.firewall = {
+          enable = true;
+          allowedTCPPorts = [ 80 2222 ];
+        };
+
+        # Manually configure nameserver. Using resolved inside the container seems to fail
+        # currently
+        environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
+
       };
-
-      system.stateVersion = "23.05";
-
-      networking.firewall = {
-        enable = true;
-        allowedTCPPorts = [ 80 2222 ];
-      };
-
-      # Manually configure nameserver. Using resolved inside the container seems to fail
-      # currently
-      environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
-
     };
   };
   virtualisation.libvirtd.enable = true;

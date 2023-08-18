@@ -11,15 +11,6 @@
 
   boot = {
     kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
-    # loader.raspberryPi = {
-    #   enable = true;
-    #   version = 4;
-    #   firmwareConfig = ''
-    #     gpu_mem=256
-    #     dtparam=audio=on
-    #   '';
-    # };
-
     kernelParams = lib.mkForce [
       "snd_bcm2835.enable_headphones=1"
       "console=tty0"
@@ -42,21 +33,14 @@
     server = true;
   };
 
-  #networking = {
-  #  hostName = "pitest"; # Define your hostname.
-  #  domain = "tailf0ec0.ts.net";
-  #  nftables.enable = true;
-  #  useDHCP = false;
-  #  interfaces.eth0.ipv4.addresses = [{
-  #    address = "192.168.178.2";
-  #    prefixLength = 24;
-  #  }];
-  #  defaultGateway = "192.168.178.1";
-  #  nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  networking = {
+    hostName = "nwtest";
+    domain = "tailf0ec0.ts.net";
+    nftables.enable = true;
 
-  #  firewall.enable = true;
-  #  firewall.allowedTCPPorts = [ 80 443 ];
-  #};
+    firewall.enable = true;
+    firewall.allowedTCPPorts = [ 80 443 ];
+  };
 
   nix = {
     daemonCPUSchedPolicy = "idle";
