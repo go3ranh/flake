@@ -29,11 +29,11 @@
       pkgsarm64 = nixpkgs.legacyPackages.aarch64-linux;
       lib = nixpkgs.lib;
     in
-    rec {
+    {
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
       };
-      apps = nixinate.nixinate.x86_64-linux self;
+      #apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
         pitest = lib.nixosSystem {
           system = "aarch64-linux";
@@ -42,12 +42,12 @@
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
             nixos-hardware.nixosModules.raspberry-pi-4
-            #{
-            #  programs.bash.interactiveShellInit = ''
-            #    source ${packages.x86_64-linux.settings.bashrc.outPath}
-            #    source ${packages.x86_64-linux.settings.goeranh.outPath}
-            #  '';
-            #}
+            {
+              programs.bash.interactiveShellInit = ''
+                source ${self.packages.aarch64-linux.settings.bashrc.outPath}
+                source ${self.packages.aarch64-linux.settings.goeranh.outPath}
+              '';
+            }
             {
               _module.args.nixinate = {
                 host = "pitest";
@@ -75,8 +75,8 @@
             self.nixosModules.goeranh
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
             {
@@ -98,8 +98,8 @@
             inputs.hyprland.nixosModules.default
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
             {
@@ -120,8 +120,8 @@
             self.nixosModules.goeranh
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
             {
@@ -143,8 +143,8 @@
             disko.nixosModules.disko
             {
               programs.bash.interactiveShellInit = ''
-                source ${packages.x86_64-linux.settings.bashrc.outPath}
-                source ${packages.x86_64-linux.settings.goeranh.outPath}
+                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
             {
@@ -163,14 +163,17 @@
           modules = [
             ./host/node5
             {
+              environment.systemPackages = with pkgs; [
+			    self.packages.x86_64-linux.proxmark
+	          ];
               programs = {
                 bash.interactiveShellInit = ''
-                  source ${packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${packages.x86_64-linux.settings.goeranh.outPath}
+                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
                 '';
                 neovim.configure = {
                   customRC = ''
-                    dofile('${packages.x86_64-linux.settings.nvimconfig.outPath}/init.lua')
+                    dofile('${self.packages.x86_64-linux.settings.nvimconfig.outPath}/init.lua')
                   '';
                 };
               };
@@ -190,8 +193,9 @@
       #  );
 
       #legacyPackages = nixpkgs.legacyPackages;
-      packages.x86_64-linux = import ./packages.nix { inherit inputs lib self pkgsx86; };
-      packages.aarch64-linux = import ./packages.nix { inherit inputs lib self pkgsarm64; };
+      #packages.x86_64-linux = import ./packages.nix { inherit inputs lib self pkgsx86; };
+      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self=self; archpkgs = pkgsx86; };
+      packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self=self; archpkgs = pkgsarm64; };
 
       devShells = {
         x86_64-linux = {
@@ -228,5 +232,5 @@
           };
         };
       };
-    }pkgs;
+    };
 }

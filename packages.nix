@@ -1,4 +1,4 @@
-{ inputs, lib, self, archpkgs }:
+{ inputs, lib, self, archpkgs, ... }@input:
 builtins.foldl'
   (result: name:
     let
@@ -10,9 +10,6 @@ builtins.foldl'
           name;
     in
     result // {
-      # Generate a small script for copying this flake to the
-      # remote machine and bulding and switching there.
-      # Can be run with `nix run c3d2#…-nixos-rebuild switch`
       "${name}-ssh" = archpkgs.writeScriptBin "${name}-ssh" ''
         #!${archpkgs.runtimeShell} -e
 

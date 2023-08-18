@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ self, config, lib, pkgs, ... }:
 
 let
   zfsRoot.partitionScheme = {
@@ -14,11 +14,6 @@ let
 
 in
 {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-    #./dconf.nix
-  ];
-
   systemd.services = {
     ModemManager.enable = false;
     zfs-mount.enable = false;
@@ -37,8 +32,10 @@ in
       path = [
         pkgs.zfs
         pkgs.openssh
+        pkgs.iproute2
+        pkgs.gawk
       ];
-      script = ./backup;
+      script = builtins.readFile ./backup;
       serviceConfig = {
         User = config.users.users.root.name;
       };
@@ -125,11 +122,11 @@ in
     python3Packages.pip
     gcc
     clang
-  ];# ++ [ self.packages.x86_64-linux.proxmark ];
+  ]; # ++ [ self.packages.x86_64-linux.proxmark ];
 
-  virtualisation.docker = {
-    enable = true;
-  };
+  #virtualisation.docker = {
+  #  enable = true;
+  #};
   #virtualisation.virtualbox.host.enable = true;
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
