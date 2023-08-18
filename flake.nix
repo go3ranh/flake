@@ -33,7 +33,7 @@
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
       };
-      #apps = nixinate.nixinate.x86_64-linux self;
+      apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
         pitest = lib.nixosSystem {
           system = "aarch64-linux";
@@ -43,6 +43,9 @@
             self.nixosModules.goeranh
             nixos-hardware.nixosModules.raspberry-pi-4
             {
+              environment.systemPackages = [
+			    self.packages.aarch64-linux.proxmark
+	          ];
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.aarch64-linux.settings.bashrc.outPath}
                 source ${self.packages.aarch64-linux.settings.goeranh.outPath}
@@ -163,7 +166,7 @@
           modules = [
             ./host/node5
             {
-              environment.systemPackages = with pkgs; [
+              environment.systemPackages = [
 			    self.packages.x86_64-linux.proxmark
 	          ];
               programs = {
