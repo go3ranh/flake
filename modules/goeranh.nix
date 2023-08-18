@@ -87,6 +87,7 @@ in
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
           #bitwarden # nodejs 16 deprecated
+          gpa
           chromium
           obsidian
           dbeaver
@@ -224,6 +225,8 @@ in
             git
             gitui
             gnupg
+            pinentry
+            pinentry-gnome
             gofu
             htop
             neovim
