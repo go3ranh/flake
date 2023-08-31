@@ -80,24 +80,25 @@ in
       ];
       packages = builtins.concatLists [
         (with pkgs; [
+		  atuin
           btrfs-progs
-          tailscale
           dig
           rsync
+          tailscale
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
           #bitwarden # nodejs 16 deprecated
-          gpa
           chromium
-          obsidian
           dbeaver
           discord
           filezilla
           firefox
           gajim
           gnome3.gnome-terminal
+          gpa
           libreoffice
           logseq
+          obsidian
           okular
           poppler_utils
           quickemu

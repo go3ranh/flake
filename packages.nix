@@ -26,11 +26,11 @@ builtins.foldl'
   (builtins.attrNames self.nixosConfigurations)
   // {
   settings = archpkgs.stdenv.mkDerivation rec {
-    buildInputs = [ archpkgs.fzf ];
+    buildInputs = with archpkgs; [ fzf bfs atuin ];
     name = "settings";
     description = "goeranh settings / dotfiles";
     bashrc = archpkgs.writeText ".bashrc" ''
-      source "${archpkgs.fzf.outPath}/share/fzf/key-bindings.bash"
+      #source "${archpkgs.fzf.outPath}/share/fzf/key-bindings.bash"
       source "${archpkgs.fzf.outPath}/share/fzf/completion.bash"
       function pkgsearch (){
       nix-env -qa | fzf
@@ -40,7 +40,10 @@ builtins.foldl'
       export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
       export GOPATH="/home/goeranh/gitprojects"
 
+	  eval "$(atuin init bash)"
+
       eval "$(direnv hook bash)"
+	  #bfs 2>/dev/null | fzf +m
       HISTFILESIZE=100000
       HISTSIZE=10000
 

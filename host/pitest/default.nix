@@ -125,6 +125,14 @@
       };
       package = pkgs.forgejo;
     };
+    atuin = {
+      enable = true;
+      #openFirewall = true;
+      openRegistration = false;
+      host = "127.0.0.1";
+      maxHistoryLength = 1000000;
+      path = "/atuin/";
+    };
     nginx = {
       enable = true;
       virtualHosts = {
@@ -144,6 +152,9 @@
             };
             "/invoices/" = {
               proxyPass = "http://10.0.0.2/";
+            };
+            "/atuin/" = {
+              proxyPass = "http://127.0.0.1:8888";
             };
           };
         };
