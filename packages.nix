@@ -61,7 +61,7 @@ builtins.foldl'
       alias nsh="nix-shell -p"
       alias tma="tmux ls && tmux a || tmux"
       alias ccat="/bin/cat"
-      alias cat="bat"
+      #alias cat="bat"
       alias ls="exa"
       alias lls="/bin/ls --color"
       alias gits="git status"
