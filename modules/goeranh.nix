@@ -80,7 +80,7 @@ in
       ];
       packages = builtins.concatLists [
         (with pkgs; [
-		  atuin
+          atuin
           btrfs-progs
           dig
           rsync

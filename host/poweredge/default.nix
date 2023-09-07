@@ -31,8 +31,8 @@ in
         prefixLength = 24;
       }
     ];
-	defaultGateway = "192.168.178.1";
-	firewall.allowedTCPPorts = [ 22 ];
+    defaultGateway = "192.168.178.1";
+    firewall.allowedTCPPorts = [ 22 ];
   };
 
   time.timeZone = "Europe/Berlin";
