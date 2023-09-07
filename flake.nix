@@ -40,22 +40,45 @@
           modules = [
             ./host/pitest
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            #self.nixosModules.goeranh
+            #{
+            #  environment.systemPackages = [
+            #    self.packages.aarch64-linux.proxmark
+            #  ];
+            #  programs.bash.interactiveShellInit = ''
+            #    source ${self.packages.aarch64-linux.settings.bashrc.outPath}
+            #    source ${self.packages.aarch64-linux.settings.goeranh.outPath}
+            #  '';
+            #  programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
+            #    programs.neovim.configure = {
+            #      customRC = ''
+            #        dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
+            #      '';
+            #    };
+            #}
+          ];
+        };
+        pwnzero = lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            ./host/pwnzero
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
             nixos-hardware.nixosModules.raspberry-pi-4
             {
               environment.systemPackages = [
-			    self.packages.aarch64-linux.proxmark
-	          ];
+                self.packages.aarch64-linux.proxmark
+              ];
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.aarch64-linux.settings.bashrc.outPath}
                 source ${self.packages.aarch64-linux.settings.goeranh.outPath}
               '';
               programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
-                programs.neovim.configure = {
-                  customRC = ''
-                    dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
-                  '';
-                };
+              programs.neovim.configure = {
+                customRC = ''
+                  dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
+                '';
+              };
             }
             {
               _module.args.nixinate = {
@@ -173,8 +196,8 @@
             ./host/node5
             {
               environment.systemPackages = [
-			    self.packages.x86_64-linux.proxmark
-	          ];
+                self.packages.x86_64-linux.proxmark
+              ];
               programs = {
                 bash.interactiveShellInit = ''
                   source ${self.packages.x86_64-linux.settings.bashrc.outPath}
@@ -203,8 +226,8 @@
 
       #legacyPackages = nixpkgs.legacyPackages;
       #packages.x86_64-linux = import ./packages.nix { inherit inputs lib self pkgsx86; };
-      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self=self; archpkgs = pkgsx86; };
-      packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self=self; archpkgs = pkgsarm64; };
+      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
+      packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
 
       devShells = {
         x86_64-linux = {

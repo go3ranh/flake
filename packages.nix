@@ -30,30 +30,30 @@ builtins.foldl'
     name = "settings";
     description = "goeranh settings / dotfiles";
     bashrc = archpkgs.writeText ".bashrc" ''
-      #source "${archpkgs.fzf.outPath}/share/fzf/key-bindings.bash"
-      source "${archpkgs.fzf.outPath}/share/fzf/completion.bash"
-      function pkgsearch (){
-      nix-env -qa | fzf
-      }
+            #source "${archpkgs.fzf.outPath}/share/fzf/key-bindings.bash"
+            source "${archpkgs.fzf.outPath}/share/fzf/completion.bash"
+            function pkgsearch (){
+            nix-env -qa | fzf
+            }
 
-      export XDG_CONFIG_HOME="/home/goeranh/.config"
-      export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
-      export GOPATH="/home/goeranh/gitprojects"
+            export XDG_CONFIG_HOME="/home/goeranh/.config"
+            export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
+            export GOPATH="/home/goeranh/gitprojects"
 
-	  eval "$(atuin init bash)"
+      	  eval "$(atuin init bash)"
 
-	  source ${archpkgs.git.outPath}/share/bash-completion/completions/git
+      	  source ${archpkgs.git.outPath}/share/bash-completion/completions/git
 
-      eval "$(direnv hook bash)"
-	  #bfs 2>/dev/null | fzf +m
-      HISTFILESIZE=100000
-      HISTSIZE=10000
+            eval "$(direnv hook bash)"
+      	  #bfs 2>/dev/null | fzf +m
+            HISTFILESIZE=100000
+            HISTSIZE=10000
 
-      shopt -s histappend
-      shopt -s checkwinsize
-      shopt -s extglob
-      shopt -s globstar
-      shopt -s checkjobs
+            shopt -s histappend
+            shopt -s checkwinsize
+            shopt -s extglob
+            shopt -s globstar
+            shopt -s checkjobs
     '';
 
     goeranh = archpkgs.writeText ".goeranh" ''
