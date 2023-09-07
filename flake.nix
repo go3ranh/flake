@@ -50,6 +50,12 @@
                 source ${self.packages.aarch64-linux.settings.bashrc.outPath}
                 source ${self.packages.aarch64-linux.settings.goeranh.outPath}
               '';
+              programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
+                programs.neovim.configure = {
+                  customRC = ''
+                    dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
+                  '';
+                };
             }
             {
               _module.args.nixinate = {

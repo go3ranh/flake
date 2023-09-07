@@ -26,7 +26,7 @@ builtins.foldl'
   (builtins.attrNames self.nixosConfigurations)
   // {
   settings = archpkgs.stdenv.mkDerivation rec {
-    buildInputs = with archpkgs; [ fzf bfs atuin ];
+    buildInputs = with archpkgs; [ fzf bfs atuin git ];
     name = "settings";
     description = "goeranh settings / dotfiles";
     bashrc = archpkgs.writeText ".bashrc" ''
@@ -41,6 +41,8 @@ builtins.foldl'
       export GOPATH="/home/goeranh/gitprojects"
 
 	  eval "$(atuin init bash)"
+
+	  source ${archpkgs.git.outPath}/share/bash-completion/completions/git
 
       eval "$(direnv hook bash)"
 	  #bfs 2>/dev/null | fzf +m
