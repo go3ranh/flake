@@ -40,7 +40,7 @@ builtins.foldl'
             export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
             export GOPATH="/home/goeranh/gitprojects"
 
-      	  eval "$(atuin init bash)"
+      	  eval "$(${archpkgs.atuin.outPath}/bin/atuin init bash)"
 
       	  source ${archpkgs.git.outPath}/share/bash-completion/completions/git
 
