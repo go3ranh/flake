@@ -2,7 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "flake:nixpkgs/nixos-unstable";
+    nixpkgs.url = "flake:nixpkgs/nixos-23.05";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     #nixpkgs.url = "github:go3ranh/nixpkgs/invoiceplane-change-port";
     microvm = {
@@ -23,7 +23,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, microvm, nixinate, hyprland, nixos-hardware, disko }@inputs:
+  outputs = { self, nixpkgs, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
