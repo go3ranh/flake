@@ -220,7 +220,6 @@ in
             bash
             bat
             direnv
-            exa
             fzf
             gettext
             git

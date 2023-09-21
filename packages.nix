@@ -64,7 +64,6 @@ builtins.foldl'
       alias tma="tmux ls && tmux a || tmux"
       alias ccat="/bin/cat"
       #alias cat="bat"
-      alias ls="exa"
       alias lls="/bin/ls --color"
       alias gits="git status"
       alias gitd="git diff"
