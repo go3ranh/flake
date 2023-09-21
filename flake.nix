@@ -2,7 +2,8 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "flake:nixpkgs/nixos-23.05";
+    nixpkgs.url = "flake:nixpkgs/nixos-unstable";
+    #nixpkgs-unstable.url = "flake:nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     #nixpkgs.url = "github:go3ranh/nixpkgs/invoiceplane-change-port";
     microvm = {
@@ -41,22 +42,31 @@
           modules = [
             ./host/pitest
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-            #self.nixosModules.goeranh
-            #{
-            #  environment.systemPackages = [
-            #    self.packages.aarch64-linux.proxmark
-            #  ];
-            #  programs.bash.interactiveShellInit = ''
-            #    source ${self.packages.aarch64-linux.settings.bashrc.outPath}
-            #    source ${self.packages.aarch64-linux.settings.goeranh.outPath}
-            #  '';
-            #  programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
-            #    programs.neovim.configure = {
-            #      customRC = ''
-            #        dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
-            #      '';
-            #    };
-            #}
+            self.nixosModules.goeranh
+            {
+              environment.systemPackages = [
+                self.packages.aarch64-linux.proxmark
+              ];
+              programs.bash.interactiveShellInit = ''
+                source ${self.packages.aarch64-linux.settings.bashrc.outPath}
+                source ${self.packages.aarch64-linux.settings.goeranh.outPath}
+              '';
+              programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
+                programs.neovim.configure = {
+                  customRC = ''
+                    dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
+                  '';
+                };
+            }
+            {
+              _module.args.nixinate = {
+                host = "pitest";
+                sshUser = "goeranh";
+                buildOn = "remote"; # valid args are "local" or "remote"
+                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
+                hermetic = false;
+              };
+            }
           ];
         };
         pwnzero = lib.nixosSystem {
@@ -79,15 +89,6 @@
                 customRC = ''
                   dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
                 '';
-              };
-            }
-            {
-              _module.args.nixinate = {
-                host = "pitest";
-                sshUser = "goeranh";
-                buildOn = "remote"; # valid args are "local" or "remote"
-                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
-                hermetic = false;
               };
             }
           ];
