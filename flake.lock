@@ -53,6 +53,24 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_3"
+      },
+      "locked": {
+        "lastModified": 1694529238,
+        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "hyprland": {
       "inputs": {
         "hyprland-protocols": "hyprland-protocols",
@@ -64,11 +82,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1696597300,
-        "narHash": "sha256-zYfw0CG4eDGkYtTMTGLoMXxS/DOTWyAWUuTiMuWjMUA=",
+        "lastModified": 1696684118,
+        "narHash": "sha256-t9OF7rrNWq50EA6SqTy3nvcdnq+CABlSY7/hORZeqoE=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "1afb00a01b7cab3e68f5af3ca6a7d7d86b8f913e",
+        "rev": "7d7565e7ecb65463d68ebe0d2654ad346d61acd8",
         "type": "github"
       },
       "original": {
@@ -123,6 +141,24 @@
         "type": "github"
       }
     },
+    "mitgliederverwaltung": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "dirtyRev": "288085280f222b167e5433455310b87fbbd1797b-dirty",
+        "dirtyShortRev": "2880852-dirty",
+        "lastModified": 1696666254,
+        "narHash": "sha256-H+/UoD9q1CzcbelJVPH7WUvLEzzJ7kJCON8HFscOQLQ=",
+        "type": "git",
+        "url": "file:/home/goeranh/gitprojects/src/git.htw.stura-dresden.de/Bereich_Administration_Rechentechnik/Mitgliederverwaltung"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:/home/goeranh/gitprojects/src/git.htw.stura-dresden.de/Bereich_Administration_Rechentechnik/Mitgliederverwaltung"
+      }
+    },
     "nixinate": {
       "inputs": {
         "nixpkgs": [
@@ -161,6 +197,21 @@
     },
     "nixpkgs": {
       "locked": {
+        "lastModified": 1694499547,
+        "narHash": "sha256-R7xMz1Iia6JthWRHDn36s/E248WB1/je62ovC/dUVKI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e5f018cf150e29aac26c61dac0790ea023c46b24",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-23.05",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
         "lastModified": 1696375444,
         "narHash": "sha256-Sv0ICt/pXfpnFhTGYTsX6lUr1SljnuXWejYTI2ZqHa4=",
         "owner": "NixOS",
@@ -180,9 +231,10 @@
         "flake-schemas": "flake-schemas",
         "hyprland": "hyprland",
         "microvm": "microvm",
+        "mitgliederverwaltung": "mitgliederverwaltung",
         "nixinate": "nixinate",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs_2"
       }
     },
     "systems": {
@@ -201,6 +253,21 @@
       }
     },
     "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
