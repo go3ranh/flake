@@ -248,6 +248,7 @@ in
     lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.cpu.amd.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
+	hardware.enableRedistributableFirmware = true;
 
   boot.supportedFilesystems = [ "zfs" "ntfs" ];
   networking.hostId = "2b34dd1b";
