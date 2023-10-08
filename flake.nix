@@ -5,6 +5,10 @@
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
     #nixpkgs-unstable.url = "flake:nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
+	sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     #nixpkgs.url = "github:go3ranh/nixpkgs/invoiceplane-change-port";
     microvm = {
       url = "github:astro/microvm.nix";
@@ -24,7 +28,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko }@inputs:
+  outputs = { self, nixpkgs, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
@@ -52,11 +56,11 @@
                 source ${self.packages.aarch64-linux.settings.goeranh.outPath}
               '';
               programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
-                programs.neovim.configure = {
-                  customRC = ''
-                    dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
-                  '';
-                };
+              programs.neovim.configure = {
+                customRC = ''
+                  dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
+                '';
+              };
             }
             {
               _module.args.nixinate = {
