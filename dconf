@@ -133,6 +133,11 @@ binding='<Super>Return'
 command='gnome-terminal'
 name='terminal'
 
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8]
+binding='<Shift><Super>o'
+command='obsidian'
+name='obsiian'
+
 [org/gnome/shell/keybindings]
 screenshot=['<Shift><Super>p']
 show-screenshot-ui=['<Primary><Alt>p']
