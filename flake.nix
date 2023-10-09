@@ -238,6 +238,15 @@
               };
             }
             self.nixosModules.goeranh
+            {
+              _module.args.nixinate = {
+                host = "192.168.178.124";
+                sshUser = "root";
+                buildOn = "remote";
+                substituteOnTarget = true;
+                hermetic = false;
+              };
+            }
           ];
         };
       };
