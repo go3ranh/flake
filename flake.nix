@@ -3,9 +3,9 @@
 
   inputs = {
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
-    #nixpkgs-unstable.url = "flake:nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "flake:nixpkgs/nixos-23.05";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
-	sops-nix = {
+    sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -28,7 +28,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-stable, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
@@ -203,7 +203,28 @@
             {
               environment.systemPackages = [
                 self.packages.x86_64-linux.proxmark
+                nixpkgs-stable.legacyPackages.x86_64-linux.firefox
               ];
+              programs = {
+                bash.interactiveShellInit = ''
+                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+                '';
+                neovim.configure = {
+                  customRC = ''
+                    dofile('${self.packages.x86_64-linux.settings.nvimconfig.outPath}/init.lua')
+                  '';
+                };
+              };
+            }
+            self.nixosModules.goeranh
+          ];
+        };
+        nixserver = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/nixserver
+            {
               programs = {
                 bash.interactiveShellInit = ''
                   source ${self.packages.x86_64-linux.settings.bashrc.outPath}

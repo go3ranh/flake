@@ -165,6 +165,7 @@
     };
     vaultwarden = {
       enable = true;
+      #backupDir = "/home/goeranh/ssd/vaultwarden/backup";
       config = {
         DOMAIN = "https://${config.networking.fqdn}/vw";
         SIGNUPS_ALLOWED = true;
