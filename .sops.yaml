@@ -1,0 +1,26 @@
+keys:
+  # PGP offbyone
+  - &admins
+    - 110B4E8E367996C0CAE56FFF92C391779672C527 # goeranh
+  - &node5 age14nwt6vr0jrr05zwukht5p8t9zlrsemp0lzpxdyvnr6jzpyqx7cssgs7sk4
+  - &pitest age13p4hpwd93m0xetp8z9np7gw7xq9vqja4agrft0pe0620vh24c5jqgefxn6
+
+creation_rules:
+  - path_regex: buildkeys.yaml
+    key_groups:
+    - pgp: *admins
+      age:
+      - *node5
+      - *pitest
+
+  - path_regex: host/node5/[^/]+\.yaml$
+    key_groups:
+    - pgp: *admins
+      age:
+      - *node5
+
+  - path_regex: host/pitest/[^/]+\.yaml$
+    key_groups:
+    - pgp: *admins
+      age:
+      - *pitest

@@ -20,10 +20,6 @@
     [{ device = "/dev/disk/by-uuid/0500c8e8-069e-4cf7-92fb-3e2ee148c5b6"; }];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    trusted-public-keys = [ ];
-  };
 
   # Bootloader.
   boot.loader.grub = {
@@ -31,6 +27,7 @@
     device = "/dev/sda";
     useOSProber = true;
   };
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   networking = {
     hostName = "nixserver";
@@ -46,10 +43,18 @@
     defaultGateway = "192.168.178.1";
     nameservers = [ "1.1.1.1" "9.9.9.9" ];
   };
+  services = {
+    qemuGuest.enable = true;
+  };
 
   goeranh = {
     server = true;
+    development = true;
+    remote-store = true;
   };
+  environment.systemPackages = with pkgs; [
+    waypipe
+  ];
 
   system.stateVersion = "23.05"; # Did you read the comment?
 }

@@ -77,7 +77,7 @@ builtins.foldl'
       alias nixrevisions="sudo nix-env --list-generations --profile /nix/var/nix/profiles/system"
       alias ng="./node_modules/@angular/cli/bin/ng.js"
       #alias nyxt="/home/goeranh/programs/nyxt/usr/local/bin/nyxt"
-      export EDITOR="vim"
+      export EDITOR="nvim"
       alias open="xdg-open"
 
       [ -f ~/.fzf.bash ] && source ~/.fzf.bash
@@ -152,11 +152,11 @@ builtins.foldl'
     '';
 
     nvimconfig = builtins.fetchGit {
-      url = "https://gitlab.goeranh.de/goeranh/nvim-config.git";
-      rev = "ee8604deb04b4b555ab0504e92200ab94ef8d497";
+      url = "https://pitest.tailf0ec0.ts.net/git/goeranh/nvim";
+      rev = "eb73e49a828dc8699b620b09c89598689b52efaa";
     };
     dconf = archpkgs.writeShellScriptBin "apply-dconf" ''
-      	  echo "${builtins.readFile ./dconf}" | dconf load /
+      echo "${builtins.readFile ./dconf}" | dconf load /
     '';
 
     postInstall = ''

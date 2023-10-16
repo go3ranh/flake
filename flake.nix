@@ -9,6 +9,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     #nixpkgs.url = "github:go3ranh/nixpkgs/invoiceplane-change-port";
     microvm = {
       url = "github:astro/microvm.nix";
@@ -28,7 +32,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, nixpkgs-stable, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-stable, nixos-generators, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
@@ -39,8 +43,21 @@
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
       };
-      apps = nixinate.nixinate.x86_64-linux self;
+      #apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
+        #bootstrap = lib.nixosSystem {
+        #  system = "aarch64-linux";
+        #  modules = [
+        #    self.nixosModules.goeranh
+        #    {
+        #      config = {
+        #        goeranh = {
+        #          server = true;
+        #        };
+        #      };
+        #    }
+        #  ];
+        #};
         pitest = lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
@@ -200,6 +217,7 @@
           system = "x86_64-linux";
           modules = [
             ./host/node5
+            sops-nix.nixosModules.sops
             {
               environment.systemPackages = [
                 self.packages.x86_64-linux.proxmark
@@ -260,13 +278,28 @@
       #    nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
       #  );
 
-      #legacyPackages = nixpkgs.legacyPackages;
-      #packages.x86_64-linux = import ./packages.nix { inherit inputs lib self pkgsx86; };
-      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
+      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; } // {
+        #bootstrap = nixos-generators.nixosGenerate {
+        #  system = "x86_64-linux";
+        #  modules = [
+        #    self.nixosConfigurations.bootstrap.config
+        #    {
+        #      users.users.root.password = "test";
+        #    }
+        #  ];
+        #  format = "proxmox-lxc";
+        #};
+      };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
 
       devShells = {
         x86_64-linux = {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+			  sops
+			  ssh-to-age
+            ];
+          };
           phpshell = pkgs.mkShell {
             buildInputs = with pkgs; [
               php82

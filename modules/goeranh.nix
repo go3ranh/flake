@@ -41,6 +41,12 @@ in
       example = true;
       description = "apply server settings";
     };
+    remote-store = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "selve as remote nix store / builder";
+    };
     hypr = mkOption {
       type = types.bool;
       default = false;
@@ -59,12 +65,47 @@ in
       example = true;
       description = "install steam, etc";
     };
+    update = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "update";
+    };
   };
   config = {
+    boot.extraModulePackages = with config.boot.kernelPackages; [ ply perf ];
     nix = {
+      distributedBuilds = true;
+      extraOptions = ''
+        builders-use-substitutes = true
+      '';
+      buildMachines = [
+        {
+          hostName = "nixserver";
+          maxJobs = 5;
+          protocol = "ssh-ng";
+          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUJXM24vRHhXTUE4YUFoU3QxNkRTb0t1NXVKbUVYZlE5VmZyS3BIK1A0R2sgcm9vdEBuaXhzZXJ2ZXIK";
+          sshKey = "/root/.ssh/buildkey";
+          sshUser = "root";
+          supportedFeatures = [
+            "nixos-test"
+            "benchmark"
+            "big-parallel"
+          ];
+          speedFactor = 10;
+          systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
+
+        }
+      ];
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
+      };
+      sshServe = mkIf cfg.remote-store {
+        enable = true;
+        keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5" ];
+        protocol = "ssh-ng";
+        write = true;
       };
       gc = {
         automatic = true;
@@ -77,6 +118,7 @@ in
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" "plugdev" ];
       openssh.authorizedKeys.keys = mkIf cfg.server [
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaU3idFwbk0uY4jooS9dwdBvNLnWfgFRmc7hkSeubSAWnT5J6NM8L8NZrT1ZoiYfebsKmwIn111BGfohZkC6wA= homelab key goeranh"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
       ];
       packages = builtins.concatLists [
         (with pkgs; [
@@ -121,7 +163,7 @@ in
           jetbrains.idea-community
           jetbrains.jdk
           jetbrains.phpstorm
-          jetbrains.webstorm
+          #jetbrains.webstorm
           jetbrains.clion
           libxcrypt
           meson
@@ -181,6 +223,8 @@ in
           bind -n M-L select-pane -R
           bind -n M-K select-pane -U
           bind -n M-J select-pane -D
+          bind -n M-O display-popup
+          bind u display-popup
           bind h select-pane -L
           bind j select-pane -D
           bind k select-pane -U
@@ -217,6 +261,8 @@ in
       systemPackages = builtins.concatLists
         [
           (with pkgs; [
+            linuxKernel.packages.linux_zen.ply
+            linuxKernel.packages.linux_zen.perf
             bash
             bat
             direnv

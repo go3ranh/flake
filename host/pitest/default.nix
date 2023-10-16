@@ -174,6 +174,18 @@
         ROCKET_LOG = "critical";
       };
     };
+    radicale = {
+      enable = true;
+      settings = {
+        server.hosts = [ "127.0.0.1:5323" ];
+        auth = {
+          type = "htpasswd";
+          htpasswd_filename = "/var/lib/radicale/htpasswd";
+          # hash function used for passwords. May be `plain` if you don't want to hash the passwords
+          htpasswd_encryption = "bcrypt";
+        };
+      };
+    };
   };
 
   containers = {

@@ -74,6 +74,20 @@ in
     LC_TIME = "de_DE.UTF-8";
   };
 
+  sops = {
+    # This will automatically import SSH keys as age keys
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFormat = "yaml";
+    secrets = {
+      "testfile" = {
+        owner = "root";
+        group = "root";
+        mode = "0400";
+      };
+    };
+  };
+
 
   services.printing.enable = true;
   services.avahi.enable = true;
@@ -129,6 +143,7 @@ in
   #};
   #virtualisation.virtualbox.host.enable = true;
   virtualisation.libvirtd.enable = true;
+  virtualisation.podman.enable = true;
   programs.dconf.enable = true;
   programs.gnupg.agent.pinentryFlavor = "gnome3";
   services.fwupd.enable = true;
@@ -182,7 +197,6 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "kvm-amd" ];
-  boot.extraModulePackages = [ ];
 
   fileSystems = {
     "/" = {
