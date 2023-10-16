@@ -51,6 +51,7 @@
 
   goeranh = {
     server = true;
+    trust-builder = true;
   };
 
   networking = {

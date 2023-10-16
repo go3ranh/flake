@@ -114,7 +114,7 @@ in
 
   goeranh = {
     desktop = true;
-    #hypr = true;
+    trust-builder = true;
     development = true;
   };
 

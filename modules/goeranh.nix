@@ -47,6 +47,12 @@ in
       example = true;
       description = "selve as remote nix store / builder";
     };
+    trust-builder = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "trust nixserver and install keys for store";
+    };
     hypr = mkOption {
       type = types.bool;
       default = false;
@@ -74,18 +80,37 @@ in
   };
   config = {
     boot.extraModulePackages = with config.boot.kernelPackages; [ ply perf ];
+    sops = mkIf cfg.trust-builder {
+      # This will automatically import SSH keys as age keys
+      age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+      defaultSopsFormat = "yaml";
+      secrets = {
+        "buildkey" = {
+          sopsFile = ../buildkeys.yaml;
+          owner = "root";
+          group = "root";
+          mode = "0400";
+        };
+        "buildkey_pub" = {
+          sopsFile = ../buildkeys.yaml;
+          owner = "root";
+          group = "root";
+          mode = "0400";
+        };
+      };
+    };
     nix = {
       distributedBuilds = true;
       extraOptions = ''
         builders-use-substitutes = true
       '';
-      buildMachines = [
+      buildMachines = mkIf cfg.trust-builder [
         {
           hostName = "nixserver";
           maxJobs = 5;
           protocol = "ssh-ng";
           publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUJXM24vRHhXTUE4YUFoU3QxNkRTb0t1NXVKbUVYZlE5VmZyS3BIK1A0R2sgcm9vdEBuaXhzZXJ2ZXIK";
-          sshKey = "/root/.ssh/buildkey";
+          sshKey = "${config.sops.secrets."buildkey".path}";
           sshUser = "root";
           supportedFeatures = [
             "nixos-test"
@@ -100,6 +125,9 @@ in
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
+        trusted-substituters = mkIf cfg.trust-builder [
+          "ssh-ng://nixserver"
+        ];
       };
       sshServe = mkIf cfg.remote-store {
         enable = true;
@@ -263,6 +291,7 @@ in
           (with pkgs; [
             linuxKernel.packages.linux_zen.ply
             linuxKernel.packages.linux_zen.perf
+            bpftrace
             bash
             bat
             direnv

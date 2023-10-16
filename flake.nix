@@ -63,6 +63,7 @@
           modules = [
             ./host/pitest
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            sops-nix.nixosModules.sops
             self.nixosModules.goeranh
             {
               environment.systemPackages = [
@@ -242,6 +243,7 @@
           system = "x86_64-linux";
           modules = [
             ./host/nixserver
+            sops-nix.nixosModules.sops
             {
               programs = {
                 bash.interactiveShellInit = ''
@@ -296,8 +298,8 @@
         x86_64-linux = {
           default = pkgs.mkShell {
             buildInputs = with pkgs; [
-			  sops
-			  ssh-to-age
+              sops
+              ssh-to-age
             ];
           };
           phpshell = pkgs.mkShell {
