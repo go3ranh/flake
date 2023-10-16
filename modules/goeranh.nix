@@ -155,6 +155,120 @@ in
           dig
           rsync
           tailscale
+          (neovim.override {
+            vimAlias = true;
+            configure = {
+              packages.myPlugins = with pkgs.vimPlugins; {
+                start = [
+                  dracula-nvim
+                ];
+                opt = [
+                  nvim-treesitter-parsers.sql
+                  nvim-treesitter-parsers.typescript
+                  nvim-treesitter-parsers.arduino
+                  nvim-treesitter-parsers.c
+                  nvim-treesitter-parsers.cmake
+                  nvim-treesitter-parsers.cpp
+                  nvim-treesitter-parsers.css
+                  nvim-treesitter-parsers.csv
+                  nvim-treesitter-parsers.dockerfile
+                  nvim-treesitter-parsers.elixir
+                  nvim-treesitter-parsers.gitcommit
+                  nvim-treesitter-parsers.git_config
+                  nvim-treesitter-parsers.gitignore
+                  nvim-treesitter-parsers.git_rebase
+                  nvim-treesitter-parsers.go
+                  nvim-treesitter-parsers.html
+                  nvim-treesitter-parsers.java
+                  nvim-treesitter-parsers.javascript
+                  nvim-treesitter-parsers.json
+                  nvim-treesitter-parsers.latex
+                  nvim-treesitter-parsers.markdown
+                  nvim-treesitter-parsers.nix
+                  nvim-treesitter-parsers.org
+                  nvim-treesitter-parsers.php
+                  nvim-treesitter-parsers.sql
+                  nvim-treesitter-parsers.ssh_config
+                  plenary-nvim
+                  telescope-nvim
+                  vim-dadbod
+                  vim-dadbod-ui
+                  vim-dadbod-completion
+                  vim-fugitive
+                  lsp-zero-nvim
+                  nvim-lspconfig
+                  mason-nvim
+                  mason-lspconfig-nvim
+                  nvim-cmp
+                  cmp-buffer
+                  cmp-path
+                  cmp-nvim-lsp
+                  cmp-nvim-lua
+                  cmp-nvim-tags
+                  orgmode
+                  sniprun
+                  vim-floaterm
+                  nvim-web-devicons
+                  nvim-tree-lua
+                ];
+              };
+              customRC = ''
+                luafile ${./nvim/init.lua}
+                "set nocompatible
+                "set backspace=indent,eol,start
+                "set nu rnu
+                "set tabstop=4
+                "set softtabstop=4
+                "set shiftwidth=4
+                "set smartindent
+                "set noswapfile
+                "set nobackup
+                "set nohlsearch
+                "set incsearch
+                "set termguicolors
+                "set scrolloff=8
+                "set undodir=$HOME/.vim/undodir
+                "let mapleader=" "
+                "colorscheme dracula
+
+                "vnoremap <silent> * :call VisualSelection('f')<CR>
+                "vnoremap <silent> # :call VisualSelection('b')<CR>
+                "" Treat long lines as break lines (useful when moving around in them)
+                "map j gj
+                "map k gk
+				"" Useful mappings for managing tabs
+                "map <leader>tn :tabnew<cr>
+                "map <leader>to :tabonly<cr>
+                "map <leader>tc :tabclose<cr>
+                "map <leader>tm :tabmove
+
+                "map <leader>mas :Mason<CR>
+                "map <leader>u :UndotreeToggle<CR>:UndotreeFocus<CR>
+                "vnoremap J :m '>+1<CR>gv=gv
+                "vnoremap K :m '<-2<CR>gv=gv
+                "vnoremap H <gv
+                "vnoremap L >gv
+                "vnoremap <leader>r :SnipRun<CR>
+                "map <leader>gd :Gdiffsplit<CR>
+                "map <leader>gb :Git blame<CR>
+                "map <leader>gl :Git log<CR>
+                "map <leader>gc :Git commit<CR>
+                "map <leader>gp :Git push<CR>
+                "map <leader>1 :resize 10<CR>
+                "map <leader>2 :resize 20<CR>
+                "map <leader>3 :resize 30<CR>
+                "map <leader>4 :resize 40<CR>
+                "map <leader>5 :resize 50<CR>
+                "map <leader>6 :vertical resize 20<CR>
+                "map <leader>7 :vertical resize 40<CR>
+                "map <leader>8 :vertical resize 60<CR>
+                "map <leader>9 :vertical resize 80<CR>
+                "map <leader>0 :vertical resize 100<CR>
+                "map <leader>db", ':DBUIToggle<CR>
+              '';
+            };
+          }
+          )
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
           #bitwarden # nodejs 16 deprecated
@@ -304,7 +418,6 @@ in
             pinentry-gnome
             gofu
             htop
-            neovim
             nix-direnv
             nmap
             ripgrep
