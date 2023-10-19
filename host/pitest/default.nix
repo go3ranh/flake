@@ -52,11 +52,12 @@
   goeranh = {
     server = true;
     trust-builder = true;
+    update = true;
+    update-user = "goeranh";
   };
 
   networking = {
     hostName = "pitest"; # Define your hostname.
-    domain = "tailf0ec0.ts.net";
     nftables.enable = true;
     useDHCP = false;
     interfaces.eth0.ipv4.addresses = [{

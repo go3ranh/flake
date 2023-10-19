@@ -13,15 +13,6 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #nixpkgs.url = "github:go3ranh/nixpkgs/invoiceplane-change-port";
-    microvm = {
-      url = "github:astro/microvm.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixinate = {
-      url = "github:matthewcroughan/nixinate";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     hyprland = {
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,7 +23,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, nixpkgs-stable, nixos-generators, flake-schemas, microvm, nixinate, hyprland, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-stable, nixos-generators, flake-schemas, hyprland, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
@@ -43,7 +34,6 @@
       nixosModules = {
         goeranh = import ./modules/goeranh.nix;
       };
-      #apps = nixinate.nixinate.x86_64-linux self;
       nixosConfigurations = {
         #bootstrap = lib.nixosSystem {
         #  system = "aarch64-linux";
@@ -73,21 +63,6 @@
                 source ${self.packages.aarch64-linux.settings.bashrc.outPath}
                 source ${self.packages.aarch64-linux.settings.goeranh.outPath}
               '';
-              programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
-              programs.neovim.configure = {
-                customRC = ''
-                  dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
-                '';
-              };
-            }
-            {
-              _module.args.nixinate = {
-                host = "pitest";
-                sshUser = "goeranh";
-                buildOn = "remote"; # valid args are "local" or "remote"
-                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
-                hermetic = false;
-              };
             }
           ];
         };
@@ -97,6 +72,7 @@
             ./host/pwnzero
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
+            sops-nix.nixosModules.sops
             nixos-hardware.nixosModules.raspberry-pi-4
             {
               environment.systemPackages = [
@@ -106,12 +82,6 @@
                 source ${self.packages.aarch64-linux.settings.bashrc.outPath}
                 source ${self.packages.aarch64-linux.settings.goeranh.outPath}
               '';
-              programs.neovim.runtime."init.lua".text = lib.readFile "${self.packages.aarch64-linux.settings.nvimconfig.outPath}/nvim-config/init.lua";
-              programs.neovim.configure = {
-                customRC = ''
-                  dofile('${self.packages.aarch64-linux.settings.nvimconfig.outPath}/init.lua')
-                '';
-              };
             }
           ];
         };
@@ -121,6 +91,7 @@
             ./host/networking-test
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             self.nixosModules.goeranh
+            sops-nix.nixosModules.sops
             nixos-hardware.nixosModules.raspberry-pi-4
           ];
         };
@@ -129,20 +100,12 @@
           modules = [
             ./host/desktop
             self.nixosModules.goeranh
+            sops-nix.nixosModules.sops
             {
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.x86_64-linux.settings.bashrc.outPath}
                 source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "192.168.178.43";
-                sshUser = "goeranh";
-                buildOn = "remote"; # valid args are "local" or "remote"
-                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
-                hermetic = false;
-              };
             }
           ];
         };
@@ -151,21 +114,13 @@
           modules = [
             ./host/hypr
             self.nixosModules.goeranh
+            sops-nix.nixosModules.sops
             inputs.hyprland.nixosModules.default
             {
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.x86_64-linux.settings.bashrc.outPath}
                 source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "192.168.122.208";
-                sshUser = "goeranh";
-                buildOn = "remote"; # valid args are "local" or "remote"
-                substituteOnTarget = true; # if buildOn is "local" then it will substitute on the target, "-s"
-                hermetic = false;
-              };
             }
           ];
         };
@@ -174,20 +129,12 @@
           modules = [
             ./host/laptop1
             self.nixosModules.goeranh
+            sops-nix.nixosModules.sops
             {
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.x86_64-linux.settings.bashrc.outPath}
                 source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "192.168.178.158";
-                sshUser = "goeranh";
-                buildOn = "remote";
-                substituteOnTarget = true;
-                hermetic = false;
-              };
             }
           ];
         };
@@ -196,21 +143,13 @@
           modules = [
             ./host/poweredge
             self.nixosModules.goeranh
+            sops-nix.nixosModules.sops
             disko.nixosModules.disko
             {
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.x86_64-linux.settings.bashrc.outPath}
                 source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
-            }
-            {
-              _module.args.nixinate = {
-                host = "192.168.178.123";
-                sshUser = "root";
-                buildOn = "remote";
-                substituteOnTarget = true;
-                hermetic = false;
-              };
             }
           ];
         };
@@ -229,11 +168,6 @@
                   source ${self.packages.x86_64-linux.settings.bashrc.outPath}
                   source ${self.packages.x86_64-linux.settings.goeranh.outPath}
                 '';
-                neovim.configure = {
-                  customRC = ''
-                    dofile('${self.packages.x86_64-linux.settings.nvimconfig.outPath}/init.lua')
-                  '';
-                };
               };
             }
             self.nixosModules.goeranh
@@ -250,23 +184,54 @@
                   source ${self.packages.x86_64-linux.settings.bashrc.outPath}
                   source ${self.packages.x86_64-linux.settings.goeranh.outPath}
                 '';
-                neovim.configure = {
-                  customRC = ''
-                    dofile('${self.packages.x86_64-linux.settings.nvimconfig.outPath}/init.lua')
-                  '';
-                };
               };
             }
             self.nixosModules.goeranh
+          ];
+        };
+        fileserver = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/fileserver
+            sops-nix.nixosModules.sops
             {
-              _module.args.nixinate = {
-                host = "192.168.178.124";
-                sshUser = "root";
-                buildOn = "remote";
-                substituteOnTarget = true;
-                hermetic = false;
+              programs = {
+                bash.interactiveShellInit = ''
+                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+                '';
               };
             }
+            self.nixosModules.goeranh
+            disko.nixosModules.disko
+						./host/fileserver/disko.nix
+          ];
+        };
+        testkernel = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            self.nixosModules.goeranh
+            sops-nix.nixosModules.sops
+            {
+              fileSystems."/" =
+                {
+                  device = "/dev/sda";
+                  fsType = "ext4";
+                };
+              boot.loader.grub.devices = [ "/dev/sda" ];
+              boot.kernelPatches = [{
+                name = "crashdump-config";
+                patch = null;
+                extraConfig = ''
+                  CRASH_DUMP y
+                  DEBUG_INFO y
+                  PROC_VMCORE y
+                  LOCKUP_DETECTOR y
+                  HARDLOCKUP_DETECTOR y
+                '';
+              }];
+            }
+
           ];
         };
       };
@@ -280,19 +245,18 @@
       #    nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
       #  );
 
-      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; } // {
-        #bootstrap = nixos-generators.nixosGenerate {
-        #  system = "x86_64-linux";
-        #  modules = [
-        #    self.nixosConfigurations.bootstrap.config
-        #    {
-        #      users.users.root.password = "test";
-        #    }
-        #  ];
-        #  format = "proxmox-lxc";
-        #};
-      };
+      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
+      #bootstrap = nixos-generators.nixosGenerate {
+      #  system = "x86_64-linux";
+      #  modules = [
+      #    self.nixosConfigurations.bootstrap.config
+      #    {
+      #      users.users.root.password = "test";
+      #    }
+      #  ];
+      #  format = "proxmox-lxc";
+      #};
 
       devShells = {
         x86_64-linux = {

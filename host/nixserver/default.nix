@@ -33,6 +33,7 @@
     hostName = "nixserver";
     networkmanager.enable = true;
     firewall = {
+      interfaces."tailscale0".allowedTCPPorts = [ 80 443 ];
       allowedTCPPorts = [ 22 ];
       enable = true;
     };
@@ -45,12 +46,31 @@
   };
   services = {
     qemuGuest.enable = true;
+    hydra = {
+      enable = true;
+      hydraURL = "http://${config.networking.fqdn}/hydra/";
+      notificationSender = "hydra@hydra.local";
+      listenHost = "localhost";
+    };
+    nginx = {
+      enable = true;
+      virtualHosts."${config.networking.fqdn}" = {
+        serverAliases = [ "${config.networking.hostName}" ];
+        sslCertificate = "/var/lib/nixserver.tailf0ec0.ts.net.crt";
+        sslCertificateKey = "/var/lib/nixserver.tailf0ec0.ts.net.key";
+        locations."/hydra/" = {
+          proxyPass = "http://127.0.0.1:3000";
+          recommendedProxySettings = true;
+        };
+      };
+    };
   };
 
   goeranh = {
     server = true;
     development = true;
     remote-store = true;
+    update = true;
   };
   environment.systemPackages = with pkgs; [
     waypipe

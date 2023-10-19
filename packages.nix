@@ -1,27 +1,26 @@
-{ inputs, lib, self, archpkgs, ... }@input:
-builtins.foldl'
+{ inputs, lib, self, archpkgs, ... }@input: builtins.foldl'
   (result: name:
     let
-      cfg = self.nixosConfigurations.${name};
-      target =
-        if cfg ? _module.args.nixinate.host then
-          cfg._module.args.nixinate.host
-        else
-          name;
+      cfg = self.nixosConfigurations.${name}.config;
+      target = cfg.networking.hostName;
     in
-    result // {
-      "${name}-ssh" = archpkgs.writeScriptBin "${name}-ssh" ''
-        #!${archpkgs.runtimeShell} -e
+    result // (if cfg.goeranh.update then {
+      "${name}-update" = archpkgs.writeScriptBin "${name}-update" ''
+                #!${archpkgs.runtimeShell} -e
 
-        ssh ${target}
+        			  nixos-rebuild switch --flake .#${name} --target-host goeranh@${target} --use-remote-sudo
       '';
+      "${name}-update-local" = archpkgs.writeScriptBin "${name}-update-local" ''
+                #!${archpkgs.runtimeShell} -e
 
-      "${name}-ssh-A" = archpkgs.writeScriptBin "${name}-ssh" ''
-        #!${archpkgs.runtimeShell} -e
+        			  nixos-rebuild switch --flake .#${name} --target-host ${cfg.goeranh.update-user}@${target} --use-remote-sudo --build-host ${cfg.goeranh.update-user}@${target}
+        			'';
+      "${name}-update-builder" = archpkgs.writeScriptBin "${name}-update-builder" ''
+                #!${archpkgs.runtimeShell} -e
 
-        ssh ${target} -A
+        			  nixos-rebuild switch --flake .#${name} --target-host ${cfg.goeranh.update-user}@${target} --use-remote-sudo --build-host nixserver
       '';
-    })
+    } else { }))
   { }
   (builtins.attrNames self.nixosConfigurations)
   // {
@@ -67,10 +66,6 @@ builtins.foldl'
 
     '';
 
-    nvimconfig = builtins.fetchGit {
-      url = "https://pitest.tailf0ec0.ts.net/git/goeranh/nvim";
-      rev = "eb73e49a828dc8699b620b09c89598689b52efaa";
-    };
     dconf = archpkgs.writeShellScriptBin "apply-dconf" ''
       echo "${builtins.readFile ./dconf}" | dconf load /
     '';
@@ -79,7 +74,6 @@ builtins.foldl'
       	  mkdir -p $out
       	  cp $bashrc $out/.bashrc
       	  cp $goeranh $out/.goeranh
-      	  cp -r $nvimconfig $out/nvim-config
       	'';
 
     src = ./.;
