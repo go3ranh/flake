@@ -51,16 +51,32 @@
       hydraURL = "http://${config.networking.fqdn}/hydra/";
       notificationSender = "hydra@hydra.local";
       listenHost = "localhost";
+      extraConfig = ''
+        using_frontend_proxy 1
+        base_uri https://${config.networking.fqdn}/hydra/
+      '';
     };
     nginx = {
       enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
       virtualHosts."${config.networking.fqdn}" = {
         serverAliases = [ "${config.networking.hostName}" ];
         sslCertificate = "/var/lib/nixserver.tailf0ec0.ts.net.crt";
         sslCertificateKey = "/var/lib/nixserver.tailf0ec0.ts.net.key";
-        locations."/hydra/" = {
+        onlySSL = true;
+        locations."/hydra" = {
           proxyPass = "http://127.0.0.1:3000";
           recommendedProxySettings = true;
+          extraConfig = ''
+            proxy_set_header        Host              $host;
+            proxy_set_header        X-Real-IP         $remote_addr;
+            proxy_set_header        X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header        X-Forwarded-Proto $scheme;
+            proxy_set_header        X-Request-Base     /hydra;
+          '';
         };
       };
     };
