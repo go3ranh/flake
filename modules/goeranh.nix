@@ -764,6 +764,7 @@ in
 
     nixpkgs.config.allowUnfree = true;
     networking.firewall.enable = true;
+    networking.firewall.nftables.enable = true;
     networking.domain = "tailf0ec0.ts.net";
 
     console.keyMap = "de";
