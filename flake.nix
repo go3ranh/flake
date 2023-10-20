@@ -204,7 +204,7 @@
             }
             self.nixosModules.goeranh
             disko.nixosModules.disko
-						./host/fileserver/disko.nix
+            ./host/fileserver/disko.nix
           ];
         };
         testkernel = lib.nixosSystem {
@@ -264,6 +264,12 @@
             buildInputs = with pkgs; [
               sops
               ssh-to-age
+            ];
+          };
+          loraflash = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              python3
+              esptool
             ];
           };
           phpshell = pkgs.mkShell {
