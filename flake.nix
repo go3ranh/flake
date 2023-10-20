@@ -189,6 +189,22 @@
             self.nixosModules.goeranh
           ];
         };
+        firewall-test = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/firewall-test
+            sops-nix.nixosModules.sops
+            {
+              programs = {
+                bash.interactiveShellInit = ''
+                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+                '';
+              };
+            }
+            self.nixosModules.goeranh
+          ];
+        };
         fileserver = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
