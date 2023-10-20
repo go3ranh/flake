@@ -226,6 +226,8 @@ in
                 luaconfig = pkgs.writeText "init.lua" ''
                   vim.opt.packpath = '${pack}/'
                   local builtin = require('telescope.builtin')
+									vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
+									vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
                   vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
                   vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
                   vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
@@ -324,72 +326,72 @@ in
                   ];
                 };
                 customRC = ''
-                                    set nocompatible
-                                    set backspace=indent,eol,start
-                                    set nu rnu
-                                    set tabstop=4
-                                    set softtabstop=4
-                                    set shiftwidth=4
-                                    set smartindent
-                                    set noswapfile
-                                    set nobackup
-                                    set nohlsearch
-                                    set incsearch
-                                    set termguicolors
-                                    set scrolloff=8
-                                    set undodir=$HOME/.vim/undodir
-                                    let mapleader=" "
-                                    colorscheme dracula
+                  set nocompatible
+                  set backspace=indent,eol,start
+                  set nu rnu
+                  set tabstop=4
+                  set softtabstop=4
+                  set shiftwidth=4
+                  set smartindent
+                  set noswapfile
+                  set nobackup
+                  set nohlsearch
+                  set incsearch
+                  set termguicolors
+                  set scrolloff=8
+                  set undodir=$HOME/.vim/undodir
+                  let mapleader=" "
+                  colorscheme dracula
 
-                                    vnoremap <silent> * :call VisualSelection('f')<CR>
-                                    vnoremap <silent> # :call VisualSelection('b')<CR>
-                                    " Treat long lines as break lines (useful when moving around in them)
-                                    map j gj
-                                    map k gk
-                                    "Useful mappings for managing tabs
-                                    map <leader>tn :tabnew<cr>
-                                    map <leader>to :tabonly<cr>
-                                    map <leader>tc :tabclose<cr>
-                                    map <leader>tm :tabmove 
+                  vnoremap <silent> * :call VisualSelection('f')<CR>
+                  vnoremap <silent> # :call VisualSelection('b')<CR>
+                  " Treat long lines as break lines (useful when moving around in them)
+                  map j gj
+                  map k gk
+                  "Useful mappings for managing tabs
+                  map <leader>tn :tabnew<cr>
+                  map <leader>to :tabonly<cr>
+                  map <leader>tc :tabclose<cr>
+                  map <leader>tm :tabmove 
 
-                                    map <leader>mas :Mason<CR>
-                                    map <leader>u :UndotreeToggle<CR>:UndotreeFocus<CR>
-                                    vnoremap J :m '>+1<CR>gv=gv
-                                    vnoremap K :m '<-2<CR>gv=gv
-                                    vnoremap H <gv
-                                    vnoremap L >gv
-                                    vnoremap <leader>r :SnipRun<CR>
-                                    map <leader>gd :Gdiffsplit<CR>
-                                    map <leader>gb :Git blame<CR>
-                                    map <leader>gl :Git log<CR>
-                                    map <leader>gc :Git commit<CR>
-                                    map <leader>gp :Git push<CR>
-                                    map <leader>1 :resize 10<CR>
-                                    map <leader>2 :resize 20<CR>
-                                    map <leader>3 :resize 30<CR>
-                                    map <leader>4 :resize 40<CR>
-                                    map <leader>5 :resize 50<CR>
-                                    map <leader>6 :vertical resize 20<CR>
-                                    map <leader>7 :vertical resize 40<CR>
-                                    map <leader>8 :vertical resize 60<CR>
-                                    map <leader>9 :vertical resize 80<CR>
-                                    map <leader>0 :vertical resize 100<CR>
-                                    map <leader>db :DBUIToggle<CR>
-                                    map <leader>gs :Git<CR>
+                  map <leader>mas :Mason<CR>
+                  map <leader>u :UndotreeToggle<CR>:UndotreeFocus<CR>
+                  vnoremap J :m '>+1<CR>gv=gv
+                  vnoremap K :m '<-2<CR>gv=gv
+                  vnoremap H <gv
+                  vnoremap L >gv
+                  vnoremap <leader>r :SnipRun<CR>
+                  map <leader>gd :Gdiffsplit<CR>
+                  map <leader>gb :Git blame<CR>
+                  map <leader>gl :Git log<CR>
+                  map <leader>gc :Git commit<CR>
+                  map <leader>gp :Git push<CR>
+                  map <leader>1 :resize 10<CR>
+                  map <leader>2 :resize 20<CR>
+                  map <leader>3 :resize 30<CR>
+                  map <leader>4 :resize 40<CR>
+                  map <leader>5 :resize 50<CR>
+                  map <leader>6 :vertical resize 20<CR>
+                  map <leader>7 :vertical resize 40<CR>
+                  map <leader>8 :vertical resize 60<CR>
+                  map <leader>9 :vertical resize 80<CR>
+                  map <leader>0 :vertical resize 100<CR>
+                  map <leader>db :DBUIToggle<CR>
+                  map <leader>gs :Git<CR>
 
-                                    autocmd FileType nix set tabstop=2
-                                    autocmd FileType nix set softtabstop=2
-                                    autocmd FileType nix set shiftwidth=2
-                                    autocmd FileType yaml set tabstop=2
-                                    autocmd FileType yaml set softtabstop=2
-                                    autocmd FileType yaml set shiftwidth=2
-                  									augroup remember_folds
-                  										autocmd!
-                  										autocmd BufWinLeave * mkview
-                  										autocmd BufWinEnter * silent! loadview
-                  									augroup END
+                  autocmd FileType nix set tabstop=2
+                  autocmd FileType nix set softtabstop=2
+                  autocmd FileType nix set shiftwidth=2
+                  autocmd FileType yaml set tabstop=2
+                  autocmd FileType yaml set softtabstop=2
+                  autocmd FileType yaml set shiftwidth=2
+                  augroup remember_folds
+                  	autocmd!
+                  	autocmd BufWinLeave * mkview
+                  	autocmd BufWinEnter * silent! loadview
+                  augroup END
 
-                                    luafile ${luaconfig}
+                  luafile ${luaconfig}
                 '';
               };
           }
