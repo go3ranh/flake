@@ -10,12 +10,6 @@
     extraModulePackages = [ ];
   };
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
-      fsType = "ext4";
-    };
-
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   # Bootloader.
@@ -28,6 +22,7 @@
 
   networking = {
     hostName = "fileserver";
+    hostId = "1a1a1a1a";
     #firewall = {
     #  interfaces."tailscale0".allowedTCPPorts = [ 80 443 ];
     #  allowedTCPPorts = [ 22 ];
