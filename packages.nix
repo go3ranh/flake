@@ -64,7 +64,7 @@
           tmux new -s $name
       }
 
-      function tmlocal (){
+      function pmlocal (){
 				  ssh -L 8006:127.0.0.1:8006 -L 3128:127.0.0.1:3128 $1
       }
 
