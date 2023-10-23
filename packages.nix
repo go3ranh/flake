@@ -49,24 +49,24 @@
     '';
 
     goeranh = archpkgs.writeText ".goeranh" ''
-      alias :q="exit"
-      alias :Q="exit"
-      alias tml="tmux ls"
-      alias tma="tmux ls && tmux a || tmux"
-      alias lls="/bin/ls --color"
-      alias vim="nvim"
-      export EDITOR="nvim"
-      alias open="xdg-open"
+            alias :q="exit"
+            alias :Q="exit"
+            alias tml="tmux ls"
+            alias tma="tmux ls && tmux a || tmux"
+            alias lls="/bin/ls --color"
+            alias vim="nvim"
+            export EDITOR="nvim"
+            alias open="xdg-open"
 
-      #open tmux session with pwd as session name
-      function tmn (){
-          name=$(pwd | awk -F'/' '{print $NF}')
-          tmux new -s $name
-      }
+            #open tmux session with pwd as session name
+            function tmn (){
+                name=$(pwd | awk -F'/' '{print $NF}')
+                tmux new -s $name
+            }
 
-      function pmlocal (){
-				  ssh -L 8006:127.0.0.1:8006 -L 3128:127.0.0.1:3128 $1
-      }
+            function pmlocal (){
+      				  ssh -L 8006:127.0.0.1:8006 -L 3128:127.0.0.1:3128 $1
+            }
 
     '';
 

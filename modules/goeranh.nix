@@ -224,50 +224,50 @@ in
                     plugins);
                 vimpkgs = pkgs.vimPlugins;
                 luaconfig = pkgs.writeText "init.lua" ''
-                  vim.opt.packpath = '${pack}/'
-                  local builtin = require('telescope.builtin')
-									vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
-									vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
-                  vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
-                  vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-                  vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
-                  vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
-                  vim.keymap.set('n', '<leader>b', builtin.buffers, {})
-                  local lsp = require('lsp-zero')
+                                    vim.opt.packpath = '${pack}/'
+                                    local builtin = require('telescope.builtin')
+                  									vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
+                  									vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
+                                    vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
+                                    vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+                                    vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
+                                    vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
+                                    vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+                                    local lsp = require('lsp-zero')
 
-                  lsp.preset('recommended')
+                                    lsp.preset('recommended')
 
-                  lsp.ensure_installed({
-                  	'tsserver',
-                  	'eslint'
-                  })
+                                    lsp.ensure_installed({
+                                    	'tsserver',
+                                    	'eslint'
+                                    })
 
-                  local cmp = require('cmp')
-                  local cmp_select = {behavior = cmp.SelectBehavior.Select}
-                  local cmp_mappings = lsp.defaults.cmp_mappings({
-                    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-                    ["<C-Space>"] = cmp.mapping.complete(),
-                  })
+                                    local cmp = require('cmp')
+                                    local cmp_select = {behavior = cmp.SelectBehavior.Select}
+                                    local cmp_mappings = lsp.defaults.cmp_mappings({
+                                      ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+                                      ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+                                      ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+                                      ["<C-Space>"] = cmp.mapping.complete(),
+                                    })
 
-                  lsp.on_attach(function(client, bufnr)
-                    local opts = {buffer = bufnr, remap = false}
+                                    lsp.on_attach(function(client, bufnr)
+                                      local opts = {buffer = bufnr, remap = false}
 
-                    if client.name == "eslint" then
-                        vim.cmd.LspStop('eslint')
-                        return
-                    end
+                                      if client.name == "eslint" then
+                                          vim.cmd.LspStop('eslint')
+                                          return
+                                      end
 
-                    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-                    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-                    vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-                    vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-                    vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-                  end)
+                                      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+                                      vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+                                      vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
+                                      vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
+                                      vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
+                                    end)
 
 
-                  lsp.setup()
+                                    lsp.setup()
                 '';
               in
               {

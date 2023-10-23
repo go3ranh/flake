@@ -7,7 +7,8 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/832ec016-7d26-4a86-813b-ec375f698262";
+    {
+      device = "/dev/disk/by-uuid/832ec016-7d26-4a86-813b-ec375f698262";
       fsType = "ext4";
     };
 
@@ -32,6 +33,11 @@
     remote-store = true;
     update = true;
   };
+  security.sudo = {
+    enable = true;
+    wheelNeedsPassword = false;
+  };
+
 
   system.stateVersion = "23.05"; # Did you read the comment?
 
