@@ -45,7 +45,7 @@ in
       type = types.bool;
       default = false;
       example = true;
-      description = "selve as remote nix store / builder";
+      description = "serve as remote nix store / builder";
     };
     trust-builder = mkOption {
       type = types.bool;
