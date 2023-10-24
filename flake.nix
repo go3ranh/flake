@@ -74,35 +74,12 @@
             self.nixosModules.goeranh
             sops-nix.nixosModules.sops
             nixos-hardware.nixosModules.raspberry-pi-4
-            {
-              environment.systemPackages = [
-                self.packages.aarch64-linux.proxmark
-              ];
-              programs.bash.interactiveShellInit = ''
-                source ${self.packages.aarch64-linux.settings.bashrc.outPath}
-                source ${self.packages.aarch64-linux.settings.goeranh.outPath}
-              '';
-            }
           ];
         };
         desktop = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/desktop
-            self.nixosModules.goeranh
-            sops-nix.nixosModules.sops
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-          ];
-        };
-        laptop1 = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/laptop1
             self.nixosModules.goeranh
             sops-nix.nixosModules.sops
             {
@@ -202,7 +179,7 @@
               nixosSystem.config.system.build.toplevel;
           in
           nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-        );
+        ) // self.packages;
 
       packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
