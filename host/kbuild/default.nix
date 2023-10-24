@@ -16,7 +16,7 @@
 
   networking = {
     useDHCP = true;
-    hostName = "buildvm1";
+    hostName = "kbuild";
     firewall.allowedTCPPorts = [ 22 ];
   };
 
@@ -36,6 +36,35 @@
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
+  };
+
+  services = {
+    nginx = {
+      enable = true;
+      virtualHosts = {
+        "${config.networking.fqdn}" = {
+          sslCertificate = "/var/lib/${config.networking.fqdn}.crt";
+          sslCertificateKey = "/var/lib/${config.networking.fqdn}.key";
+          forceSSL = true;
+          locations = {
+            "/" = {
+              proxyPass = "http://localhost:8081";
+            };
+            "/hydra/" = {
+              proxyPass = "http://localhost:3000";
+              #extraConfig = ''
+              #  rewrite ^/git(.*)$ $1 break;
+              #'';
+            };
+          };
+        };
+      };
+    };
+    hydra = {
+      enable = true;
+      hydraURL = "https://${config.networking.fqdn}/hydra";
+      notificationSender = "hydra@kbuild.local";
+    };
   };
 
 

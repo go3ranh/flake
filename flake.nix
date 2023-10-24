@@ -85,16 +85,6 @@
             }
           ];
         };
-        networking-test = lib.nixosSystem {
-          system = "aarch64-linux";
-          modules = [
-            ./host/networking-test
-            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-            self.nixosModules.goeranh
-            sops-nix.nixosModules.sops
-            nixos-hardware.nixosModules.raspberry-pi-4
-          ];
-        };
         desktop = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
@@ -109,42 +99,12 @@
             }
           ];
         };
-        hypr = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/hypr
-            self.nixosModules.goeranh
-            sops-nix.nixosModules.sops
-            inputs.hyprland.nixosModules.default
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-          ];
-        };
         laptop1 = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/laptop1
             self.nixosModules.goeranh
             sops-nix.nixosModules.sops
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-          ];
-        };
-        poweredge = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/poweredge
-            self.nixosModules.goeranh
-            sops-nix.nixosModules.sops
-            disko.nixosModules.disko
             {
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.x86_64-linux.settings.bashrc.outPath}
@@ -189,40 +149,6 @@
             self.nixosModules.goeranh
           ];
         };
-        firewall-test = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/firewall-test
-            sops-nix.nixosModules.sops
-            {
-              programs = {
-                bash.interactiveShellInit = ''
-                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-                '';
-              };
-            }
-            self.nixosModules.goeranh
-          ];
-        };
-        fileserver = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/fileserver
-            sops-nix.nixosModules.sops
-            {
-              programs = {
-                bash.interactiveShellInit = ''
-                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-                '';
-              };
-            }
-            self.nixosModules.goeranh
-            disko.nixosModules.disko
-            ./host/fileserver/disko.nix
-          ];
-        };
         kbuild = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
@@ -240,43 +166,43 @@
             disko.nixosModules.disko
           ];
         };
-        testkernel = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            self.nixosModules.goeranh
-            sops-nix.nixosModules.sops
-            {
-              fileSystems."/" =
-                {
-                  device = "/dev/sda";
-                  fsType = "ext4";
-                };
-              boot.loader.grub.devices = [ "/dev/sda" ];
-              boot.kernelPatches = [{
-                name = "crashdump-config";
-                patch = null;
-                extraConfig = ''
-                  CRASH_DUMP y
-                  DEBUG_INFO y
-                  PROC_VMCORE y
-                  LOCKUP_DETECTOR y
-                  HARDLOCKUP_DETECTOR y
-                '';
-              }];
-            }
+        #testkernel = lib.nixosSystem {
+        #  system = "x86_64-linux";
+        #  modules = [
+        #    self.nixosModules.goeranh
+        #    sops-nix.nixosModules.sops
+        #    {
+        #      fileSystems."/" =
+        #        {
+        #          device = "/dev/sda";
+        #          fsType = "ext4";
+        #        };
+        #      boot.loader.grub.devices = [ "/dev/sda" ];
+        #      boot.kernelPatches = [{
+        #        name = "crashdump-config";
+        #        patch = null;
+        #        extraConfig = ''
+        #          CRASH_DUMP y
+        #          DEBUG_INFO y
+        #          PROC_VMCORE y
+        #          LOCKUP_DETECTOR y
+        #          HARDLOCKUP_DETECTOR y
+        #        '';
+        #      }];
+        #    }
 
-          ];
-        };
+        #  ];
+        #};
       };
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-      #hydraJobs =
-      #  nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob) (
-      #    let
-      #      getBuildEntryPoint = _: nixosSystem:
-      #        nixosSystem.config.system.build.toplevel;
-      #    in
-      #    nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-      #  );
+      hydraJobs =
+        nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob) (
+          let
+            getBuildEntryPoint = _: nixosSystem:
+              nixosSystem.config.system.build.toplevel;
+          in
+          nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
+        );
 
       packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };

@@ -1,6 +1,7 @@
 { inputs, config, pkgs, lib, ... }:
 with lib;
 let
+  buildkeyPub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+45vPiX86aXqAosIcy8KAYKOswkGbZyJadJR61YZ9Z";
   cfg = config.goeranh;
   kanshiConfig = pkgs.writeText "kanshi-config" ''
     profile docked{
@@ -85,21 +86,21 @@ in
     };
   };
   config = {
-    sops = mkIf cfg.trust-builder {
+    sops = mkIf (cfg.trust-builder || cfg.remote-store) {
       # This will automatically import SSH keys as age keys
       age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
       defaultSopsFormat = "yaml";
       secrets = {
         "buildkey" = {
           sopsFile = ../buildkeys.yaml;
-          owner = "root";
-          group = "root";
+          owner = "goeranh";
+          group = "users";
           mode = "0400";
         };
         "buildkey_pub" = {
           sopsFile = ../buildkeys.yaml;
-          owner = "root";
-          group = "root";
+          owner = "goeranh";
+          group = "users";
           mode = "0400";
         };
       };
@@ -111,12 +112,12 @@ in
       '';
       buildMachines = mkIf cfg.trust-builder [
         {
-          hostName = "nixserver";
+          hostName = "kbuild";
           maxJobs = 5;
           protocol = "ssh-ng";
-          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUJXM24vRHhXTUE4YUFoU3QxNkRTb0t1NXVKbUVYZlE5VmZyS3BIK1A0R2sgcm9vdEBuaXhzZXJ2ZXIK";
+          publicHostKey = "";
           sshKey = "${config.sops.secrets."buildkey".path}";
-          sshUser = "root";
+          sshUser = "builder";
           supportedFeatures = [
             "nixos-test"
             "benchmark"
@@ -126,6 +127,22 @@ in
           systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
 
         }
+        #{ Server is temporarily turned off
+        #  hostName = "nixserver";
+        #  maxJobs = 5;
+        #  protocol = "ssh-ng";
+        #  publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUJXM24vRHhXTUE4YUFoU3QxNkRTb0t1NXVKbUVYZlE5VmZyS3BIK1A0R2sgcm9vdEBuaXhzZXJ2ZXIK";
+        #  sshKey = "${config.sops.secrets."buildkey".path}";
+        #  sshUser = "root";
+        #  supportedFeatures = [
+        #    "nixos-test"
+        #    "benchmark"
+        #    "big-parallel"
+        #  ];
+        #  speedFactor = 10;
+        #  systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
+
+        #}
       ];
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
@@ -136,7 +153,10 @@ in
       };
       sshServe = mkIf cfg.remote-store {
         enable = true;
-        keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5" ];
+        keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+          "${buildkeyPub}"
+        ];
         protocol = "ssh-ng";
         write = true;
       };
@@ -145,6 +165,13 @@ in
         dates = "weekly";
         options = "--delete-older-than 30d";
       };
+    };
+    users.users.builder = mkIf cfg.remote-store {
+      isNormalUser = true;
+      openssh.authorizedKeys.keys = [
+        buildkeyPub
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+      ];
     };
     users.users.goeranh = {
       isNormalUser = true;
