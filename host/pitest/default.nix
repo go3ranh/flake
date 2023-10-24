@@ -139,8 +139,8 @@
       enable = true;
       virtualHosts = {
         "${config.networking.fqdn}" = {
-          sslCertificate = "/var/lib/pitest.tailf0ec0.ts.net.crt";
-          sslCertificateKey = "/var/lib/pitest.tailf0ec0.ts.net.key";
+          sslCertificate = "/var/lib/${config.networking.fqdn}.crt";
+          sslCertificateKey = "/var/lib/${config.networking.fqdn}.key";
           forceSSL = true;
           locations = {
             "/" = {
