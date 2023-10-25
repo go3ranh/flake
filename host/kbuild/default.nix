@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
-
+let
+  cachePort = 8080;
+in
 {
   boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
@@ -35,7 +37,7 @@
     defaultSopsFormat = "yaml";
     secrets = {
       "privateCacheKey" = {
-        owner = "harmonia";
+        owner = "root";
         #group = "root";
         mode = "0400";
       };
@@ -63,57 +65,43 @@
           forceSSL = true;
           locations = {
             "/" = {
-              proxyPass = "http://localhost:8081";
-            };
-            "/hydra/" = {
-              proxyPass = "http://localhost:3000";
-              #extraConfig = ''
-              #  rewrite ^/git(.*)$ $1 break;
-              #'';
+              proxyPass = "http://localhost:${toString cachePort}";
             };
           };
         };
       };
     };
-    #hydra = {
-    #  enable = true;
-    #  buildMachinesFiles = [
-    #    "/etc/nix/machines"
-    #    "/var/lib/hydra/machines"
-    #  ];
-    #  hydraURL = "https://hydra.hq.c3d2.de";
-    #  ldap.enable = true;
-    #  logo = ./c3d2.svg;
-    #  minimumDiskFree = 50;
-    #  minimumDiskFreeEvaluator = 50;
-    #  notificationSender = "hydra@spam.works";
-    #  useSubstitutes = true;
-    #  extraConfig =
-    #    let
-    #      key = config.sops.secrets."nix/signing-key/secretKey".path;
-    #    in
-    #    ''
-    #      binary_cache_secret_key_file = ${key}
-    #      compress_num_threads = 4
-    #      evaluator_workers = 4
-    #      evaluator_max_memory_size = 2048
-    #      max_output_size = ${toString (5*1024*1024*1024)} # sd card and raw images
-    #      store_uri = auto?secret-key=${key}&write-nar-listing=1&ls-compression=zstd&log-compression=zstd
-    #      upload_logs_to_binary_cache = true
-    #    '';
-    #};
+    hydra = {
+      enable = true;
+      hydraURL = "http://localhost:3000";
+      minimumDiskFree = 20;
+      minimumDiskFreeEvaluator = 50;
+      notificationSender = "notify@hydra.local";
+      useSubstitutes = true;
+      extraConfig =
+        let
+          key = config.sops.secrets."privateCacheKey".path;
+        in
+        ''
+          binary_cache_secret_key_file = ${key}
+          compress_num_threads = 4
+          evaluator_workers = 4
+          store_uri = auto?secret-key=${key}&write-nar-listing=1&ls-compression=zstd&log-compression=zstd
+          upload_logs_to_binary_cache = true
+        '';
+    };
 
     ## A rust nix binary cache
-    #harmonia = {
-    #  enable = true;
-    #  settings = {
-    #    bind = "[::]:${toString cachePort}";
-    #    workers = 20;
-    #    max_connection_rate = 1024;
-    #    priority = 50;
-    #  };
-    #  signKeyPath = config.sops.secrets."nix/signing-key/secretKey".path;
-    #};
+    harmonia = {
+      enable = true;
+      settings = {
+        bind = "[::]:${toString cachePort}";
+        workers = 20;
+        max_connection_rate = 1024;
+        priority = 50;
+      };
+      signKeyPath = config.sops.secrets."privateCacheKey".path;
+    };
   };
 
 
