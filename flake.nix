@@ -180,7 +180,7 @@
                 nixosSystem.config.system.build.toplevel;
             in
             nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-          ) // self.packages;
+          );
 
       packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
