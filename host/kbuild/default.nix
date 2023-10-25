@@ -20,7 +20,7 @@ in
   networking = {
     useDHCP = true;
     hostName = "kbuild";
-    firewall.allowedTCPPorts = [ 22 ];
+    firewall.allowedTCPPorts = [ 22 80 443 ];
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";
