@@ -26,3 +26,9 @@ creation_rules:
     - pgp: *admins
       age:
       - *pitest
+
+  - path_regex: host/kbuild/[^/]+\.yaml$
+    key_groups:
+    - pgp: *admins
+      age:
+      - *kbuild
