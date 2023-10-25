@@ -147,8 +147,11 @@ in
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
+        trusted-public-keys = [
+				  "kbuild.tailf0ec0.ts.net:NMbE+ZsnodlZU//YNVf6vTXIQyuwOfZ1Ol29aPz56CE="
+				];
         trusted-substituters = mkIf cfg.trust-builder [
-          "ssh-ng://nixserver"
+          "ssh-ng://kbuild"
         ];
       };
       sshServe = mkIf cfg.remote-store {

@@ -173,13 +173,14 @@
       };
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
       hydraJobs =
-        nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob) (
-          let
-            getBuildEntryPoint = _: nixosSystem:
-              nixosSystem.config.system.build.toplevel;
-          in
-          nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-        ) // self.packages;
+        nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob)
+          (
+            let
+              getBuildEntryPoint = _: nixosSystem:
+                nixosSystem.config.system.build.toplevel;
+            in
+            nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
+          ) // self.packages;
 
       packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
