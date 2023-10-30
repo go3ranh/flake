@@ -13,14 +13,6 @@
     # repeat https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/default.nix#L20
     # to overwrite audio module
     kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
-    # loader.raspberryPi = {
-    #   enable = true;
-    #   version = 4;
-    #   firmwareConfig = ''
-    #     gpu_mem=256
-    #     dtparam=audio=on
-    #   '';
-    # };
 
     kernelParams = lib.mkForce [
       "snd_bcm2835.enable_headphones=1"
@@ -83,27 +75,23 @@
       builders-use-substitutes = true;
       cores = 4;
       extra-platforms = "armv6l-linux";
-      max-jobs = 1;
-      system-features = [ ];
-      trusted-users = [ "client" ];
+      #max-jobs = 1;
+      #system-features = [ ];
+      #trusted-users = [ "client" ];
     };
   };
 
   environment.systemPackages = with pkgs; [
     libraspberrypi
     raspberrypi-eeprom
-    vim
-    tmux
-    wget
   ];
 
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
   };
-  sdImage.compressImage = false;
 
-  console.keyMap = "de";
+  sdImage.compressImage = false;
 
   services = {
     # Do not log to flash:
@@ -126,14 +114,6 @@
         log.LEVEL = "Warn";
       };
       package = pkgs.forgejo;
-    };
-    atuin = {
-      enable = true;
-      #openFirewall = true;
-      openRegistration = false;
-      host = "127.0.0.1";
-      maxHistoryLength = 1000000;
-      path = "/atuin/";
     };
     nginx = {
       enable = true;
@@ -176,18 +156,18 @@
         ROCKET_LOG = "critical";
       };
     };
-    radicale = {
-      enable = true;
-      settings = {
-        server.hosts = [ "127.0.0.1:5323" ];
-        auth = {
-          type = "htpasswd";
-          htpasswd_filename = "/var/lib/radicale/htpasswd";
-          # hash function used for passwords. May be `plain` if you don't want to hash the passwords
-          htpasswd_encryption = "bcrypt";
-        };
-      };
-    };
+    # radicale = {
+    #   enable = true;
+    #   settings = {
+    #     server.hosts = [ "127.0.0.1:5323" ];
+    #     auth = {
+    #       type = "htpasswd";
+    #       htpasswd_filename = "/var/lib/radicale/htpasswd";
+    #       # hash function used for passwords. May be `plain` if you don't want to hash the passwords
+    #       htpasswd_encryption = "bcrypt";
+    #     };
+    #   };
+    # };
   };
 
   containers = {
@@ -219,15 +199,10 @@
           allowedTCPPorts = [ 80 2222 ];
         };
 
-        # Manually configure nameserver. Using resolved inside the container seems to fail
-        # currently
         environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
-
       };
     };
   };
-  virtualisation.libvirtd.enable = true;
-  virtualisation.podman.enable = true;
 
   systemd = {
     services.nix-daemon.serviceConfig = {
@@ -258,6 +233,6 @@
     #};
   };
 
-  system.stateVersion = "22.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }
 
