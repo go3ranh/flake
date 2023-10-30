@@ -160,6 +160,23 @@
             disko.nixosModules.disko
           ];
         };
+        hetznertest = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/hetznertest
+            sops-nix.nixosModules.sops
+            {
+              programs = {
+                bash.interactiveShellInit = ''
+                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+                '';
+              };
+            }
+            self.nixosModules.goeranh
+            disko.nixosModules.disko
+          ];
+        };
         #testkernel = lib.nixosSystem {
         #  system = "x86_64-linux";
         #  modules = [
