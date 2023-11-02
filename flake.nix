@@ -66,6 +66,24 @@
             }
           ];
         };
+        sdrpi = lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            ./host/sdrpi
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            sops-nix.nixosModules.sops
+            self.nixosModules.goeranh
+            {
+              environment.systemPackages = [
+                self.packages.aarch64-linux.proxmark
+              ];
+              programs.bash.interactiveShellInit = ''
+                source ${self.packages.aarch64-linux.settings.bashrc.outPath}
+                source ${self.packages.aarch64-linux.settings.goeranh.outPath}
+              '';
+            }
+          ];
+        };
         pwnzero = lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
@@ -181,7 +199,7 @@
           system = "x86_64-linux";
           modules = [
             "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-            ./host/deployment
+            #./host/deployment
             sops-nix.nixosModules.sops
             {
               programs = {
