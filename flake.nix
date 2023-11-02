@@ -177,6 +177,24 @@
             disko.nixosModules.disko
           ];
         };
+        deploy-iso = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+            ./host/deployment
+            sops-nix.nixosModules.sops
+            {
+              programs = {
+                bash.interactiveShellInit = ''
+                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+                '';
+              };
+            }
+            self.nixosModules.goeranh
+            disko.nixosModules.disko
+          ];
+        };
         #testkernel = lib.nixosSystem {
         #  system = "x86_64-linux";
         #  modules = [
@@ -206,15 +224,15 @@
         #};
       };
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-      hydraJobs =
-        nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob)
-          (
-            let
-              getBuildEntryPoint = _: nixosSystem:
-                nixosSystem.config.system.build.toplevel;
-            in
-            nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-          );
+      #hydraJobs =
+      #  nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob)
+      #    (
+      #      let
+      #        getBuildEntryPoint = _: nixosSystem:
+      #          nixosSystem.config.system.build.toplevel;
+      #      in
+      #      nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
+      #    );
 
       packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };

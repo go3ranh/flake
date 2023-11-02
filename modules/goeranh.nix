@@ -110,6 +110,11 @@ in
       extraOptions = ''
         builders-use-substitutes = true
       '';
+      #registry."fah" = {
+      #  flake = {
+      #    url = "git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome";
+      #  };
+      #};
       buildMachines = mkIf cfg.trust-builder [
         {
           hostName = "kbuild";
@@ -148,10 +153,10 @@ in
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
         trusted-public-keys = [
-				  "kbuild.tailf0ec0.ts.net:NMbE+ZsnodlZU//YNVf6vTXIQyuwOfZ1Ol29aPz56CE="
-				];
+          "kbuild.tailf0ec0.ts.net:NMbE+ZsnodlZU//YNVf6vTXIQyuwOfZ1Ol29aPz56CE="
+        ];
         trusted-substituters = mkIf cfg.trust-builder [
-          "ssh-ng://kbuild"
+          "https://kbuild.tailf0ec0.ts.net"
         ];
       };
       sshServe = mkIf cfg.remote-store {
@@ -176,6 +181,9 @@ in
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
       ];
     };
+    nixpkgs.config.permittedInsecurePackages = [
+      "electron-24.8.6"
+    ];
     users.users.goeranh = {
       isNormalUser = true;
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" "plugdev" ];
@@ -433,7 +441,7 @@ in
           dbeaver
           discord
           filezilla
-          #firefox
+          firefox
           gajim
           gnome3.gnome-terminal
           gpa
@@ -445,7 +453,7 @@ in
           quickemu
           rambox
           shotwell
-          #signal-desktop
+          signal-desktop
           spotify
           thunderbird
           vieb
@@ -523,6 +531,7 @@ in
           bind -n M-K select-pane -U
           bind -n M-J select-pane -D
           bind -n M-O display-popup
+          bind -n M-t display-popup
           bind u display-popup
           bind h select-pane -L
           bind j select-pane -D

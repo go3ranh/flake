@@ -9,10 +9,6 @@
   networking = {
     useDHCP = true;
     hostName = "hetznertest";
-    interfaces.eth0.ipv4.addresses = [{
-      address = "128.140.89.143";
-      prefixLength = 24;
-		}];
     firewall.allowedTCPPorts = [ 22 ];
   };
 
@@ -21,6 +17,8 @@
   goeranh = {
     server = true;
   };
+
+	users.users.goeranh.password = "test";
 
   security.sudo = {
     enable = true;
