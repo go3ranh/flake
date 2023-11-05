@@ -44,6 +44,8 @@ in
     };
   };
 
+  nix.settings.secret-key-files = [ "${config.sops.secrets.privateCacheKey.path}" ];
+
   goeranh = {
     server = true;
     development = true;
