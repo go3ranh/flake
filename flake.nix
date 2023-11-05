@@ -58,6 +58,7 @@
             {
               environment.systemPackages = [
                 self.packages.aarch64-linux.proxmark
+                self.packages.aarch64-linux.customvim
               ];
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.aarch64-linux.settings.bashrc.outPath}
@@ -116,7 +117,7 @@
             {
               environment.systemPackages = [
                 self.packages.x86_64-linux.proxmark
-                nixpkgs-stable.legacyPackages.x86_64-linux.firefox
+                self.packages.x86_64-linux.customvim
               ];
               programs = {
                 bash.interactiveShellInit = ''
