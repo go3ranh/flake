@@ -18,7 +18,7 @@
     server = true;
   };
 
-	users.users.goeranh.password = "test";
+  users.users.goeranh.password = "test";
 
   security.sudo = {
     enable = true;
