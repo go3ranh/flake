@@ -57,7 +57,6 @@
             self.nixosModules.goeranh
             {
               environment.systemPackages = [
-                self.packages.aarch64-linux.proxmark
                 self.packages.aarch64-linux.customvim
               ];
               programs.bash.interactiveShellInit = ''
