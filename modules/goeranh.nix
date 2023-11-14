@@ -117,16 +117,17 @@ in
       #};
       buildMachines = mkIf cfg.trust-builder [
         {
-          hostName = "kbuild";
-          maxJobs = 5;
+          maxJobs = 50;
           protocol = "ssh-ng";
-          publicHostKey = "";
+					hostName = "kbuild";
+					publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
           sshKey = "${config.sops.secrets."buildkey".path}";
           sshUser = "builder";
           supportedFeatures = [
             "nixos-test"
             "benchmark"
             "big-parallel"
+            "kvm"
           ];
           speedFactor = 10;
           systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
@@ -334,7 +335,6 @@ in
       systemPackages = builtins.concatLists
         [
           (with pkgs; [
-            linuxKernel.packages.linux_zen.ply
             linuxKernel.packages.linux_zen.perf
             bpftrace
             bash
