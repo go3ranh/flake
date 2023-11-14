@@ -92,18 +92,6 @@ in
           upload_logs_to_binary_cache = true
         '';
     };
-
-    ## A rust nix binary cache
-    harmonia = {
-      enable = true;
-      settings = {
-        bind = "[::]:${toString cachePort}";
-        workers = 20;
-        max_connection_rate = 1024;
-        priority = 50;
-      };
-      signKeyPath = config.sops.secrets."privateCacheKey".path;
-    };
   };
 
 
