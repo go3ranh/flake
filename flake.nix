@@ -77,7 +77,6 @@
             ./host/desktop
             self.nixosModules.goeranh
             sops-nix.nixosModules.sops
-            disko.nixosModules.disko
             {
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.x86_64-linux.settings.bashrc.outPath}
@@ -103,7 +102,6 @@
               };
             }
             sops-nix.nixosModules.sops
-            disko.nixosModules.disko
             self.nixosModules.goeranh
           ];
         };
@@ -112,7 +110,6 @@
           modules = [
             ./host/nixserver
             sops-nix.nixosModules.sops
-            disko.nixosModules.disko
             {
               programs = {
                 bash.interactiveShellInit = ''
@@ -129,7 +126,6 @@
           modules = [
             ./host/kbuild
             sops-nix.nixosModules.sops
-            disko.nixosModules.disko
             {
               programs = {
                 bash.interactiveShellInit = ''
@@ -139,7 +135,6 @@
               };
             }
             self.nixosModules.goeranh
-            disko.nixosModules.disko
           ];
         };
         hetznertest = lib.nixosSystem {
@@ -156,7 +151,6 @@
               };
             }
             self.nixosModules.goeranh
-            disko.nixosModules.disko
           ];
         };
         deploy-iso = lib.nixosSystem {
@@ -174,7 +168,6 @@
               };
             }
             self.nixosModules.goeranh
-            disko.nixosModules.disko
           ];
         };
       };
