@@ -60,9 +60,7 @@
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
             self.nixosModules.goeranh
-            disko.nixosModules.disko
             {
-              disko.devices = lib.mkForce { };
               environment.systemPackages = [
                 self.packages.aarch64-linux.customvim
               ];

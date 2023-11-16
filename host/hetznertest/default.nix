@@ -17,7 +17,7 @@
   };
   goeranh = {
     server = true;
-    defaultdisco = true;
+#    defaultdisco = true;
   };
   users.users.goeranh.password = "test";
   security.sudo = {
