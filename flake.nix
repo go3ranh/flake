@@ -40,6 +40,7 @@
           modules = [
             self.nixosModules.goeranh
             sops-nix.nixosModules.sops
+            disko.nixosModules.disko
             "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
             "${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix"
             {
@@ -47,6 +48,7 @@
                 goeranh = {
                   server = true;
                 };
+								system.stateVersion = "23.05";
               };
             }
           ];
@@ -58,7 +60,9 @@
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
             self.nixosModules.goeranh
+            disko.nixosModules.disko
             {
+							disko.devices = lib.mkForce {};
               environment.systemPackages = [
                 self.packages.aarch64-linux.customvim
               ];
@@ -75,6 +79,7 @@
             ./host/desktop
             self.nixosModules.goeranh
             sops-nix.nixosModules.sops
+            disko.nixosModules.disko
             {
               programs.bash.interactiveShellInit = ''
                 source ${self.packages.x86_64-linux.settings.bashrc.outPath}
@@ -87,7 +92,6 @@
           system = "x86_64-linux";
           modules = [
             ./host/node5
-            sops-nix.nixosModules.sops
             {
               environment.systemPackages = [
                 self.packages.x86_64-linux.proxmark
@@ -100,6 +104,8 @@
                 '';
               };
             }
+            sops-nix.nixosModules.sops
+            disko.nixosModules.disko
             self.nixosModules.goeranh
           ];
         };
@@ -108,6 +114,7 @@
           modules = [
             ./host/nixserver
             sops-nix.nixosModules.sops
+            disko.nixosModules.disko
             {
               programs = {
                 bash.interactiveShellInit = ''
@@ -124,6 +131,7 @@
           modules = [
             ./host/kbuild
             sops-nix.nixosModules.sops
+            disko.nixosModules.disko
             {
               programs = {
                 bash.interactiveShellInit = ''
