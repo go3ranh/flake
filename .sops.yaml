@@ -15,6 +15,12 @@ creation_rules:
       - *pitest
       - *kbuild
 
+  - path_regex: deploykey.yaml
+    key_groups:
+    - pgp: *admins
+      age:
+      - *kbuild
+
   - path_regex: host/node5/[^/]+\.yaml$
     key_groups:
     - pgp: *admins

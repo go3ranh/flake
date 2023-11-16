@@ -97,8 +97,14 @@ in
           group = "users";
           mode = "0400";
         };
-        "buildkey_pub" = {
+        "buildkey.pub" = {
           sopsFile = ../buildkeys.yaml;
+          owner = "goeranh";
+          group = "users";
+          mode = "0444";
+        };
+        "deploykey" = {
+          sopsFile = ../deploykey.yaml;
           owner = "goeranh";
           group = "users";
           mode = "0444";
@@ -164,7 +170,6 @@ in
       sshServe = mkIf cfg.remote-store {
         enable = true;
         keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
           "${buildkeyPub}"
         ];
         protocol = "ssh-ng";
@@ -176,13 +181,22 @@ in
         options = "--delete-older-than 30d";
       };
     };
-    users.users.builder = mkIf cfg.remote-store {
-      isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        buildkeyPub
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
-      ];
-    };
+    users.users = {
+			builder = mkIf cfg.remote-store {
+				isNormalUser = true;
+				openssh.authorizedKeys.keys = [
+					buildkeyPub
+					"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+				];
+			};
+			updater = mkIf cfg.update {
+				isNormalUser = true;
+				openssh.authorizedKeys.keys = [
+					buildkeyPub
+					"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+				];
+			};
+		};
     nixpkgs.config.permittedInsecurePackages = [
       "electron-24.8.6"
     ];
