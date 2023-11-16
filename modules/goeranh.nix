@@ -119,8 +119,8 @@ in
         {
           maxJobs = 50;
           protocol = "ssh-ng";
-					hostName = "kbuild";
-					publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
+          hostName = "kbuild";
+          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
           sshKey = "${config.sops.secrets."buildkey".path}";
           sshUser = "builder";
           supportedFeatures = [
@@ -559,29 +559,29 @@ in
       };
     };
     systemd = {
-			services. autoupdate = mkIf cfg.update {
-				description = "Check for updates from the flake";
-				path = with pkgs; [
-					nixos-rebuild
-					nix
-					git
-				];
-				script = ''
-					nix build git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git#nixosConfigurations.${config.networking.hostName}.config.system.build.toplevel --builders kbuild
-				sudo nixos-rebuild switch --flake git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git#nixosConfigurations.${config.networking.hostName}
-				'';
-				serviceConfig = {
-					User = config.users.users.goeranh.name;
-				};
-				startAt = "hourly";
-			};
-			user.services.kanshi = mkIf cfg.hypr {
-				description = "kanshi daemon";
-				serviceConfig = {
-					Type = "simple";
-					ExecStart = ''${pkgs.kanshi}/bin/kanshi -c /home/goeranh/kanshitest'';
-				};
-			};
+      services. autoupdate = mkIf cfg.update {
+        description = "Check for updates from the flake";
+        path = with pkgs; [
+          nixos-rebuild
+          nix
+          git
+        ];
+        script = ''
+          					nix build git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git#nixosConfigurations.${config.networking.hostName}.config.system.build.toplevel --builders kbuild
+          				sudo nixos-rebuild switch --flake git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git#nixosConfigurations.${config.networking.hostName}
+          				'';
+        serviceConfig = {
+          User = config.users.users.goeranh.name;
+        };
+        startAt = "hourly";
+      };
+      user.services.kanshi = mkIf cfg.hypr {
+        description = "kanshi daemon";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = ''${pkgs.kanshi}/bin/kanshi -c /home/goeranh/kanshitest'';
+        };
+      };
     };
 
     nixpkgs.config.allowUnfree = true;

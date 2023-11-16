@@ -48,7 +48,7 @@
                 goeranh = {
                   server = true;
                 };
-								system.stateVersion = "23.05";
+                system.stateVersion = "23.05";
               };
             }
           ];
@@ -62,7 +62,7 @@
             self.nixosModules.goeranh
             disko.nixosModules.disko
             {
-							disko.devices = lib.mkForce {};
+              disko.devices = lib.mkForce { };
               environment.systemPackages = [
                 self.packages.aarch64-linux.customvim
               ];
