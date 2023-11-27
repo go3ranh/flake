@@ -9,6 +9,9 @@
       pkgs.makeModulesClosure (x // { allowMissing = true; });
   };
 
+	zramSwap = {
+		enable = true;
+	};
   boot = {
     # repeat https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/default.nix#L20
     # to overwrite audio module
@@ -45,17 +48,18 @@
     server = true;
     trust-builder = true;
     update = true;
-    update-user = "goeranh";
   };
 
   networking = {
     hostName = "pitest"; # Define your hostname.
     nftables.enable = true;
     useDHCP = false;
-    interfaces.eth0.ipv4.addresses = [{
-      address = "192.168.178.2";
-      prefixLength = 24;
-    }];
+    interfaces.eth0.ipv4.addresses = [
+			{
+				address = "192.168.178.2";
+				prefixLength = 24;
+			}
+		];
     defaultGateway = "192.168.178.1";
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
@@ -124,6 +128,7 @@
           forceSSL = true;
           locations = {
             "/" = {
+							# todo
               proxyPass = "http://localhost:8081";
             };
             "/git/" = {
