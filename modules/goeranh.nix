@@ -2,6 +2,7 @@
 with lib;
 let
   buildkeyPub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+45vPiX86aXqAosIcy8KAYKOswkGbZyJadJR61YZ9Z";
+  deploykeyPub = builtins.readFile ../deploykey.pub;
   cfg = config.goeranh;
   kanshiConfig = pkgs.writeText "kanshi-config" ''
     profile docked{
@@ -103,7 +104,7 @@ in
           group = "users";
           mode = "0444";
         };
-        "deploykey" = {
+        "deploykey" = mkIf config.goeranh.remote-store {
           sopsFile = ../deploykey.yaml;
           owner = "goeranh";
           group = "users";
@@ -112,50 +113,6 @@ in
       };
     };
     nix = {
-      distributedBuilds = true;
-      extraOptions = ''
-        builders-use-substitutes = true
-      '';
-      #registry."fah" = {
-      #  flake = {
-      #    url = "git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome";
-      #  };
-      #};
-      buildMachines = mkIf cfg.trust-builder [
-        {
-          maxJobs = 50;
-          protocol = "ssh-ng";
-          hostName = "kbuild";
-          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
-          sshKey = "${config.sops.secrets."buildkey".path}";
-          sshUser = "builder";
-          supportedFeatures = [
-            "nixos-test"
-            "benchmark"
-            "big-parallel"
-            "kvm"
-          ];
-          speedFactor = 10;
-          systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
-
-        }
-        #{ Server is temporarily turned off
-        #  hostName = "nixserver";
-        #  maxJobs = 5;
-        #  protocol = "ssh-ng";
-        #  publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUJXM24vRHhXTUE4YUFoU3QxNkRTb0t1NXVKbUVYZlE5VmZyS3BIK1A0R2sgcm9vdEBuaXhzZXJ2ZXIK";
-        #  sshKey = "${config.sops.secrets."buildkey".path}";
-        #  sshUser = "root";
-        #  supportedFeatures = [
-        #    "nixos-test"
-        #    "benchmark"
-        #    "big-parallel"
-        #  ];
-        #  speedFactor = 10;
-        #  systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
-
-        #}
-      ];
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
@@ -192,8 +149,7 @@ in
 			updater = mkIf cfg.update {
 				isNormalUser = true;
 				openssh.authorizedKeys.keys = [
-					buildkeyPub
-					"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+					deploykeyPub
 				];
 			};
 		};
@@ -298,6 +254,8 @@ in
           bind y copy-mode
           #vi scrolling
           set-window-option -g mode-keys vi
+					set -g pane-border-status top
+					set -g pane-border-format " [ ###P #T ] "
           #u/f pageup/pagedown
           bind -T copy-mode u send -X page-up
           bind -T copy-mode f send -X page-down

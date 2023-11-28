@@ -161,18 +161,6 @@
         ROCKET_LOG = "critical";
       };
     };
-    # radicale = {
-    #   enable = true;
-    #   settings = {
-    #     server.hosts = [ "127.0.0.1:5323" ];
-    #     auth = {
-    #       type = "htpasswd";
-    #       htpasswd_filename = "/var/lib/radicale/htpasswd";
-    #       # hash function used for passwords. May be `plain` if you don't want to hash the passwords
-    #       htpasswd_encryption = "bcrypt";
-    #     };
-    #   };
-    # };
   };
 
   containers = {
@@ -217,25 +205,6 @@
       MemoryMax = "6G";
       MemorySwapMax = "0";
     };
-    #network = {
-    #  enable = true;
-    #  networks."10-lan" = {
-    #    enable = true;
-    #    matchConfig.Name = "eth0";
-    #    address = [ "192.168.178.2/24" ];
-    #    gateway = [ "192.168.178.1" ];
-    #    dns = [ "1.1.1.1" "9.9.9.9" ];
-    #    routes = [
-    #      { routeConfig.Gateway = "192.168.178.1"; }
-    #      {
-    #        routeConfig = {
-    #          Gateway = "192.168.178.1";
-    #          GatewayOnLink = true;
-    #        };
-    #      }
-    #    ];
-    #  };
-    #};
   };
 
   system.stateVersion = "23.05"; # Did you read the comment?
