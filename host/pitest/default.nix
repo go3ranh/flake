@@ -1,4 +1,14 @@
 { config, pkgs, lib, ... }:
+let 
+  website = pkgs.stdenv.mkDerivation {
+		pname = "website";
+		version = "0.1";
+		src = ./html;
+		installPhase = ''
+		  cp $src $out
+		'';
+	};
+in
 {
   hardware.enableRedistributableFirmware = true;
   powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
@@ -129,7 +139,7 @@
           locations = {
             "/" = {
 							# todo
-              proxyPass = "http://localhost:8081";
+              root = "${website.outPath}";
             };
             "/git/" = {
               proxyPass = "http://localhost:3000";
