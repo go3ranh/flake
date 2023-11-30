@@ -1,13 +1,13 @@
 { config, pkgs, lib, ... }:
-let 
+let
   website = pkgs.stdenv.mkDerivation {
-		pname = "website";
-		version = "0.1";
-		src = ./html;
-		installPhase = ''
-		  cp -r $src $out
-		'';
-	};
+    pname = "website";
+    version = "0.1";
+    src = ./html;
+    installPhase = ''
+      		  cp -r $src $out
+      		'';
+  };
 in
 {
   hardware.enableRedistributableFirmware = true;
@@ -19,9 +19,9 @@ in
       pkgs.makeModulesClosure (x // { allowMissing = true; });
   };
 
-	zramSwap = {
-		enable = true;
-	};
+  zramSwap = {
+    enable = true;
+  };
   boot = {
     # repeat https://github.com/NixOS/nixos-hardware/blob/master/raspberry-pi/4/default.nix#L20
     # to overwrite audio module
@@ -65,11 +65,11 @@ in
     nftables.enable = true;
     useDHCP = false;
     interfaces.eth0.ipv4.addresses = [
-			{
-				address = "192.168.178.2";
-				prefixLength = 24;
-			}
-		];
+      {
+        address = "192.168.178.2";
+        prefixLength = 24;
+      }
+    ];
     defaultGateway = "192.168.178.1";
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
@@ -138,7 +138,7 @@ in
           forceSSL = true;
           locations = {
             "/" = {
-							# todo
+              # todo
               root = "${website.outPath}";
             };
             "/git/" = {
@@ -149,9 +149,6 @@ in
             };
             "/invoices/" = {
               proxyPass = "http://10.0.0.2/";
-            };
-            "/atuin/" = {
-              proxyPass = "http://127.0.0.1:8888";
             };
             "/vw/" = {
               proxyPass = "http://127.0.0.1:8222";

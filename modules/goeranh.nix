@@ -139,20 +139,20 @@ in
       };
     };
     users.users = {
-			builder = mkIf cfg.remote-store {
-				isNormalUser = true;
-				openssh.authorizedKeys.keys = [
-					buildkeyPub
-					"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
-				];
-			};
-			updater = mkIf cfg.update {
-				isNormalUser = true;
-				openssh.authorizedKeys.keys = [
-					deploykeyPub
-				];
-			};
-		};
+      builder = mkIf cfg.remote-store {
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          buildkeyPub
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+        ];
+      };
+      updater = mkIf cfg.update {
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          deploykeyPub
+        ];
+      };
+    };
     nixpkgs.config.permittedInsecurePackages = [
       "electron-24.8.6"
     ];
@@ -162,7 +162,7 @@ in
       openssh.authorizedKeys.keys = mkIf cfg.server [
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaU3idFwbk0uY4jooS9dwdBvNLnWfgFRmc7hkSeubSAWnT5J6NM8L8NZrT1ZoiYfebsKmwIn111BGfohZkC6wA= homelab key goeranh"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
-				"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHZP250IoyRgSYNc/0xilSxJcY36gFnPnm2r7vZlKX6C"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHZP250IoyRgSYNc/0xilSxJcY36gFnPnm2r7vZlKX6C"
       ];
       packages = builtins.concatLists [
         (with pkgs; [
@@ -249,33 +249,33 @@ in
           fingers # quick copy paste prefix + f
         ];
         extraConfig = ''
-          bind '§' splitw -hc '#{pane_current_path}'
-          bind -n M-z resize-pane -Z
-          #open copy mode y
-          bind y copy-mode
-          #vi scrolling
-          set-window-option -g mode-keys vi
-					set -g pane-border-status top
-					set -g pane-border-format " [ ###P #T ] "
-          #u/f pageup/pagedown
-          bind -T copy-mode u send -X page-up
-          bind -T copy-mode f send -X page-down
+                    bind '§' splitw -hc '#{pane_current_path}'
+                    bind -n M-z resize-pane -Z
+                    #open copy mode y
+                    bind y copy-mode
+                    #vi scrolling
+                    set-window-option -g mode-keys vi
+          					set -g pane-border-status top
+          					set -g pane-border-format " [ ###P #T ] "
+                    #u/f pageup/pagedown
+                    bind -T copy-mode u send -X page-up
+                    bind -T copy-mode f send -X page-down
 
-          bind -n M-h select-pane -L
-          bind -n M-l select-pane -R
-          bind -n M-k select-pane -U
-          bind -n M-j select-pane -D
-          bind -n M-H select-pane -L
-          bind -n M-L select-pane -R
-          bind -n M-K select-pane -U
-          bind -n M-J select-pane -D
-          bind -n M-O display-popup
-          bind -n M-t display-popup
-          bind u display-popup
-          bind h select-pane -L
-          bind j select-pane -D
-          bind k select-pane -U
-          bind l select-pane -R
+                    bind -n M-h select-pane -L
+                    bind -n M-l select-pane -R
+                    bind -n M-k select-pane -U
+                    bind -n M-j select-pane -D
+                    bind -n M-H select-pane -L
+                    bind -n M-L select-pane -R
+                    bind -n M-K select-pane -U
+                    bind -n M-J select-pane -D
+                    bind -n M-O display-popup
+                    bind -n M-t display-popup
+                    bind u display-popup
+                    bind h select-pane -L
+                    bind j select-pane -D
+                    bind k select-pane -U
+                    bind l select-pane -R
         '';
       };
     };

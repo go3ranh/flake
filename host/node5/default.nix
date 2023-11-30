@@ -52,39 +52,39 @@ in
       startAt = "weekly";
     };
   };
-	nix = {
-		distributedBuilds = true;
-		extraOptions = ''
-			builders-use-substitutes = true
-		'';
-		#registry."fah" = {
-		#  flake = {
-		#    url = "git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome";
-		#  };
-		#};
-		buildMachines = [
-			{
-				maxJobs = 50;
-				protocol = "ssh-ng";
-				hostName = "kbuild";
-				publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
-				sshKey = "/home/goeranh/.ssh/wgidng";
-				sshUser = "goeranh";
-				supportedFeatures = [
-					"nixos-test"
-					"benchmark"
-					"big-parallel"
-					"kvm"
-				];
-				speedFactor = 10;
-				systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
-			}
-		];
-	};
+  nix = {
+    distributedBuilds = true;
+    extraOptions = ''
+      			builders-use-substitutes = true
+      		'';
+    #registry."fah" = {
+    #  flake = {
+    #    url = "git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome";
+    #  };
+    #};
+    buildMachines = [
+      {
+        maxJobs = 50;
+        protocol = "ssh-ng";
+        hostName = "kbuild";
+        publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
+        sshKey = "/home/goeranh/.ssh/wgidng";
+        sshUser = "goeranh";
+        supportedFeatures = [
+          "nixos-test"
+          "benchmark"
+          "big-parallel"
+          "kvm"
+        ];
+        speedFactor = 10;
+        systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
+      }
+    ];
+  };
 
-	zramSwap = {
-		enable = true;
-	};
+  zramSwap = {
+    enable = true;
+  };
 
   networking.hostName = "node5";
   networking.networkmanager.enable = true;
@@ -176,17 +176,17 @@ in
 
 
   services = {
-		fwupd.enable = true;
-		pipewire = {
-			enable = true;
-			alsa.enable = true;
-			alsa.support32Bit = true;
-			pulse.enable = true;
-			jack.enable = false;
-		};
-		#printing.enable = true;
-		#avahi.enable = true;
-		#avahi.nssmdns = true;
+    fwupd.enable = true;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = false;
+    };
+    #printing.enable = true;
+    #avahi.enable = true;
+    #avahi.nssmdns = true;
     openssh.enable = false;
     #usbmuxd = {
     #  enable = true;
