@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "flake:nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "flake:nixpkgs/nixos-23.05";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -23,7 +22,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, nixpkgs-stable, nixos-generators, flake-schemas, hyprland, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, nixpkgs, nixos-generators, flake-schemas, hyprland, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
