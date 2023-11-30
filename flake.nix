@@ -2,7 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "flake:nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     sops-nix = {
       url = "github:Mic92/sops-nix";
