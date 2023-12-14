@@ -1,9 +1,9 @@
-net=$(ip a | grep "192\.168\.178")
-if [ $? -ne 0 ]; then
-	exit 1
-fi
+#net=$(ip a | grep "192\.168\.178")
+#if [ $? -ne 0 ]; then
+#	exit 1
+#fi
 
-sshcommand="ssh -i /root/.ssh/backup root@192.168.178.123"
+sshcommand="ssh -i /root/.ssh/backup root@10.0.0.5"
 
 remote=$($sshcommand "zfs list -t snap -r rpool/backup/node5 | tail -n 1 | awk '{print \$1}' | awk -F'@' '{print \$2}'")
 local=$(zfs list -t snap -r rpool/nixos/home | tail -n 1 | awk '{print $1}')
