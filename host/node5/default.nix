@@ -172,7 +172,7 @@ in
   # networking.firewall.allowedUDPPorts = [ ... ];
   networking.firewall.enable = true;
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.11";
 
 
   services = {
