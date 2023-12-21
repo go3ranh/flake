@@ -183,7 +183,7 @@ in
           gnome3.gnome-terminal
           gpa
           libreoffice
-          logseq
+          #logseq
           obsidian
           okular
           poppler_utils

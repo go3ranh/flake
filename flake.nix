@@ -136,22 +136,22 @@
             self.nixosModules.goeranh
           ];
         };
-        hetznertest = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./host/hetznertest
-            sops-nix.nixosModules.sops
-            {
-              programs = {
-                bash.interactiveShellInit = ''
-                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-                '';
-              };
-            }
-            self.nixosModules.goeranh
-          ];
-        };
+        # hetznertest = lib.nixosSystem {
+        #   system = "x86_64-linux";
+        #   modules = [
+        #     ./host/hetznertest
+        #     sops-nix.nixosModules.sops
+        #     {
+        #       programs = {
+        #         bash.interactiveShellInit = ''
+        #           source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+        #           source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+        #         '';
+        #       };
+        #     }
+        #     self.nixosModules.goeranh
+        #   ];
+        # };
         deploy-iso = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [

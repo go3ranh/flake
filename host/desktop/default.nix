@@ -43,7 +43,7 @@
   };
 
   goeranh = {
-    desktop = true;
+    #desktop = true;
     gaming = true;
   };
 
