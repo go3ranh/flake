@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable?b0d36bd0a420ecee3bc916c91886caca87c894e9";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -108,6 +109,22 @@
           system = "x86_64-linux";
           modules = [
             ./host/nixserver
+            sops-nix.nixosModules.sops
+            {
+              programs = {
+                bash.interactiveShellInit = ''
+                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+                '';
+              };
+            }
+            self.nixosModules.goeranh
+          ];
+        };
+        workstation = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/workstation
             sops-nix.nixosModules.sops
             {
               programs = {
