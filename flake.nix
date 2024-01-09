@@ -23,7 +23,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, nixos-generators, flake-schemas, hyprland, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-generators, flake-schemas, hyprland, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
@@ -56,7 +56,7 @@
         pitest = lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
-            ./host/pitest
+            (import ./host/pitest/default.nix { config = self.nixosConfigurations.pitest.config; pkgs = pkgsarm64; pkgs-unstable = nixpkgs-unstable.legacyPackages.aarch64-linux; lib = nixpkgs.lib; })
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
             self.nixosModules.goeranh

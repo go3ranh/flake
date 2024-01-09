@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, pkgs-unstable, lib, ... }:
 let
   website = pkgs.stdenv.mkDerivation {
     pname = "website";
@@ -127,7 +127,7 @@ in
         };
         log.LEVEL = "Warn";
       };
-      package = pkgs.forgejo;
+      package = pkgs-unstable.forgejo;
     };
     nginx = {
       enable = true;
@@ -178,7 +178,6 @@ in
       localAddress = "10.0.0.2";
       config = { config, pkgs, ... }: {
 
-        nix.settings.experimental-features = [ "nix-command" "flakes" ];
         services.invoiceplane = {
           sites = {
             "10.0.0.2" = {
