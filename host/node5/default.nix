@@ -53,43 +53,40 @@ in
     };
   };
   nix = {
-    distributedBuilds = true;
-    extraOptions = ''
-      			builders-use-substitutes = true
-      		'';
-    #registry."fah" = {
-    #  flake = {
-    #    url = "git+https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome";
-    #  };
-    #};
-    buildMachines = [
-      {
-        maxJobs = 50;
-        protocol = "ssh-ng";
-        hostName = "kbuild";
-        publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
-        sshKey = "/home/goeranh/.ssh/wgidng";
-        sshUser = "goeranh";
-        supportedFeatures = [
-          "nixos-test"
-          "benchmark"
-          "big-parallel"
-          "kvm"
-        ];
-        speedFactor = 10;
-        systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
-      }
-    ];
+    # distributedBuilds = true;
+    # extraOptions = ''
+    #   			builders-use-substitutes = true
+    #   		'';
+    # buildMachines = [
+    #   {
+    #     maxJobs = 50;
+    #     protocol = "ssh-ng";
+    #     hostName = "kbuild";
+    #     publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
+    #     sshKey = "/home/goeranh/.ssh/wgidng";
+    #     sshUser = "goeranh";
+    #     supportedFeatures = [
+    #       "nixos-test"
+    #       "benchmark"
+    #       "big-parallel"
+    #       "kvm"
+    #     ];
+    #     speedFactor = 10;
+    #     systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
+    #   }
+    # ];
   };
 
   zramSwap = {
     enable = true;
   };
 
-  networking.hostName = "node5";
-  networking.networkmanager.enable = true;
-  networking.hosts = {
-    "127.0.0.2" = [ "youtube.com" ];
+	networking = {
+		hostName = "node5";
+		networkmanager.enable = true;
+		hosts = {
+			"127.0.0.2" = [ "youtube.com" "*.youtube.com" ];
+		};
   };
 
   time.timeZone = "Europe/Berlin";
