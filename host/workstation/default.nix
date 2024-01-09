@@ -2,6 +2,7 @@
 
 {
   boot = {
+		binfmt.emulatedSystems = [ "aarch64-linux" ];
     kernelModules = [ ];
     extraModulePackages = [ ];
     initrd = {
