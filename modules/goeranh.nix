@@ -173,7 +173,7 @@ in
           tailscale
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
-          #bitwarden # nodejs 16 deprecated
+          bitwarden
           chromium
           dbeaver
           discord
@@ -183,7 +183,6 @@ in
           gnome3.gnome-terminal
           gpa
           libreoffice
-          #logseq
           obsidian
           okular
           poppler_utils
@@ -193,6 +192,7 @@ in
           signal-desktop
           spotify
           thunderbird
+					tor-browser-bundle-bin
           vieb
           virt-manager
           virt-viewer
