@@ -2,7 +2,7 @@
 
 {
   boot = {
-		binfmt.emulatedSystems = [ "aarch64-linux" ];
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
     kernelModules = [ ];
     extraModulePackages = [ ];
     initrd = {
@@ -16,12 +16,14 @@
   };
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/6d1f76d6-961b-44c7-98ff-d020ecbce7b4";
+    {
+      device = "/dev/disk/by-uuid/6d1f76d6-961b-44c7-98ff-d020ecbce7b4";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/D80A-1208";
+    {
+      device = "/dev/disk/by-uuid/D80A-1208";
       fsType = "vfat";
     };
 
@@ -33,9 +35,9 @@
   time.timeZone = "Europe/Berlin";
 
   security.sudo.wheelNeedsPassword = false;
-	goeranh = {
-		server = true;
-	};
+  goeranh = {
+    server = true;
+  };
 
   networking.firewall.allowedTCPPorts = [ 22 ];
   system.stateVersion = "23.11";

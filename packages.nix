@@ -89,101 +89,101 @@
             plugins);
         vimpkgs = archpkgs.vimPlugins;
         luaconfig = archpkgs.writeText "init.lua" ''
-					vim.opt.packpath = '${pack}/'
-					local builtin = require('telescope.builtin')
-					vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
-					vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
-					vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
-					vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-					vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
-					vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
-					vim.keymap.set('n', '<leader>b', builtin.buffers, {})
-					local lsp = require('lsp-zero')
+          					vim.opt.packpath = '${pack}/'
+          					local builtin = require('telescope.builtin')
+          					vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
+          					vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
+          					vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
+          					vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+          					vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
+          					vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
+          					vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+          					local lsp = require('lsp-zero')
 
-					lsp.preset('recommended')
+          					lsp.preset('recommended')
 
-					local cmp = require('cmp')
-					cmp.setup {
+          					local cmp = require('cmp')
+          					cmp.setup {
 
-						mapping = {
+          						mapping = {
 
-							-- ... Your other configuration ...
+          							-- ... Your other configuration ...
 
-							['<C-Space>'] = cmp.mapping.confirm {
-								behavior = cmp.ConfirmBehavior.Insert,
-								select = true,
-							},
+          							['<C-Space>'] = cmp.mapping.confirm {
+          								behavior = cmp.ConfirmBehavior.Insert,
+          								select = true,
+          							},
 
-							-- ['<Tab>'] = function(fallback)
-							-- 	if not cmp.select_next_item() then
-							-- 		if vim.bo.buftype ~= 'prompt' and has_words_before() then
-							-- 			cmp.complete()
-							-- 		else
-							-- 			fallback()
-							-- 		end
-							-- 	end
-							-- end,
+          							-- ['<Tab>'] = function(fallback)
+          							-- 	if not cmp.select_next_item() then
+          							-- 		if vim.bo.buftype ~= 'prompt' and has_words_before() then
+          							-- 			cmp.complete()
+          							-- 		else
+          							-- 			fallback()
+          							-- 		end
+          							-- 	end
+          							-- end,
 
-							-- ['<S-Tab>'] = function(fallback)
-							-- 	if not cmp.select_prev_item() then
-							-- 		if vim.bo.buftype ~= 'prompt' and has_words_before() then
-							-- 			cmp.complete()
-							-- 		else
-							-- 			fallback()
-							-- 		end
-							-- 	end
-							-- end,
-						},
+          							-- ['<S-Tab>'] = function(fallback)
+          							-- 	if not cmp.select_prev_item() then
+          							-- 		if vim.bo.buftype ~= 'prompt' and has_words_before() then
+          							-- 			cmp.complete()
+          							-- 		else
+          							-- 			fallback()
+          							-- 		end
+          							-- 	end
+          							-- end,
+          						},
 
-						snippet = {
-							-- We recommend using *actual* snippet engine.
-							-- It's a simple implementation so it might not work in some of the cases.
-							expand = function(args)
-								unpack = unpack or table.unpack
-								local line_num, col = unpack(vim.api.nvim_win_get_cursor(0))
-								local line_text = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num, true)[1]
-								local indent = string.match(line_text, '^%s*')
-								local replace = vim.split(args.body, '\n', true)
-								local surround = string.match(line_text, '%S.*') or "" 
-								local surround_end = surround:sub(col)
+          						snippet = {
+          							-- We recommend using *actual* snippet engine.
+          							-- It's a simple implementation so it might not work in some of the cases.
+          							expand = function(args)
+          								unpack = unpack or table.unpack
+          								local line_num, col = unpack(vim.api.nvim_win_get_cursor(0))
+          								local line_text = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num, true)[1]
+          								local indent = string.match(line_text, '^%s*')
+          								local replace = vim.split(args.body, '\n', true)
+          								local surround = string.match(line_text, '%S.*') or "" 
+          								local surround_end = surround:sub(col)
 
-								replace[1] = surround:sub(0, col - 1)..replace[1]
-								replace[#replace] = replace[#replace]..(#surround_end > 1 and ' ' or "")..surround_end
-								if indent ~= "" then
-									for i, line in ipairs(replace) do
-										replace[i] = indent..line
-									end
-								end
+          								replace[1] = surround:sub(0, col - 1)..replace[1]
+          								replace[#replace] = replace[#replace]..(#surround_end > 1 and ' ' or "")..surround_end
+          								if indent ~= "" then
+          									for i, line in ipairs(replace) do
+          										replace[i] = indent..line
+          									end
+          								end
 
-								vim.api.nvim_buf_set_lines(0, line_num - 1, line_num, true, replace)
-							end,
-						},
-					}
-					local cmp_select = {behavior = cmp.SelectBehavior.Select}
-					local cmp_mappings = lsp.defaults.cmp_mappings({
-						['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-						['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-						['<C-y>'] = cmp.mapping.confirm({ select = true }),
-						["<C-Space>"] = cmp.mapping.complete(),
-					})
+          								vim.api.nvim_buf_set_lines(0, line_num - 1, line_num, true, replace)
+          							end,
+          						},
+          					}
+          					local cmp_select = {behavior = cmp.SelectBehavior.Select}
+          					local cmp_mappings = lsp.defaults.cmp_mappings({
+          						['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+          						['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+          						['<C-y>'] = cmp.mapping.confirm({ select = true }),
+          						["<C-Space>"] = cmp.mapping.complete(),
+          					})
 
-					lsp.on_attach(function(client, bufnr)
-						local opts = {buffer = bufnr, remap = false}
+          					lsp.on_attach(function(client, bufnr)
+          						local opts = {buffer = bufnr, remap = false}
 
-						if client.name == "eslint" then
-								vim.cmd.LspStop('eslint')
-								return
-						end
+          						if client.name == "eslint" then
+          								vim.cmd.LspStop('eslint')
+          								return
+          						end
 
-						vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-						vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-						vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-						vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-						vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-					end)
+          						vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          						vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+          						vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
+          						vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
+          						vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
+          					end)
 
 
-					lsp.setup()
+          					lsp.setup()
         '';
       in
       {

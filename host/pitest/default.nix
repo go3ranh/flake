@@ -5,7 +5,7 @@ let
     version = "0.1";
     src = ./html;
     installPhase = ''
-      		  cp -r $src $out
+      			cp -r $src $out
       		'';
   };
 in
