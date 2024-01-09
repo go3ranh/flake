@@ -167,6 +167,7 @@ in
 
   virtualisation.libvirtd.enable = true;
   virtualisation.podman.enable = true;
+  virtualisation.podman.dockerCompat = true;
   programs.dconf.enable = true;
   programs.gnupg.agent.pinentryFlavor = "gnome3";
 
