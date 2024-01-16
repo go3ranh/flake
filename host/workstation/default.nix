@@ -34,6 +34,10 @@
   networking.hostName = "workstation";
   time.timeZone = "Europe/Berlin";
 
+	virtualisation.podman = {
+		enable = true;
+		dockerCompat = true;
+	};
   security.sudo.wheelNeedsPassword = false;
   goeranh = {
     server = true;
