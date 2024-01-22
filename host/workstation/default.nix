@@ -38,13 +38,13 @@
 		enable = true;
 		dockerCompat = true;
 	};
+
   security.sudo.wheelNeedsPassword = false;
   goeranh = {
     server = true;
   };
 
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [ 22 8080 1980 ];
   system.stateVersion = "23.11";
-
 }
 
