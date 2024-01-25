@@ -166,9 +166,9 @@ in
       ];
       packages = builtins.concatLists [
         (with pkgs; [
-          atuin
-          btrfs-progs
           dig
+          tcpdump
+          whois
           rsync
           tailscale
         ])
