@@ -350,6 +350,13 @@
       				  ssh -L 8006:127.0.0.1:8006 -L 3128:127.0.0.1:3128 $1
             }
 
+            function ipl (){
+      				  ${archpkgs.curl}/bin/curl -s http://ip-api.com/json/$1 | ${archpkgs.jq}/bin/js .as
+            }
+
+            function iplookup (){
+      				  ${archpkgs.curl}/bin/curl http://ip-api.com/$1
+            }
     '';
 
     dconf = archpkgs.writeShellScriptBin "apply-dconf" ''
