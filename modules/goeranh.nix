@@ -205,6 +205,7 @@ in
           gitkraken
           gnome-builder
           jetbrains.idea-community
+          jetbrains.datagrip
           jetbrains.jdk
           jetbrains.phpstorm
           #jetbrains.webstorm
