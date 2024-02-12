@@ -357,6 +357,17 @@
             function iplookup (){
       				  ${archpkgs.curl}/bin/curl http://ip-api.com/$1
             }
+
+            function motd (){
+							#6 - matrix; 25 - zelt
+							mensen=( 6 35 )
+							for mensa in "''${mensen[@]}"; do
+											${archpkgs.curl}/bin/curl -s https://api.studentenwerk-dresden.de/openmensa/v2/canteens/$mensa | ${archpkgs.jq}/bin/jq -r .name
+											while read meal; do
+															echo "$(echo "$meal" | awk -F '$' '{print $2}')€ $(echo "$meal" | awk -F '$' '{print $1}')"
+											done < <(${archpkgs.curl}/bin/curl -s https://api.studentenwerk-dresden.de/openmensa/v2/canteens/$mensa/days/$(${archpkgs.curl}/bin/curl -s https://api.studentenwerk-dresden.de/openmensa/v2/canteens/$mensa/days | ${archpkgs.jq}/bin/jq -r .[0].date)/meals | ${archpkgs.jq}/bin/jq -r '.[] | "\(.name)$\(.prices.Studierende)$\(.notes)"' | grep -E "vegan|vegetarisch" | grep -v suppe)
+							done
+            }
     '';
 
     dconf = archpkgs.writeShellScriptBin "apply-dconf" ''
