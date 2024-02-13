@@ -351,7 +351,7 @@
             }
 
             function ipl (){
-      				  ${archpkgs.curl}/bin/curl -s http://ip-api.com/json/$1 | ${archpkgs.jq}/bin/js .as
+      				  ${archpkgs.curl}/bin/curl -s http://ip-api.com/json/$1 | ${archpkgs.jq}/bin/jq .as
             }
 
             function iplookup (){
@@ -365,7 +365,7 @@
 											${archpkgs.curl}/bin/curl -s https://api.studentenwerk-dresden.de/openmensa/v2/canteens/$mensa | ${archpkgs.jq}/bin/jq -r .name
 											while read meal; do
 															echo "$(echo "$meal" | awk -F '$' '{print $2}')€ $(echo "$meal" | awk -F '$' '{print $1}')"
-											done < <(${archpkgs.curl}/bin/curl -s https://api.studentenwerk-dresden.de/openmensa/v2/canteens/$mensa/days/$(${archpkgs.curl}/bin/curl -s https://api.studentenwerk-dresden.de/openmensa/v2/canteens/$mensa/days | ${archpkgs.jq}/bin/jq -r .[0].date)/meals | ${archpkgs.jq}/bin/jq -r '.[] | "\(.name)$\(.prices.Studierende)$\(.notes)"' | grep -E "vegan|vegetarisch" | grep -v suppe)
+											done < <(${archpkgs.curl}/bin/curl -s https://api.studentenwerk-dresden.de/openmensa/v2/canteens/$mensa/days/$(date "+%Y-%m-%d")/meals | ${archpkgs.jq}/bin/jq -r '.[] | "\(.name)$\(.prices.Studierende)$\(.notes)"' | grep -E "vegan|vegetarisch" | grep -v suppe)
 							done
             }
     '';
