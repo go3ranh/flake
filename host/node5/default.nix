@@ -154,12 +154,6 @@ in
     lm_sensors
     lsof
     smartmontools
-    vscode
-    platformio
-    python3
-    python3Packages.pip
-    gcc
-    clang
   ]; # ++ [ self.packages.x86_64-linux.proxmark ];
 
   virtualisation.libvirtd.enable = true;
