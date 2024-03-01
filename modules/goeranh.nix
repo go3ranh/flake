@@ -171,6 +171,7 @@ in
           whois
           rsync
           tailscale
+          file
         ])
         (if cfg.desktop || cfg.hypr then with pkgs; [
           bitwarden
