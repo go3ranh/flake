@@ -570,6 +570,7 @@ in
 
     services.openssh = mkIf cfg.server {
       enable = true;
+			openFirewall = true;
     };
     services.tailscale.enable = true;
   };

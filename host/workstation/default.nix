@@ -26,6 +26,18 @@
       device = "/dev/disk/by-uuid/D80A-1208";
       fsType = "vfat";
     };
+	nix = {
+		settings = {
+			experimental-features = [ "nix-command" "flakes" ];
+			auto-optimise-store = true;
+			trusted-public-keys = [
+			  "nixbsd:gwcQlsUONBLrrGCOdEboIAeFq9eLaDqfhfXmHZs1mgc="
+			];
+			trusted-substituters = [
+				"https://attic.mildlyfunctional.gay/nixbsd"
+			];
+		};
+	};
 
   swapDevices = [ ];
 
@@ -34,10 +46,15 @@
   networking.hostName = "workstation";
   time.timeZone = "Europe/Berlin";
 
+  virtualisation.libvirtd.enable = true;
 	virtualisation.podman = {
 		enable = true;
 		dockerCompat = true;
 	};
+
+	users.users.root.openssh.authorizedKeys.keys = [
+		"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+  ];
 
   security.sudo.wheelNeedsPassword = false;
   goeranh = {
@@ -45,6 +62,7 @@
   };
 
 	services = {
+		openssh.settings.X11Forwarding = true;
 		netdata = {
 			enable = true;
 			config = {
@@ -65,7 +83,7 @@
 		};
 	};
 
-  networking.firewall.allowedTCPPorts = [ 22 8080 1980 ];
+  networking.firewall.allowedTCPPorts = [ 8080 1980 ];
   system.stateVersion = "23.11";
 }
 
