@@ -128,7 +128,7 @@
             sops-nix.nixosModules.sops
             {
               environment.systemPackages = [
-                self.packages.aarch64-linux.customvim
+                self.packages.x86_64-linux.customvim
               ];
               programs.bash.interactiveShellInit = ''
 								source ${self.packages.x86_64-linux.settings.bashrc.outPath}
