@@ -73,8 +73,13 @@ in
     defaultGateway = "192.168.178.1";
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
-    firewall.enable = true;
-    firewall.allowedTCPPorts = [ 80 443 2222 ];
+		firewall = {
+			enable = true;
+			interfaces = {
+				"tailscale0".allowedTCPPorts = [ 22 80 443 2222 ];
+				"eth0".allowedTCPPorts = [ 22 80 443 2222 ];
+			};
+		};
     nat = {
       enable = true;
       internalInterfaces = [ "ve-+" ];
