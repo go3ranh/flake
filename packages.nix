@@ -1,29 +1,4 @@
-{ inputs, lib, self, archpkgs, ... }@input: builtins.foldl'
-  (result: name:
-    let
-      cfg = self.nixosConfigurations.${name}.config;
-      target = cfg.networking.hostName;
-    in
-    result // (if cfg.goeranh.update then {
-      "${name}-update" = archpkgs.writeScriptBin "${name}-update" ''
-                #!${archpkgs.runtimeShell} -e
-
-        			  nixos-rebuild switch --flake .#${name} --target-host goeranh@${target} --use-remote-sudo
-      '';
-      "${name}-update-local" = archpkgs.writeScriptBin "${name}-update-local" ''
-                #!${archpkgs.runtimeShell} -e
-
-        			  nixos-rebuild switch --flake .#${name} --target-host ${cfg.goeranh.update-user}@${target} --use-remote-sudo --build-host ${cfg.goeranh.update-user}@${target}
-        			'';
-      "${name}-update-builder" = archpkgs.writeScriptBin "${name}-update-builder" ''
-                #!${archpkgs.runtimeShell} -e
-
-        			  nixos-rebuild switch --flake .#${name} --target-host ${cfg.goeranh.update-user}@${target} --use-remote-sudo --build-host nixserver
-      '';
-    } else { }))
-  { }
-  (builtins.attrNames self.nixosConfigurations)
-  // {
+{ inputs, lib, self, archpkgs, ... }@input: {
   customvim = archpkgs.neovim.override {
     vimAlias = true;
     configure =
