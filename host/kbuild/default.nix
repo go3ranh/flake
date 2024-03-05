@@ -50,7 +50,6 @@ in
     server = true;
     development = true;
     remote-store = true;
-    update = true;
   };
   security.sudo = {
     enable = true;

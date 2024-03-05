@@ -136,7 +136,6 @@ in
     desktop = true;
     trust-builder = true;
     development = true;
-    update = false;
   };
 
   hardware.hackrf.enable = true;

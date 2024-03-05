@@ -13,17 +13,13 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-generators, flake-schemas, hyprland, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsx86 = nixpkgs.legacyPackages.x86_64-linux;
@@ -35,24 +31,6 @@
         goeranh = import ./modules/goeranh.nix;
       };
       nixosConfigurations = {
-        bootstrap = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            self.nixosModules.goeranh
-            sops-nix.nixosModules.sops
-            disko.nixosModules.disko
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-            "${nixpkgs}/nixos/modules/virtualisation/proxmox-lxc.nix"
-            {
-              config = {
-                goeranh = {
-                  server = true;
-                };
-                system.stateVersion = "23.05";
-              };
-            }
-          ];
-        };
         pitest = lib.nixosSystem {
           system = "aarch64-linux";
           modules = [

@@ -86,7 +86,6 @@
     server = true;
     development = true;
     remote-store = true;
-    update = true;
   };
   environment.systemPackages = with pkgs; [
     waypipe

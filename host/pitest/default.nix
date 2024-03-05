@@ -5,8 +5,8 @@ let
     version = "0.1";
     src = ./html;
     installPhase = ''
-      			cp -r $src $out
-      		'';
+			cp -r $src $out
+		'';
   };
 in
 {
@@ -83,6 +83,13 @@ in
       enable = true;
       internalInterfaces = [ "ve-+" ];
       externalInterface = "eth0";
+			forwardPorts = [
+				{
+					sourcePort = 9090;
+					proto = "tcp";
+					destination = "10.10.0.3:9090";
+				}
+			];
     };
   };
 
@@ -92,10 +99,7 @@ in
     settings = {
       builders-use-substitutes = true;
       cores = 4;
-      extra-platforms = "armv6l-linux";
-      #max-jobs = 1;
-      #system-features = [ ];
-      #trusted-users = [ "client" ];
+      #extra-platforms = "armv6l-linux";
     };
   };
 
@@ -116,13 +120,13 @@ in
     journald.extraConfig = ''
       Storage=volatile
     '';
-    gitea = {
+    forgejo = {
       enable = true;
       settings = {
         service.DISABLE_REGISTRATION = true;
         server = {
           ROOT_URL = "https://${config.networking.fqdn}/git/";
-          WORK_PATH = "/var/lib/gitea";
+          WORK_PATH = "/var/lib/forgejo";
           DISABLE_SSH = false;
           DOMAIN = "${config.networking.fqdn}";
           SSH_DOMAIN = "${config.networking.fqdn}";
@@ -152,7 +156,7 @@ in
               '';
             };
             "/invoices/" = {
-              proxyPass = "http://10.0.0.2/";
+              proxyPass = "http://10.10.0.2/";
             };
             "/vw/" = {
               proxyPass = "http://127.0.0.1:8222";
@@ -178,13 +182,13 @@ in
     invoiceplane = {
       autoStart = true;
       privateNetwork = true;
-      hostAddress = "10.0.0.1";
-      localAddress = "10.0.0.2";
+      hostAddress = "10.10.0.1";
+      localAddress = "10.10.0.2";
       config = { config, pkgs, ... }: {
 
         services.invoiceplane = {
           sites = {
-            "10.0.0.2" = {
+            "10.10.0.2" = {
               enable = true;
               #port = 81;
               #proxyPathPrefix = "/invoices";
@@ -195,11 +199,36 @@ in
           };
         };
 
-        system.stateVersion = "23.05";
+        system.stateVersion = "23.11";
 
         networking.firewall = {
           enable = true;
           allowedTCPPorts = [ 80 2222 ];
+        };
+
+        environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
+      };
+    };
+    ntfy = {
+      autoStart = true;
+      privateNetwork = true;
+      hostAddress = "10.10.0.1";
+      localAddress = "10.10.0.3";
+      config = { config, pkgs, ... }: {
+
+        services.ntfy-sh = {
+          enable = true;
+					settings = {
+						listen-http = ":9090";
+						base-url = "http://192.168.178.2:9090";
+					};
+        };
+
+        system.stateVersion = "23.11";
+
+        networking.firewall = {
+          enable = true;
+          allowedTCPPorts = [ 9090 ];
         };
 
         environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
