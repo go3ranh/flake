@@ -43,11 +43,11 @@ in
       example = true;
       description = "install steam, etc";
     };
-    update-user = mkOption {
-      type = types.str;
-      default = "root";
-      example = "john";
-      description = "user to connect over ssh";
+    update = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "update the system from flake sources";
     };
   };
   config = {
@@ -340,5 +340,25 @@ in
       openFirewall = true;
     };
     services.tailscale.enable = true;
+
+		systemd.services = {
+			autoupdate = mkIf cfg.update {
+				enable = true;
+				path = with pkgs; [
+				  nixos-rebuild
+				  git
+				];
+				script = ''
+					if [ ! -d /tmp/flakeathome ]; then
+						cd /tmp
+						${pkgs.git}/bin/git clone https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git
+					fi
+					cd /tmp/flakeathome
+					${pkgs.git}/bin/git pull
+				  nixos-rebuild switch --flake .#
+				'';
+				startAt = "daily";
+			};
+		};
   };
 }
