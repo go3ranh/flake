@@ -5,8 +5,8 @@ let
     version = "0.1";
     src = ./html;
     installPhase = ''
-			cp -r $src $out
-		'';
+      			cp -r $src $out
+      		'';
   };
 in
 {
@@ -72,24 +72,24 @@ in
     defaultGateway = "192.168.178.1";
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
-		firewall = {
-			enable = true;
-			interfaces = {
-				"tailscale0".allowedTCPPorts = [ 22 80 443 2222 ];
-				"eth0".allowedTCPPorts = [ 22 80 443 2222 ];
-			};
-		};
+    firewall = {
+      enable = true;
+      interfaces = {
+        "tailscale0".allowedTCPPorts = [ 22 80 443 2222 ];
+        "eth0".allowedTCPPorts = [ 22 80 443 2222 ];
+      };
+    };
     nat = {
       enable = true;
       internalInterfaces = [ "ve-+" ];
       externalInterface = "eth0";
-			forwardPorts = [
-				{
-					sourcePort = 9090;
-					proto = "tcp";
-					destination = "10.10.0.3:9090";
-				}
-			];
+      forwardPorts = [
+        {
+          sourcePort = 9090;
+          proto = "tcp";
+          destination = "10.10.0.3:9090";
+        }
+      ];
     };
   };
 
@@ -218,10 +218,10 @@ in
 
         services.ntfy-sh = {
           enable = true;
-					settings = {
-						listen-http = ":9090";
-						base-url = "http://192.168.178.2:9090";
-					};
+          settings = {
+            listen-http = ":9090";
+            base-url = "http://192.168.178.2:9090";
+          };
         };
 
         system.stateVersion = "23.11";

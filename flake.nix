@@ -109,8 +109,8 @@
                 self.packages.x86_64-linux.customvim
               ];
               programs.bash.interactiveShellInit = ''
-								source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-								source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+                								source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+                								source ${self.packages.x86_64-linux.settings.goeranh.outPath}
               '';
             }
             self.nixosModules.goeranh

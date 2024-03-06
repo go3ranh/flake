@@ -129,7 +129,7 @@ in
           rsync
           tailscale
           file
-					ntfy-sh
+          ntfy-sh
         ])
         (if cfg.desktop then with pkgs; [
           bitwarden
@@ -151,7 +151,7 @@ in
           signal-desktop
           spotify
           thunderbird
-					tor-browser-bundle-bin
+          tor-browser-bundle-bin
           vieb
           virt-manager
           virt-viewer
@@ -337,7 +337,7 @@ in
 
     services.openssh = mkIf cfg.server {
       enable = true;
-			openFirewall = true;
+      openFirewall = true;
     };
     services.tailscale.enable = true;
   };

@@ -81,12 +81,12 @@ in
   #  enable = true;
   #};
 
-	networking = {
-		hostName = "node5";
-		networkmanager.enable = true;
-		hosts = {
-			"127.0.0.2" = [ "youtube.com" "*.youtube.com" ];
-		};
+  networking = {
+    hostName = "node5";
+    networkmanager.enable = true;
+    hosts = {
+      "127.0.0.2" = [ "youtube.com" "*.youtube.com" ];
+    };
   };
 
   time.timeZone = "Europe/Berlin";

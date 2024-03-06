@@ -58,29 +58,29 @@ in
 
   services = {
     netdata = {
-			enable = true;
-			config = {
-				web = {
-					"bind" = "kbuild:19999";
-				};
-			};
-			configDir = {
-				"stream.conf" = pkgs.writeText "stream.conf" ''
-					[8086a19b-764b-4486-9ee9-3b6f7c0db9ba]
-						enabled = yes
-						default history = 3600
-						default memory mode = dbengine
-						health enabled by default = auto
-						allow from = 10.*
-					[8c31642a-5ee0-4f94-b293-b007134fa814]
-						enabled = yes
-						default history = 3600
-						default memory mode = dbengine
-						health enabled by default = auto
-						allow from = pitest
-				'';
-			};
-		};
+      enable = true;
+      config = {
+        web = {
+          "bind" = "kbuild:19999";
+        };
+      };
+      configDir = {
+        "stream.conf" = pkgs.writeText "stream.conf" ''
+          					[8086a19b-764b-4486-9ee9-3b6f7c0db9ba]
+          						enabled = yes
+          						default history = 3600
+          						default memory mode = dbengine
+          						health enabled by default = auto
+          						allow from = 10.*
+          					[8c31642a-5ee0-4f94-b293-b007134fa814]
+          						enabled = yes
+          						default history = 3600
+          						default memory mode = dbengine
+          						health enabled by default = auto
+          						allow from = pitest
+          				'';
+      };
+    };
     nginx = {
       enable = true;
       virtualHosts = {
