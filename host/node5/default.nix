@@ -77,9 +77,9 @@ in
     # ];
   };
 
-  zramSwap = {
-    enable = true;
-  };
+  #zramSwap = {
+  #  enable = true;
+  #};
 
 	networking = {
 		hostName = "node5";
