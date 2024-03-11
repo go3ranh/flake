@@ -78,7 +78,7 @@
                     vim.opt.incsearch = true
                     vim.opt.termguicolors = true
                     vim.opt.scrolloff = 5
-                    vim.opt.undodir = "$HOME/.vim/undodir"
+                    vim.opt.undodir = vim.env.HOME .. '/.vim/undodir'
           
                     vim.g.mapleader = " ";
                     vim.cmd 'colorscheme slate'
