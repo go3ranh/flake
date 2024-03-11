@@ -154,7 +154,6 @@ in
           rsync
           tailscale
           file
-          ntfy-sh
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
