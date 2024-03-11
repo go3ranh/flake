@@ -196,7 +196,7 @@
       
       eval "$(direnv hook bash)"
       HISTFILESIZE=100000
-      HISTSIZE=10000
+      HISTSIZE=100000
       
       shopt -s histappend
       shopt -s checkwinsize
