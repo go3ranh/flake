@@ -1,6 +1,30 @@
 { self, inputs, config, arch, nixpkgs, lib, ... }:
 with lib;
 let
+  gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
+		gnome.baobab # disk usage analyzer
+		gnome.cheese # photo booth
+		#eog         # image viewer
+		#epiphany    # web browser
+		gnome.gedit # text editor
+		gnome.simple-scan # document scanner
+		#totem       # video player
+		gnome.yelp # help viewer
+		gnome.evince # document viewer
+		gnome.geary # email client
+
+		# these should be self explanatory
+		gnome.gnome-calculator
+		gnome.gnome-calendar
+		gnome.gnome-clocks
+		gnome.gnome-contacts
+		gnome.gnome-font-viewer
+		gnome.gnome-logs
+		gnome.gnome-maps
+		gnome.gnome-music
+		gnome.gnome-weather
+		gnome-connections
+	];
 	pkgs = nixpkgs.legacyPackages.${arch};
   buildkeyPub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+45vPiX86aXqAosIcy8KAYKOswkGbZyJadJR61YZ9Z";
   deploykeyPub = builtins.readFile ../deploykey.pub;
@@ -123,7 +147,7 @@ in
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHZP250IoyRgSYNc/0xilSxJcY36gFnPnm2r7vZlKX6C"
       ];
       packages = builtins.concatLists [
-        (with pkgs; [
+        (with nixpkgs.legacyPackages.${arch}; [
           dig
           tcpdump
           whois
@@ -132,7 +156,7 @@ in
           file
           ntfy-sh
         ])
-        (if cfg.desktop then with pkgs; [
+        (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
           chromium
           dbeaver
@@ -159,7 +183,7 @@ in
           # rambox
           # spotify
         ] else [ ])
-        (if cfg.development then with pkgs; [
+        (if cfg.development then with nixpkgs.legacyPackages.${arch}; [
           binwalk
           file
           ghidra
@@ -179,7 +203,7 @@ in
           # jetbrains.phpstorm
           # jetbrains.webstorm
         ] else [ ])
-        (if cfg.gaming then with pkgs; [
+        (if cfg.gaming then with nixpkgs.legacyPackages.${arch}; [
           lutris
           wine
           wine-wayland
@@ -188,10 +212,10 @@ in
     };
 
     programs = {
-      steam = mkIf cfg.gaming {
-        enable = true;
-        remotePlay.openFirewall = true;
-      };
+      # steam = mkIf cfg.gaming {
+      #   enable = true;
+      #   remotePlay.openFirewall = true;
+      # };
       bash = {
         enableCompletion = true;
         interactiveShellInit = ''
@@ -206,7 +230,7 @@ in
         historyLimit = 50000;
         escapeTime = 50;
         baseIndex = 1;
-        plugins = with pkgs.tmuxPlugins; [
+        plugins = with nixpkgs.legacyPackages.${arch}.tmuxPlugins; [
           sidebar # prefix + tab / backspace
           fingers # quick copy paste prefix + f
         ];
@@ -246,34 +270,11 @@ in
     };
 
     environment = {
-      gnome.excludePackages = mkIf cfg.desktop [
-        pkgs.gnome.baobab # disk usage analyzer
-        pkgs.gnome.cheese # photo booth
-        #eog         # image viewer
-        #epiphany    # web browser
-        pkgs.gnome.gedit # text editor
-        pkgs.gnome.simple-scan # document scanner
-        #totem       # video player
-        pkgs.gnome.yelp # help viewer
-        pkgs.gnome.evince # document viewer
-        pkgs.gnome.geary # email client
-
-        # these should be self explanatory
-        pkgs.gnome.gnome-calculator
-        pkgs.gnome.gnome-calendar
-        pkgs.gnome.gnome-clocks
-        pkgs.gnome.gnome-contacts
-        pkgs.gnome.gnome-font-viewer
-        pkgs.gnome.gnome-logs
-        pkgs.gnome.gnome-maps
-        pkgs.gnome.gnome-music
-        pkgs.gnome.gnome-weather
-        pkgs.gnome-connections
-      ];
+      gnome.excludePackages = mkIf cfg.desktop gnomeexclude;
       systemPackages = builtins.concatLists
         [
-          self.packages.${arch}.customvim
-          (with pkgs; [
+          [self.packages.${arch}.customvim]
+          (with nixpkgs.legacyPackages.${arch}; [
             linuxKernel.packages.linux_zen.perf
             bpftrace
             bash
@@ -296,7 +297,7 @@ in
             wget
             zellij
           ])
-          (if cfg.desktop then with pkgs; [
+          (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
           ] else [ ])
         ];

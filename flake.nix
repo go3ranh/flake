@@ -31,164 +31,60 @@
         goeranh = import ./modules/goeranh.nix;
       };
       nixosConfigurations = {
-        pitest = lib.nixosSystem {
+        pitest = lib.nixosSystem rec {
           system = "aarch64-linux";
           modules = [
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.pitest.config; })
             (import ./host/pitest/default.nix { config = self.nixosConfigurations.pitest.config; pkgs = pkgsarm64; pkgs-unstable = nixpkgs-unstable.legacyPackages.aarch64-linux; lib = nixpkgs.lib; })
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
-            self.nixosModules.goeranh
-            {
-              environment.systemPackages = [
-                self.packages.aarch64-linux.customvim
-              ];
-              programs.bash.interactiveShellInit = ''
-                source ${self.packages.aarch64-linux.settings.bashrc.outPath}
-                source ${self.packages.aarch64-linux.settings.goeranh.outPath}
-              '';
-            }
           ];
         };
-        desktop = lib.nixosSystem {
+        desktop = lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
             ./host/desktop
-            self.nixosModules.goeranh
             sops-nix.nixosModules.sops
-            {
-              programs.bash.interactiveShellInit = ''
-                source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.desktop.config; })
           ];
         };
-        node5 = lib.nixosSystem {
+        node5 = lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
             ./host/node5
-            {
-              environment.systemPackages = [
-                self.packages.x86_64-linux.proxmark
-                self.packages.x86_64-linux.customvim
-              ];
-              programs = {
-                bash.interactiveShellInit = ''
-                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-                '';
-              };
-            }
             sops-nix.nixosModules.sops
-            self.nixosModules.goeranh
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.node5.config; })
           ];
         };
-        nixserver = lib.nixosSystem {
+        nixserver = lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
             ./host/nixserver
             sops-nix.nixosModules.sops
-            {
-              programs = {
-                bash.interactiveShellInit = ''
-                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-                '';
-              };
-            }
-            self.nixosModules.goeranh
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.nixserver.config; })
           ];
         };
-        workstation = lib.nixosSystem {
+        workstation = lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
             ./host/workstation
             sops-nix.nixosModules.sops
-            {
-              environment.systemPackages = [
-                self.packages.x86_64-linux.customvim
-              ];
-              programs.bash.interactiveShellInit = ''
-                								source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                								source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-              '';
-            }
-            self.nixosModules.goeranh
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.workstation.config; })
           ];
         };
-        kbuild = lib.nixosSystem {
+        kbuild = lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
             ./host/kbuild
             sops-nix.nixosModules.sops
-            {
-              programs = {
-                bash.interactiveShellInit = ''
-                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-                '';
-              };
-            }
-            self.nixosModules.goeranh
-          ];
-        };
-        # hetznertest = lib.nixosSystem {
-        #   system = "x86_64-linux";
-        #   modules = [
-        #     ./host/hetznertest
-        #     sops-nix.nixosModules.sops
-        #     {
-        #       programs = {
-        #         bash.interactiveShellInit = ''
-        #           source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-        #           source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-        #         '';
-        #       };
-        #     }
-        #     self.nixosModules.goeranh
-        #   ];
-        # };
-        deploy-iso = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-            #./host/deployment
-            sops-nix.nixosModules.sops
-            {
-              programs = {
-                bash.interactiveShellInit = ''
-                  source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-                  source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-                '';
-              };
-            }
-            self.nixosModules.goeranh
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.kbuild.config; })
           ];
         };
       };
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-      #hydraJobs =
-      #  nixpkgs.lib.mapAttrs (_: nixpkgs.lib.hydraJob)
-      #    (
-      #      let
-      #        getBuildEntryPoint = _: nixosSystem:
-      #          nixosSystem.config.system.build.toplevel;
-      #      in
-      #      nixpkgs.lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-      #    );
 
       packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsx86; };
       packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
-      #bootstrap = nixos-generators.nixosGenerate {
-      #  system = "x86_64-linux";
-      #  modules = [
-      #    self.nixosConfigurations.bootstrap.config
-      #    {
-      #      users.users.root.password = "test";
-      #    }
-      #  ];
-      #  format = "proxmox-lxc";
-      #};
 
       devShells = {
         x86_64-linux = {
