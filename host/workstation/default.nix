@@ -59,7 +59,7 @@
   security.sudo.wheelNeedsPassword = false;
   goeranh = {
     server = true;
-		update = true;
+    update = true;
   };
 
   services = {

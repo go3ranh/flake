@@ -1,6 +1,7 @@
-{ self, inputs, config, pkgs, lib, ... }:
+{ self, inputs, config, arch, nixpkgs, lib, ... }:
 with lib;
 let
+	pkgs = nixpkgs.legacyPackages.${arch};
   buildkeyPub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+45vPiX86aXqAosIcy8KAYKOswkGbZyJadJR61YZ9Z";
   deploykeyPub = builtins.readFile ../deploykey.pub;
   cfg = config.goeranh;
@@ -193,10 +194,10 @@ in
       };
       bash = {
         enableCompletion = true;
-				interactiveShellInit = ''
-					source ${self.packages.x86_64-linux.settings.bashrc.outPath}
-					source ${self.packages.x86_64-linux.settings.goeranh.outPath}
-				'';
+        interactiveShellInit = ''
+          					source ${self.packages.${arch}.settings.bashrc.outPath}
+          					source ${self.packages.${arch}.settings.goeranh.outPath}
+          				'';
       };
       tmux = {
         enable = true;
@@ -271,6 +272,7 @@ in
       ];
       systemPackages = builtins.concatLists
         [
+          self.packages.${arch}.customvim
           (with pkgs; [
             linuxKernel.packages.linux_zen.perf
             bpftrace
@@ -344,24 +346,24 @@ in
     };
     services.tailscale.enable = true;
 
-		systemd.services = {
-			autoupdate = mkIf cfg.update {
-				enable = true;
-				path = with pkgs; [
-				  nixos-rebuild
-				  git
-				];
-				script = ''
-					if [ ! -d /tmp/flakeathome ]; then
-						cd /tmp
-						${pkgs.git}/bin/git clone https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git
-					fi
-					cd /tmp/flakeathome
-					${pkgs.git}/bin/git pull
-				  nixos-rebuild switch --flake .#
-				'';
-				startAt = "daily";
-			};
-		};
+    systemd.services = {
+      autoupdate = mkIf cfg.update {
+        enable = true;
+        path = with pkgs; [
+          nixos-rebuild
+          git
+        ];
+        script = ''
+          					if [ ! -d /tmp/flakeathome ]; then
+          						cd /tmp
+          						${pkgs.git}/bin/git clone https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git
+          					fi
+          					cd /tmp/flakeathome
+          					${pkgs.git}/bin/git pull
+          				  nixos-rebuild switch --flake .#
+          				'';
+        startAt = "daily";
+      };
+    };
   };
 }
