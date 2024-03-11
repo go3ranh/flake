@@ -135,46 +135,48 @@ in
           bitwarden
           chromium
           dbeaver
-          discord
           filezilla
           firefox
           gajim
           gnome3.gnome-terminal
           gpa
           libreoffice
-          obsidian
           okular
           poppler_utils
           quickemu
-          rambox
           shotwell
           signal-desktop
-          spotify
           thunderbird
           tor-browser-bundle-bin
           vieb
           virt-manager
           virt-viewer
           vlc
+
+          # discord
+          # obsidian
+          # rambox
+          # spotify
         ] else [ ])
         (if cfg.development then with pkgs; [
           binwalk
           file
           ghidra
-          gitkraken
           gnome-builder
-          jetbrains.idea-community
-          jetbrains.datagrip
-          jetbrains.jdk
-          jetbrains.phpstorm
-          #jetbrains.webstorm
-          jetbrains.clion
           libxcrypt
           meson
           gnumake
           cmake
           ninja
           nodejs
+
+          # gitkraken
+          # jetbrains.clion
+          # jetbrains.idea-community
+          # jetbrains.datagrip
+          # jetbrains.jdk
+          # jetbrains.phpstorm
+          # jetbrains.webstorm
         ] else [ ])
         (if cfg.gaming then with pkgs; [
           lutris
@@ -191,9 +193,10 @@ in
       };
       bash = {
         enableCompletion = true;
-        shellInit = ''
-          alias nrepl="nix repl --file /etc/nixos/repl.nix"
-        '';
+				interactiveShellInit = ''
+					source ${self.packages.x86_64-linux.settings.bashrc.outPath}
+					source ${self.packages.x86_64-linux.settings.goeranh.outPath}
+				'';
       };
       tmux = {
         enable = true;
