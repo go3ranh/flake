@@ -210,31 +210,6 @@ in
         environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
       };
     };
-    ntfy = {
-      autoStart = true;
-      privateNetwork = true;
-      hostAddress = "10.10.0.1";
-      localAddress = "10.10.0.3";
-      config = { config, pkgs, ... }: {
-
-        services.ntfy-sh = {
-          enable = true;
-          settings = {
-            listen-http = ":9090";
-            base-url = "http://192.168.178.2:9090";
-          };
-        };
-
-        system.stateVersion = "23.11";
-
-        networking.firewall = {
-          enable = true;
-          allowedTCPPorts = [ 9090 ];
-        };
-
-        environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
-      };
-    };
   };
 
   systemd = {
