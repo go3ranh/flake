@@ -72,25 +72,6 @@ in
         };
       };
     };
-    hydra = {
-      enable = true;
-      hydraURL = "http://localhost:3000";
-      minimumDiskFree = 20;
-      minimumDiskFreeEvaluator = 50;
-      notificationSender = "notify@hydra.local";
-      useSubstitutes = true;
-      extraConfig =
-        let
-          key = config.sops.secrets."privateCacheKey".path;
-        in
-        ''
-          binary_cache_secret_key_file = ${key}
-          compress_num_threads = 4
-          evaluator_workers = 4
-          store_uri = auto?secret-key=${key}&write-nar-listing=1&ls-compression=zstd&log-compression=zstd
-          upload_logs_to_binary_cache = true
-        '';
-    };
   };
 
 
