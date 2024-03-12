@@ -92,7 +92,7 @@ in
       autoUpdateApps.enable = true;
       extraAppsEnable = true;
       extraApps = with config.services.nextcloud.package.packages.apps; {
-        inherit calendar contacts mail notes tasks music; # onlyoffice 
+        inherit calendar contacts; # onlyoffice 
       };
 
       config = {
