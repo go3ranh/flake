@@ -55,14 +55,6 @@
             (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.node5.config; })
           ];
         };
-        nixserver = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            ./host/nixserver
-            sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.nixserver.config; })
-          ];
-        };
         workstation = lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
