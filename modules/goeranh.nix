@@ -170,6 +170,7 @@ in
           quickemu
           shotwell
           signal-desktop
+					super-productivity
           thunderbird
           tor-browser-bundle-bin
           vieb
@@ -344,7 +345,10 @@ in
       enable = true;
       openFirewall = true;
     };
-    services.tailscale.enable = true;
+    services.tailscale = {
+			enable = true;
+			permitCertUid = mkIf config.services.nginx.enable "${builtins.toString config.users.users.nginx.uid}";
+		};
 
     systemd.services = {
       autoupdate = mkIf cfg.update {
@@ -363,6 +367,20 @@ in
           				  nixos-rebuild switch --flake .#
           				'';
         startAt = "daily";
+      };
+      tscert = mkIf config.services.nginx.enable {
+        enable = true;
+        path = with pkgs; [
+          tailscale
+        ];
+        script = ''
+          tailscale cert ${config.networking.fqdn}
+				'';
+        startAt = "daily";
+				unitConfig = {
+					User = config.users.users.nginx.name;
+					WorkingDirectory = "/var/lib";
+				};
       };
     };
   };
