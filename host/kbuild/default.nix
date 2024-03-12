@@ -41,6 +41,11 @@ in
         #group = "root";
         mode = "0400";
       };
+      "nextcloud-admin-pass" = {
+        owner = "nextcloud";
+        group = "nextcloud";
+        mode = "0440";
+      };
     };
   };
 
@@ -64,14 +69,44 @@ in
           sslCertificate = "/var/lib/${config.networking.fqdn}.crt";
           sslCertificateKey = "/var/lib/${config.networking.fqdn}.key";
           forceSSL = true;
-          locations = {
-            "/" = {
-              proxyPass = "http://localhost:${toString cachePort}";
-            };
-          };
         };
       };
     };
+		nextcloud = {
+			enable = true;
+      hostName = "${config.networking.fqdn}";
+
+       # Need to manually increment with every major upgrade.
+      package = pkgs.nextcloud28;
+
+      # Let NixOS install and configure the database automatically.
+      database.createLocally = true;
+
+      # Let NixOS install and configure Redis caching automatically.
+      configureRedis = true;
+
+      # Increase the maximum file upload size to avoid problems uploading videos.
+      maxUploadSize = "16G";
+      https = true;
+
+      autoUpdateApps.enable = true;
+      extraAppsEnable = true;
+      extraApps = with config.services.nextcloud.package.packages.apps; {
+        inherit calendar contacts mail notes tasks music; # onlyoffice 
+      };
+
+      config = {
+        overwriteProtocol = "https";
+        defaultPhoneRegion = "DE";
+        # dbtype = "pgsql";
+        adminuser = "admin";
+        adminpassFile = "${config.sops.secrets.nextcloud-admin-pass.path}";
+      };
+		};
+		# onlyoffice = {
+    #   enable = true;
+    #   hostname = "${config.networking.fqdn}";
+    # };
   };
 
 
