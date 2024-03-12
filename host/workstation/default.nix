@@ -64,24 +64,6 @@
 
   services = {
     openssh.settings.X11Forwarding = true;
-    netdata = {
-      enable = true;
-      config = {
-        global = {
-          "default memory mode" = "none"; # can be used to disable local data storage
-        };
-      };
-      configDir = {
-        "stream.conf" = pkgs.writeText "stream.conf" ''
-          					[stream]
-          						enabled = yes
-          						destination = 10.16.17.52:19999
-          						api key = 8086a19b-764b-4486-9ee9-3b6f7c0db9ba
-          					[8086a19b-764b-4486-9ee9-3b6f7c0db9ba]
-          						enabled = yes
-          				'';
-      };
-    };
   };
 
   networking.firewall.allowedTCPPorts = [ 8080 1980 ];
