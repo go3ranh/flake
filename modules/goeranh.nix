@@ -2,30 +2,30 @@
 with lib;
 let
   gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
-		gnome.baobab # disk usage analyzer
-		gnome.cheese # photo booth
-		#eog         # image viewer
-		#epiphany    # web browser
-		gnome.gedit # text editor
-		gnome.simple-scan # document scanner
-		#totem       # video player
-		gnome.yelp # help viewer
-		gnome.evince # document viewer
-		gnome.geary # email client
+    gnome.baobab # disk usage analyzer
+    gnome.cheese # photo booth
+    #eog         # image viewer
+    #epiphany    # web browser
+    gnome.gedit # text editor
+    gnome.simple-scan # document scanner
+    #totem       # video player
+    gnome.yelp # help viewer
+    gnome.evince # document viewer
+    gnome.geary # email client
 
-		# these should be self explanatory
-		gnome.gnome-calculator
-		gnome.gnome-calendar
-		gnome.gnome-clocks
-		gnome.gnome-contacts
-		gnome.gnome-font-viewer
-		gnome.gnome-logs
-		gnome.gnome-maps
-		gnome.gnome-music
-		gnome.gnome-weather
-		gnome-connections
-	];
-	pkgs = nixpkgs.legacyPackages.${arch};
+    # these should be self explanatory
+    gnome.gnome-calculator
+    gnome.gnome-calendar
+    gnome.gnome-clocks
+    gnome.gnome-contacts
+    gnome.gnome-font-viewer
+    gnome.gnome-logs
+    gnome.gnome-maps
+    gnome.gnome-music
+    gnome.gnome-weather
+    gnome-connections
+  ];
+  pkgs = nixpkgs.legacyPackages.${arch};
   buildkeyPub = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+45vPiX86aXqAosIcy8KAYKOswkGbZyJadJR61YZ9Z";
   deploykeyPub = builtins.readFile ../deploykey.pub;
   cfg = config.goeranh;
@@ -159,7 +159,7 @@ in
           bitwarden
           chromium
           dbeaver
-          filezilla
+          #filezilla
           firefox
           gajim
           gnome3.gnome-terminal
@@ -170,7 +170,7 @@ in
           quickemu
           shotwell
           signal-desktop
-					super-productivity
+          super-productivity
           thunderbird
           tor-browser-bundle-bin
           vieb
@@ -273,7 +273,7 @@ in
       gnome.excludePackages = mkIf cfg.desktop gnomeexclude;
       systemPackages = builtins.concatLists
         [
-          [self.packages.${arch}.customvim]
+          [ self.packages.${arch}.customvim ]
           (with nixpkgs.legacyPackages.${arch}; [
             linuxKernel.packages.linux_zen.perf
             bpftrace
@@ -337,6 +337,7 @@ in
     nixpkgs.config.allowUnfree = true;
     networking.firewall.enable = true;
     networking.nftables.enable = true;
+    networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
     networking.domain = "tailf0ec0.ts.net";
 
     console.keyMap = "de";
@@ -346,9 +347,9 @@ in
       openFirewall = true;
     };
     services.tailscale = {
-			enable = true;
-			permitCertUid = mkIf config.services.nginx.enable "${builtins.toString config.users.users.nginx.uid}";
-		};
+      enable = true;
+      permitCertUid = mkIf config.services.nginx.enable "${builtins.toString config.users.users.nginx.uid}";
+    };
 
     systemd.services = {
       autoupdate = mkIf cfg.update {
@@ -374,13 +375,13 @@ in
           tailscale
         ];
         script = ''
-          tailscale cert ${config.networking.fqdn}
-				'';
+                    tailscale cert ${config.networking.fqdn}
+          				'';
         startAt = "daily";
-				unitConfig = {
-					User = config.users.users.nginx.name;
-					WorkingDirectory = "/var/lib";
-				};
+        unitConfig = {
+          User = config.users.users.nginx.name;
+          WorkingDirectory = "/var/lib";
+        };
       };
     };
   };
