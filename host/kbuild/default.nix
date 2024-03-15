@@ -72,11 +72,11 @@ in
         };
       };
     };
-		nextcloud = {
-			enable = true;
+    nextcloud = {
+      enable = true;
       hostName = "${config.networking.fqdn}";
 
-       # Need to manually increment with every major upgrade.
+      # Need to manually increment with every major upgrade.
       package = pkgs.nextcloud28;
 
       # Let NixOS install and configure the database automatically.
@@ -102,8 +102,8 @@ in
         adminuser = "admin";
         adminpassFile = "${config.sops.secrets.nextcloud-admin-pass.path}";
       };
-		};
-		# onlyoffice = {
+    };
+    # onlyoffice = {
     #   enable = true;
     #   hostname = "${config.networking.fqdn}";
     # };
