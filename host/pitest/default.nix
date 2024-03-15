@@ -64,12 +64,21 @@ in
     hostName = "pitest"; # Define your hostname.
     nftables.enable = true;
     useDHCP = false;
-    interfaces.eth0.ipv4.addresses = [
-      {
-        address = "192.168.178.2";
-        prefixLength = 24;
-      }
-    ];
+    bridges.br0.interfaces = [ ];
+    interfaces = {
+      eth0.ipv4.addresses = [
+        {
+          address = "192.168.178.2";
+          prefixLength = 24;
+        }
+      ];
+      br0.ipv4.addresses = [
+        {
+          address = "10.10.0.1";
+          prefixLength = 24;
+        }
+      ];
+    };
     defaultGateway = "192.168.178.1";
     nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
@@ -80,9 +89,10 @@ in
         "eth0".allowedTCPPorts = [ 22 80 443 2222 ];
       };
     };
+
     nat = {
       enable = true;
-      internalInterfaces = [ "ve-+" ];
+      internalInterfaces = [ "br0" ];
       externalInterface = "eth0";
       forwardPorts = [
         {
@@ -183,8 +193,8 @@ in
     invoiceplane = {
       autoStart = true;
       privateNetwork = true;
-      hostAddress = "10.10.0.1";
-      localAddress = "10.10.0.2";
+			hostBridge = "br0";
+      localAddress = "10.10.0.2/24";
       config = { config, pkgs, ... }: {
 
         services.invoiceplane = {
@@ -202,9 +212,12 @@ in
 
         system.stateVersion = "23.11";
 
-        networking.firewall = {
-          enable = true;
-          allowedTCPPorts = [ 80 2222 ];
+        networking = {
+          defaultGateway.address = "10.10.0.1";
+          firewall = {
+            enable = true;
+            allowedTCPPorts = [ 80 2222 ];
+          };
         };
 
         environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
