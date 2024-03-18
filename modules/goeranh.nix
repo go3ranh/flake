@@ -6,7 +6,6 @@ let
     gnome.cheese # photo booth
     #eog         # image viewer
     #epiphany    # web browser
-    gnome.gedit # text editor
     gnome.simple-scan # document scanner
     #totem       # video player
     gnome.yelp # help viewer
@@ -286,7 +285,6 @@ in
             gitui
             gnupg
             pinentry
-            pinentry-gnome
             gofu
             htop
             nix-direnv
@@ -317,8 +315,10 @@ in
       displayManager.gdm.enable = true;
       displayManager.gdm.wayland = true;
       desktopManager.gnome.enable = true;
-      layout = "de";
-      xkbVariant = "";
+			xkb = {
+				layout = "de";
+				variant = "";
+			};
     };
     i18n.defaultLocale = "en_US.UTF-8";
 

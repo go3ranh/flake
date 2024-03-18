@@ -160,7 +160,6 @@ in
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerCompat = true;
   programs.dconf.enable = true;
-  programs.gnupg.agent.pinentryFlavor = "gnome3";
 
   programs.git.enable = true;
   # networking.firewall.allowedTCPPorts = [ 22 ];

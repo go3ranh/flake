@@ -2,8 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable?b0d36bd0a420ecee3bc916c91886caca87c894e9";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -19,7 +18,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, nixpkgs, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsarm64 = nixpkgs.legacyPackages.aarch64-linux;
@@ -34,7 +33,7 @@
           system = "aarch64-linux";
           modules = [
             (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.pitest.config; })
-            (import ./host/pitest/default.nix { inherit lib; config = self.nixosConfigurations.pitest.config; pkgs = pkgsarm64; pkgs-unstable = nixpkgs-unstable.legacyPackages.aarch64-linux; })
+            (import ./host/pitest/default.nix { inherit lib; config = self.nixosConfigurations.pitest.config; pkgs = pkgsarm64; })
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
           ];

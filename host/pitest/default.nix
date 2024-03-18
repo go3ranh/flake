@@ -1,4 +1,4 @@
-{ config, pkgs, pkgs-unstable, lib, ... }:
+{ config, pkgs, lib, ... }:
 let
   website = pkgs.stdenv.mkDerivation {
     pname = "website";
@@ -146,7 +146,7 @@ in
         };
         log.LEVEL = "Warn";
       };
-      package = pkgs-unstable.forgejo;
+      package = pkgs.forgejo;
     };
     nginx = {
       enable = true;
