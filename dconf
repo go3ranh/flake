@@ -140,7 +140,7 @@ name='virt-manager'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
 binding='<Shift><Super>r'
-command='rambox'
+command='ferdium'
 name='rambox'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]

@@ -159,6 +159,7 @@ in
           chromium
           dbeaver
           #filezilla
+          ferdium
           firefox
           gajim
           gnome3.gnome-terminal
