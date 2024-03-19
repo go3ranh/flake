@@ -216,6 +216,302 @@ in
       #   enable = true;
       #   remotePlay.openFirewall = true;
       # };
+			dconf.profiles.user.databases = lib.mkIf cfg.desktop [
+			{
+				settings = with lib.gvariant; {
+					"org/gnome/desktop/calendar" = {
+						show-weekdate = true;
+					};
+
+					"org/gnome/desktop/input-sources" = {
+						sources = [["xkb" "de"]];
+						xkb-options = ["terminate:ctrl_alt_bksp"];
+					};
+
+					"org/gnome/desktop/interface" = {
+						color-scheme = "prefer-dark";
+						enable-hot-corners = false;
+						font-antialiasing = "grayscale";
+						font-hinting = "slight";
+						show-battery-percentage = true;
+					};
+
+					"org/gnome/desktop/peripherals/touchpad" = {
+						tap-to-click = true;
+						two-finger-scrolling-enabled = true;
+					};
+
+					"org/gnome/desktop/session" = {
+						idle-delay = mkInt32 0;
+					};
+
+					"org/gnome/desktop/wm/keybindings" = {
+						begin-move = ["<Alt>m"];
+						begin-resize = ["<Alt>r"];
+						close = ["<Shift><Super>q"];
+						maximize = ["<Super>k"];
+						#minimize=@as []
+						move-to-center = ["<alt>c+m"];
+						move-to-monitor-down = ["<Shift><Super>j"];
+						move-to-monitor-left = ["<Shift><Super>h"];
+						move-to-monitor-right = ["<Shift><Super>l"];
+						move-to-monitor-up = ["<Shift><Super>k"];
+						move-to-workspace-1 = ["<Primary><Shift><Alt>exclam"];
+						move-to-workspace-2 = ["<Primary><Shift><Alt>quotedbl"];
+						move-to-workspace-3 = ["<Primary><Shift><Alt>section"];
+						move-to-workspace-4 = ["<Primary><Shift><Alt>dollar"];
+						move-to-workspace-5 = ["<Primary><Shift><Alt>percent"];
+						move-to-workspace-left = ["<Primary><Shift><Alt>h"];
+						move-to-workspace-right = ["<Primary><Shift><Alt>l"];
+						#switch-applications=@as []
+						#switch-applications-backward=@as []
+						switch-to-workspace-1 = ["<Primary><Alt>1"];
+						switch-to-workspace-2 = ["<Primary><Alt>2"];
+						switch-to-workspace-3 = ["<Primary><Alt>3"];
+						switch-to-workspace-4 = ["<Primary><Alt>4"];
+						switch-to-workspace-5 = ["<Primary><Alt>5"];
+						switch-to-workspace-6 = ["<Primary><Alt>6"];
+						switch-to-workspace-7 = ["<Primary><Alt>7"];
+						switch-to-workspace-8 = ["<Primary><Alt>8"];
+						switch-to-workspace-9 = ["<Primary><Alt>9"];
+						switch-to-workspace-10 = ["<Primary><Alt>0"];
+						switch-to-workspace-11 = ["<Primary><Alt>q"];
+						switch-to-workspace-12 = ["<Primary><Alt>w"];
+						switch-to-workspace-left = ["<Primary><Alt>h"];
+						switch-to-workspace-right = ["<Primary><Alt>l"];
+						switch-windows = ["<Alt>Tab"];
+						switch-windows-backward = ["<Shift><Alt>Tab"];
+						toggle-fullscreen = ["<Control><Super>f"];
+						unmaximize = ["<Super>j"];
+					};
+
+					"org/gnome/desktop/wm/preferences" = {
+						audible-bell = false;
+						button-layout = "appmenu:close";
+						num-workspaces = mkInt32 20;
+					};
+
+					"org/gnome/epiphany" = {
+						ask-for-default = false;
+					};
+
+					"org/gnome/file-roller/dialogs/extract" = {
+						recreate-folders = true;
+						skip-newer = false;
+					};
+
+					"org/gnome/file-roller/listing" = {
+						list-mode = "as-folder";
+						name-column-width = mkInt32 250;
+						show-path = false;
+						sort-method = "name";
+						sort-type = "ascending";
+					};
+
+					"org/gnome/file-roller/ui" = {
+						sidebar-width = mkInt32 200;
+					};
+
+					"org/gnome/mutter" = {
+						attach-modal-dialogs = true;
+						dynamic-workspaces = true;
+						edge-tiling = true;
+						#experimental-features=@as []
+						focus-change-on-pointer-rest = true;
+						workspaces-only-on-primary = false;
+					};
+
+					"org/gnome/mutter/keybindings" = {
+						toggle-tiled-left = ["<Super>h"];
+						toggle-tiled-right = ["<Super>l"];
+					};
+
+					"org/gnome/nautilus/compression" = {
+						default-compression-format = "zip";
+					};
+
+					# [org/gnome/nautilus/list-view]
+					# default-column-order=['name', 'size', 'type', 'owner', 'group', 'permissions', 'where', 'date_modified', 'date_modified_with_time', 'date_accessed', 'date_created', 'recency', 'detailed_type']
+					# default-visible-columns=['name', 'size', 'type', 'owner', 'group', 'permissions', 'date_modified']
+					# default-zoom-level='small'
+
+					# [org/gnome/nautilus/preferences]
+					# default-folder-viewer='list-view'
+					# migrated-gtk-settings=true
+					# search-filter-time-type='last_modified'
+					# search-view='list-view'
+
+					# [org/gnome/settings-daemon/plugins/color]
+					# night-light-enabled=false
+					# night-light-schedule-automatic=false
+					# night-light-schedule-from=6.0
+					# night-light-temperature=uint32 2427
+          "org/gnome/settings-daemon/plugins/media-keys" = {
+						control-center = ["<Super>i"];
+						custom-keybindings = [
+						  "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/"
+							"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/"
+						];
+						email = ["<Shift><Super>t"];
+						home = ["<Super>e"];
+						screensaver = ["<Primary><Super>l"];
+						#terminal=@as []
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+						binding = "<Shift><Super>f";
+						command = "nice -n 40 firefox";
+						name = "firefox";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+						binding = "<Control><Alt>t";
+						command = "tor-browser";
+						name = "tor";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+						binding = "<Shift><Super>v";
+						command = "virt-manager";
+						name = "virt-manager";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+						binding = "<Shift><Super>r";
+						command = "ferdium";
+						name = "rambox";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
+						binding = "<Shift><Super>s";
+						command = "signal-desktop";
+						name = "signal";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
+						binding = "<Shift><Super>o";
+						command = "obsidian";
+						name = "obsidian";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6" = {
+						binding = "<Shift><Super>n";
+						command = "vieb";
+						name = "vieb";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
+						binding = "<Super>Return";
+						command = "gnome-terminal";
+						name = "terminal";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8" = {
+						binding = "<Shift><Super>i";
+						command = "idea-community";
+						name = "idea-community";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9" = {
+						binding = "<Shift><Super>p";
+						command = "phpstorm";
+						name = "phpstorm";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10" = {
+						binding = "<Shift><Super>y";
+						command = "nice -n 40 firefox -p youtube";
+						name = "firefox";
+					};
+
+					"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11" = {
+						binding = "<Control><Alt>s";
+						command = "super-productivity";
+						name = "super-productivity";
+					};
+
+					"org/gnome/settings-daemon/plugins/power" = {
+						sleep-inactive-ac-timeout = mkInt32 7200;
+					};
+
+					"org/gnome/shell" = {
+						disable-user-extensions = true;
+						favorite-apps = ["org.gnome.Nautilus.desktop" "firefox.desktop" "org.gnome.Terminal.desktop"];
+						last-selected-power-profile = "performance";
+						remember-mount-password = false;
+					};
+
+					"org/gnome/shell/keybindings" = {
+						show-screenshot-ui = ["<Primary><Alt>p"];
+					};
+
+					"org/gnome/system/location" = {
+						enabled = false;
+					};
+
+					"rg/gnome/terminal/legacy" = {
+						always-check-default-terminal = false;
+						default-show-menubar = false;
+						menu-accelerator-enabled = false;
+						theme-variant = "system";
+					};
+
+					"rg/gnome/terminal/legacy/profiles:" = {
+						default = "383ef43c-768d-4f0b-aa2b-62d8cb5bf800";
+						list = ["b1dcc9dd-5262-4d8d-a863-c897e6d979b9" "383ef43c-768d-4f0b-aa2b-62d8cb5bf800"];
+					};
+
+					"rg/gnome/terminal/legacy/profiles:/:383ef43c-768d-4f0b-aa2b-62d8cb5bf800" = {
+						audible-bell = false;
+						background-color = "rgb(255,255,255)";
+						default-size-columns = mkInt32 120;
+						default-size-rows = mkInt32 36;
+						font = "Monospace 14";
+						foreground-color = "rgb(23,20,33)";
+						use-system-font = false;
+						use-theme-colors = true;
+						visible-name = "light";
+					};
+
+					"org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9" = {
+						audible-bell = false;
+						background-color = "rgb(23,20,33)";
+						default-size-columns = mkInt32 120;
+						default-size-rows = mkInt32 36;
+						font = "Monospace 14";
+						foreground-color = "rgb(208,207,204)";
+						use-system-font = false;
+						use-theme-colors = false;
+					};
+
+					"org/virt-manager/virt-manager/confirm" = {
+						delete-storage = false;
+						forcepoweroff = false;
+						removedev = false;
+						unapplied-dev = false;
+					};
+
+					"org/virt-manager/virt-manager/vmlist-fields" = {
+						disk-usage = true;
+						network-traffic = true;
+					};
+
+					"system/proxy" = {
+						mode = "none";
+					};
+				};
+			}
+			];
       bash = {
         enableCompletion = true;
         interactiveShellInit = ''

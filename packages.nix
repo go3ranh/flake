@@ -245,10 +245,6 @@
       }
     '';
 
-    dconf = archpkgs.writeShellScriptBin "apply-dconf" ''
-      echo "${builtins.readFile ./dconf}" | dconf load /
-    '';
-
     postInstall = ''
       mkdir -p $out
       cp $bashrc $out/.bashrc
