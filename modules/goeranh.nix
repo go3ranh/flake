@@ -565,6 +565,20 @@ in
       };
     };
 
+		xdg.portal = lib.mkIf cfg.desktop {
+			config = {
+				gnome = {
+					default = [
+						"gnome"
+						"gtk"
+					];
+					"org.freedesktop.impl.portal.Secret" = [
+						"gnome-keyring"
+					];
+				};
+			};
+		};
+
     environment = {
       gnome.excludePackages = mkIf cfg.desktop gnomeexclude;
       systemPackages = builtins.concatLists
@@ -607,6 +621,10 @@ in
         };
       };
     };
+    services.gnome = mkIf cfg.desktop {
+			tracker.enable = true;
+			tracker-miners.enable = true;
+		};
     services.xserver = mkIf cfg.desktop {
       enable = true;
       displayManager.gdm.enable = true;
