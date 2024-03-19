@@ -566,6 +566,8 @@ in
     };
 
 		xdg.portal = lib.mkIf cfg.desktop {
+			enable = true;
+			xdgOpenUsePortal = true;
 			config = {
 				gnome = {
 					default = [
