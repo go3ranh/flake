@@ -86,6 +86,7 @@ in
       enable = true;
       interfaces = {
         "tailscale0".allowedTCPPorts = [ 22 80 443 2222 ];
+        "wt0".allowedTCPPorts = [ 22 80 443 2222 ];
         "eth0".allowedTCPPorts = [ 22 80 443 2222 ];
       };
     };
