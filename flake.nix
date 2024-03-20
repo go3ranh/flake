@@ -62,7 +62,15 @@
             (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.workstation.config; })
           ];
         };
-        kbuild = lib.nixosSystem rec {
+        hostingfw = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./host/hostingfw
+            sops-nix.nixosModules.sops
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.kbuild.config; })
+          ];
+        };
+        kbuild = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./host/kbuild
