@@ -73,22 +73,11 @@
   };
 	goeranh = {
 		server = true;
+		trust-builder = false;
+		remote-store = false;
 	};
 
   services = {
-    dhcpd4 = {
-      enable = true;
-      interfaces = [ "ens19" ];
-      extraConfig = ''
-        subnet 10.0.0.0 netmask 255.255.255.0 {
-          option routers 10.0.0.1;
-          option domain-name-servers 1.1.1.1;
-          option subnet-mask 255.255.255.0;
-          interface ens19;
-          range 10.0.0.100 10.0.0.200;
-        }
-      '';
-    };
   };
 
   system.stateVersion = "23.11";

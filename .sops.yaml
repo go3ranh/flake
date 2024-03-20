@@ -5,15 +5,18 @@ keys:
   - &node5 age14nwt6vr0jrr05zwukht5p8t9zlrsemp0lzpxdyvnr6jzpyqx7cssgs7sk4
   - &pitest age13p4hpwd93m0xetp8z9np7gw7xq9vqja4agrft0pe0620vh24c5jqgefxn6
   - &kbuild age163a30j4vuvmcpqap7lrmyd545jqcjftq99hadhjhk6cre8yx6s0q85ekk4
+  - &nixfw age1j7ua3ze7kjep7lpc32nptz809d69cuxttnc5sz952q93vp5fzdss5shsnx
+  - &servers
+    - *node5
+    - *pitest
+    - *kbuild
+    - *nixfw
 
 creation_rules:
   - path_regex: buildkeys.yaml
     key_groups:
     - pgp: *admins
-      age:
-      - *node5
-      - *pitest
-      - *kbuild
+      age: *servers
 
   - path_regex: deploykey.yaml
     key_groups:

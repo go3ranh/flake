@@ -98,6 +98,9 @@ in
       settings = {
         overwriteprotocol = "https";
         default_phone_region = "DE";
+				trusted_domains = [
+				  "kbuild"
+				];
 			};
       config = {
         # dbtype = "pgsql";

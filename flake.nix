@@ -67,7 +67,7 @@
           modules = [
             ./host/hostingfw
             sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.kbuild.config; })
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.hostingfw.config; })
           ];
         };
         kbuild = lib.nixosSystem rec {
