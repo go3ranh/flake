@@ -47,6 +47,7 @@
           cmp-nvim-tags
           cmp-treesitter
           phpactor
+          git-worktree-nvim
 
           orgmode
 
@@ -104,6 +105,10 @@
                     }
           
                     local cmp_select = {behavior = cmp.SelectBehavior.Select}
+
+										require("telescope").load_extension("git_worktree")
+                    vim.keymap.set('n', '<leader>gwn', ':lua require(\'telescope\').extensions.git_worktree.create_git_worktree()<cr>')
+                    vim.keymap.set('n', '<leader>gws', ':lua require(\'telescope\').extensions.git_worktree.git_worktrees()<cr>')
           
                     -- php keys
                     vim.keymap.set("n", "<Leader>m", ':call phpactor#ContextMenu()<CR>')
