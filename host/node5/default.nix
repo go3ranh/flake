@@ -110,7 +110,7 @@ in
     defaultSopsFile = ./secrets.yaml;
     defaultSopsFormat = "yaml";
     secrets = {
-      "testfile" = {
+      "signingkey" = {
         owner = "root";
         group = "root";
         mode = "0400";
