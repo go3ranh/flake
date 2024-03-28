@@ -66,104 +66,104 @@
             plugins);
         vimpkgs = archpkgs.vimPlugins;
         luaconfig = archpkgs.writeText "init.lua" ''
-                    vim.opt.packpath = '${pack}/'
-                    vim.opt.number = true
-                    vim.opt.relativenumber = true
-                    vim.opt.tabstop = 4
-                    vim.opt.softtabstop = 4
-                    vim.opt.shiftwidth = 4
-                    vim.opt.smartindent = true
-                    vim.opt.swapfile = false
-                    vim.opt.backup = false
-                    vim.opt.hlsearch = false
-                    vim.opt.incsearch = true
-                    vim.opt.termguicolors = true
-                    vim.opt.scrolloff = 5
-                    vim.opt.undodir = vim.env.HOME .. '/.vim/undodir'
+                              vim.opt.packpath = '${pack}/'
+                              vim.opt.number = true
+                              vim.opt.relativenumber = true
+                              vim.opt.tabstop = 4
+                              vim.opt.softtabstop = 4
+                              vim.opt.shiftwidth = 4
+                              vim.opt.smartindent = true
+                              vim.opt.swapfile = false
+                              vim.opt.backup = false
+                              vim.opt.hlsearch = false
+                              vim.opt.incsearch = true
+                              vim.opt.termguicolors = true
+                              vim.opt.scrolloff = 5
+                              vim.opt.undodir = vim.env.HOME .. '/.vim/undodir'
           
-                    vim.g.mapleader = " ";
-                    vim.cmd 'colorscheme slate'
-                    -- vim.cmd 'colorscheme dracula'
+                              vim.g.mapleader = " ";
+                              vim.cmd 'colorscheme slate'
+                              -- vim.cmd 'colorscheme dracula'
           
-                    local builtin = require('telescope.builtin')
+                              local builtin = require('telescope.builtin')
           
-                    local cmp = require('cmp')
-                    cmp.setup {
-                    	sources = {
-                    		{ name = 'treesitter' },
-                    		{ name = 'buffer' },
-                    		{ name = 'path' }
-                    	}
-                    }
+                              local cmp = require('cmp')
+                              cmp.setup {
+                              	sources = {
+                              		{ name = 'treesitter' },
+                              		{ name = 'buffer' },
+                              		{ name = 'path' }
+                              	}
+                              }
           
-                    require'lspconfig'.phpactor.setup{
-                    		on_attach = on_attach,
-                    		init_options = {
-                    				["language_server_phpstan.enabled"] = false,
-                    				["language_server_psalm.enabled"] = false,
-                    		}
-                    }
+                              require'lspconfig'.phpactor.setup{
+                              		on_attach = on_attach,
+                              		init_options = {
+                              				["language_server_phpstan.enabled"] = false,
+                              				["language_server_psalm.enabled"] = false,
+                              		}
+                              }
           
-                    local cmp_select = {behavior = cmp.SelectBehavior.Select}
+                              local cmp_select = {behavior = cmp.SelectBehavior.Select}
 
-										require("telescope").load_extension("git_worktree")
-                    vim.keymap.set('n', '<leader>gwn', ':lua require(\'telescope\').extensions.git_worktree.create_git_worktree()<cr>')
-                    vim.keymap.set('n', '<leader>gws', ':lua require(\'telescope\').extensions.git_worktree.git_worktrees()<cr>')
+          										require("telescope").load_extension("git_worktree")
+                              vim.keymap.set('n', '<leader>gwn', ':lua require(\'telescope\').extensions.git_worktree.create_git_worktree()<cr>')
+                              vim.keymap.set('n', '<leader>gws', ':lua require(\'telescope\').extensions.git_worktree.git_worktrees()<cr>')
           
-                    -- php keys
-                    vim.keymap.set("n", "<Leader>m", ':call phpactor#ContextMenu()<CR>')
-                    vim.keymap.set("n", "gd", ':call phpactor#GotoDefinition()<CR>')
-                    vim.keymap.set("n", "gr", ':call phpactor#FindReference()<CR>')
+                              -- php keys
+                              vim.keymap.set("n", "<Leader>m", ':call phpactor#ContextMenu()<CR>')
+                              vim.keymap.set("n", "gd", ':call phpactor#GotoDefinition()<CR>')
+                              vim.keymap.set("n", "gr", ':call phpactor#FindReference()<CR>')
           
-                    -- general keybinds
-                    vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
-                    vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
-                    vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
-                    vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-                    vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
-                    vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
-                    vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+                              -- general keybinds
+                              vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
+                              vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
+                              vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
+                              vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+                              vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
+                              vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
+                              vim.keymap.set('n', '<leader>b', builtin.buffers, {})
           
-                    vim.keymap.set('v', '<silent>*', ":call VisualSelection('f')<CR>")
-                    vim.keymap.set('v', '<silent>#', ":call VisualSelection('b')<CR>")
-                    -- vnoremap <silent> * :call VisualSelection('f')<CR>
-                    -- vnoremap <silent> # :call VisualSelection('b')<CR>
-                    -- " Treat long lines as break lines (useful when moving around in them)
-                    -- map j gj
-                    -- map k gk
-                    vim.keymap.set('n', '<leader>tn', ':tabnew<CR>')
-                    vim.keymap.set('n', '<leader>to', ':tabonly<CR>')
-                    vim.keymap.set('n', '<leader>tc', ':tabclose<CR>')
+                              vim.keymap.set('v', '<silent>*', ":call VisualSelection('f')<CR>")
+                              vim.keymap.set('v', '<silent>#', ":call VisualSelection('b')<CR>")
+                              -- vnoremap <silent> * :call VisualSelection('f')<CR>
+                              -- vnoremap <silent> # :call VisualSelection('b')<CR>
+                              -- " Treat long lines as break lines (useful when moving around in them)
+                              -- map j gj
+                              -- map k gk
+                              vim.keymap.set('n', '<leader>tn', ':tabnew<CR>')
+                              vim.keymap.set('n', '<leader>to', ':tabonly<CR>')
+                              vim.keymap.set('n', '<leader>tc', ':tabclose<CR>')
           
-                    -- undotree
-                    vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>')
+                              -- undotree
+                              vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>')
           
-          					vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-          					vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-          					vim.keymap.set('v', 'H', "<gv")
-          					vim.keymap.set('v', 'L', ">gv")
-                    -- vnoremap J :m '>+1<CR>gv=gv
-                    -- vnoremap K :m '<-2<CR>gv=gv
-                    -- vnoremap H <gv
-                    -- vnoremap L >gv
+                    					vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+                    					vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+                    					vim.keymap.set('v', 'H', "<gv")
+                    					vim.keymap.set('v', 'L', ">gv")
+                              -- vnoremap J :m '>+1<CR>gv=gv
+                              -- vnoremap K :m '<-2<CR>gv=gv
+                              -- vnoremap H <gv
+                              -- vnoremap L >gv
 
-                    vim.keymap.set('n', '<leader>gd', ':Gdiffsplit<CR>')
-                    vim.keymap.set('n', '<leader>gb', ':Git blame<CR>')
-                    vim.keymap.set('n', '<leader>gl', ':Git log<CR>')
-                    vim.keymap.set('n', '<leader>gc', ':Git commit<CR>')
-                    vim.keymap.set('n', '<leader>gp', ':Git push<CR>')
-                    vim.keymap.set('n', '<leader>1', ':resize 10<CR>')
-                    vim.keymap.set('n', '<leader>2', ':resize 20<CR>')
-                    vim.keymap.set('n', '<leader>3', ':resize 30<CR>')
-                    vim.keymap.set('n', '<leader>4', ':resize 40<CR>')
-                    vim.keymap.set('n', '<leader>5', ':resize 50<CR>')
-                    vim.keymap.set('n', '<leader>6', ':vertical resize 20<CR>')
-                    vim.keymap.set('n', '<leader>7', ':vertical resize 40<CR>')
-                    vim.keymap.set('n', '<leader>8', ':vertical resize 60<CR>')
-                    vim.keymap.set('n', '<leader>9', ':vertical resize 80<CR>')
-                    vim.keymap.set('n', '<leader>0', ':vertical resize 100<CR>')
-                    vim.keymap.set('n', '<leader>db', ':DBUIToggle<CR>')
-                    vim.keymap.set('n', '<leader>gs', ':Git<CR>')
+                              vim.keymap.set('n', '<leader>gd', ':Gdiffsplit<CR>')
+                              vim.keymap.set('n', '<leader>gb', ':Git blame<CR>')
+                              vim.keymap.set('n', '<leader>gl', ':Git log<CR>')
+                              vim.keymap.set('n', '<leader>gc', ':Git commit<CR>')
+                              vim.keymap.set('n', '<leader>gp', ':Git push<CR>')
+                              vim.keymap.set('n', '<leader>1', ':resize 10<CR>')
+                              vim.keymap.set('n', '<leader>2', ':resize 20<CR>')
+                              vim.keymap.set('n', '<leader>3', ':resize 30<CR>')
+                              vim.keymap.set('n', '<leader>4', ':resize 40<CR>')
+                              vim.keymap.set('n', '<leader>5', ':resize 50<CR>')
+                              vim.keymap.set('n', '<leader>6', ':vertical resize 20<CR>')
+                              vim.keymap.set('n', '<leader>7', ':vertical resize 40<CR>')
+                              vim.keymap.set('n', '<leader>8', ':vertical resize 60<CR>')
+                              vim.keymap.set('n', '<leader>9', ':vertical resize 80<CR>')
+                              vim.keymap.set('n', '<leader>0', ':vertical resize 100<CR>')
+                              vim.keymap.set('n', '<leader>db', ':DBUIToggle<CR>')
+                              vim.keymap.set('n', '<leader>gs', ':Git<CR>')
         '';
       in
       {

@@ -194,7 +194,7 @@ in
     invoiceplane = {
       autoStart = true;
       privateNetwork = true;
-			hostBridge = "br0";
+      hostBridge = "br0";
       localAddress = "10.10.0.2/24";
       config = { config, pkgs, ... }: {
 
@@ -227,12 +227,28 @@ in
   };
 
   systemd = {
-    services.nix-daemon.serviceConfig = {
-      LimitNOFILE = lib.mkForce 8192;
-      CPUWeight = 5;
-      MemoryHigh = "4G";
-      MemoryMax = "6G";
-      MemorySwapMax = "0";
+    services = {
+      nix-daemon.serviceConfig = {
+        LimitNOFILE = lib.mkForce 8192;
+        CPUWeight = 5;
+        MemoryHigh = "4G";
+        MemoryMax = "6G";
+        MemorySwapMax = "0";
+      };
+      btrfs-copy-snap = {
+        path = with pkgs; [
+          btrfs-progs
+        ];
+        script = ''
+          				  cp -r /var/lib/forgejo/ /home/goeranh/ssd/backups
+          				  cp -r /var/lib/nixos-containers/invoiceplane/ /home/goeranh/ssd/backups
+          				  cp -r /var/lib/bitwarden_rs/ /home/goeranh/ssd/backups
+          					cd /home/goeranh/ssd
+          					btrfs subvolume snapshot backups backups-$(date "+%Y-%m-%d-%H:%M")
+          				'';
+
+        startAt = "daily";
+      };
     };
   };
 

@@ -4,28 +4,30 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   fileSystems."/" =
-    { device = "/dev/disk/by-label/nixos";
+    {
+      device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-label/boot";
+    {
+      device = "/dev/disk/by-label/boot";
       fsType = "vfat";
     };
 
 
-	boot = {
-		loader = {
-			systemd-boot.enable = true;
-			efi.canTouchEfiVariables = true;
-		};
-		initrd = {
-		  availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-		  kernelModules = [ ];
-		};
-		kernelModules = [ ];
-		extraModulePackages = [ ];
-	};
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    initrd = {
+      availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+      kernelModules = [ ];
+    };
+    kernelModules = [ ];
+    extraModulePackages = [ ];
+  };
 
   networking = {
     hostName = "nixfw";
@@ -44,11 +46,11 @@
     nftables = {
       enable = true;
       ruleset = ''
-          table ip nat {
-            chain PREROUTING {
-              type nat hook prerouting priority dstnat; policy accept;
-            }
+        table ip nat {
+          chain PREROUTING {
+            type nat hook prerouting priority dstnat; policy accept;
           }
+        }
       '';
     };
     firewall = {
@@ -71,14 +73,13 @@
     enable = true;
     wheelNeedsPassword = false;
   };
-	goeranh = {
-		server = true;
-		trust-builder = false;
-		remote-store = false;
-	};
-
-  services = {
+  goeranh = {
+    server = true;
+    trust-builder = false;
+    remote-store = false;
   };
+
+  services = { };
 
   system.stateVersion = "23.11";
 }
