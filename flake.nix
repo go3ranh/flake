@@ -33,7 +33,7 @@
           system = "aarch64-linux";
           modules = [
             (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.pitest.config; })
-            (import ./host/pitest/default.nix { inherit lib; config = self.nixosConfigurations.pitest.config; pkgs = pkgsarm64; })
+            (import ./host/pitest/default.nix { inherit lib inputs; config = self.nixosConfigurations.pitest.config; pkgs = pkgsarm64; })
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
           ];
