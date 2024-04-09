@@ -86,6 +86,24 @@ in
     networkmanager.enable = true;
     hosts = {
       "127.0.0.2" = [ "youtube.com" "*.youtube.com" ];
+      "10.20.0.2" = [ "ipa.goeranh.lan" ];
+      "10.30.0.2" = [ "ipa.goeranh.test" ];
+    };
+
+    bridges = {
+      "br0" = { interfaces = []; };
+    };
+
+    interfaces.br0.ipv4.addresses = [{
+      address = "10.20.0.1";
+      prefixLength = 24;
+    }];
+
+    nat = {
+      enable = true;
+      internalInterfaces = [ "br0" ];
+      externalInterface = "wlp0s20f3";
+      enableIPv6 = false;
     };
   };
 
