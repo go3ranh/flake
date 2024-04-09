@@ -175,8 +175,8 @@ in
   ]; # ++ [ self.packages.x86_64-linux.proxmark ];
 
   virtualisation.libvirtd.enable = true;
-  virtualisation.podman.enable = true;
-  virtualisation.podman.dockerCompat = true;
+  # virtualisation.podman.enable = true;
+  # virtualisation.podman.dockerCompat = true;
   programs.dconf.enable = true;
 
   programs.git.enable = true;
@@ -239,6 +239,9 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "kvm-amd" ];
+	# boot.kernel.sysctl = {
+	# 	"kernel.unprivileged_userns_clone" = 1; # for plex
+  # };
 
   fileSystems = {
     "/" = {
