@@ -160,6 +160,9 @@ in
           file
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
+					pika-backup
+					newsflash
+					wike
           bitwarden
           chromium
           dbeaver
@@ -192,7 +195,7 @@ in
           binwalk
           file
           ghidra
-          gnome-builder
+          #gnome-builder
           libxcrypt
           meson
           gnumake
