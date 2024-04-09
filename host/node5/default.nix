@@ -196,6 +196,9 @@ in
       pulse.enable = true;
       jack.enable = false;
     };
+    gnome = {
+      gnome-keyring.enable = true;
+    };
     #printing.enable = true;
     #avahi.enable = true;
     #avahi.nssmdns = true;
