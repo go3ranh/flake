@@ -173,9 +173,6 @@ in
             "/vw/" = {
               proxyPass = "http://127.0.0.1:8222";
             };
-            "/nixpkgs/" = {
-              root = "${inputs.nixpkgs.htmlDocs.nixpkgsManual.outPath}/share/doc/";
-            };
           };
         };
       };
