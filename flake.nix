@@ -78,6 +78,14 @@
             (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.kbuild.config; })
           ];
         };
+        dockerhost = lib.nixosSystem rec {
+          system = "x86_64-linux";
+          modules = [
+            ./host/dockerhost
+            sops-nix.nixosModules.sops
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.kbuild.config; })
+          ];
+        };
       };
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
