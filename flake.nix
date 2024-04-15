@@ -100,12 +100,6 @@
               ssh-to-age
             ];
           };
-          loraflash = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              python3
-              esptool
-            ];
-          };
           phpshell = pkgs.mkShell {
             buildInputs = with pkgs; [
               php82
@@ -114,27 +108,6 @@
               php82Extensions.gd
               php82Extensions.mbstring
               php82Packages.composer
-            ];
-          };
-          rustshell = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              cargo
-              rustc
-              gef
-            ];
-          };
-          cshell = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              clang
-              clang-tools
-              cmake
-              gcc
-              gef
-            ];
-          };
-          vmshell = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              nixos-shell
             ];
           };
         };
