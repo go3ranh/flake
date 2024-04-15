@@ -191,9 +191,7 @@
     name = "settings";
     description = "goeranh settings / dotfiles";
     bashrc = archpkgs.writeText ".bashrc" ''
-      source "${archpkgs.fzf.outPath}/share/fzf/key-bindings.bash"
-      source "${archpkgs.fzf.outPath}/share/fzf/completion.bash"
-      source ${archpkgs.git.outPath}/share/bash-completion/completions/git
+			FZF_ALT_C_COMMAND= eval "$(${archpkgs.fzf.outPath}/bin/fzf --bash)"
       export XDG_CONFIG_HOME="/home/goeranh/.config"
       export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
       export GOPATH="/home/goeranh/gitprojects"
