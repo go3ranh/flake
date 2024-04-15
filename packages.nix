@@ -191,21 +191,21 @@
     name = "settings";
     description = "goeranh settings / dotfiles";
     bashrc = archpkgs.writeText ".bashrc" ''
-			FZF_ALT_C_COMMAND= eval "$(${archpkgs.fzf.outPath}/bin/fzf --bash)"
-      export XDG_CONFIG_HOME="/home/goeranh/.config"
-      export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
-      export GOPATH="/home/goeranh/gitprojects"
+      			FZF_ALT_C_COMMAND= eval "$(${archpkgs.fzf.outPath}/bin/fzf --bash)"
+            export XDG_CONFIG_HOME="/home/goeranh/.config"
+            export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
+            export GOPATH="/home/goeranh/gitprojects"
       
       
-      eval "$(direnv hook bash)"
-      HISTFILESIZE=100000
-      HISTSIZE=100000
+            eval "$(direnv hook bash)"
+            HISTFILESIZE=100000
+            HISTSIZE=100000
       
-      shopt -s histappend
-      shopt -s checkwinsize
-      shopt -s extglob
-      shopt -s globstar
-      shopt -s checkjobs
+            shopt -s histappend
+            shopt -s checkwinsize
+            shopt -s extglob
+            shopt -s globstar
+            shopt -s checkjobs
     '';
 
     goeranh = archpkgs.writeText ".goeranh" ''
