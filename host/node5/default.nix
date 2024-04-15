@@ -91,7 +91,7 @@ in
     };
 
     bridges = {
-      "br0" = { interfaces = []; };
+      "br0" = { interfaces = [ ]; };
     };
 
     interfaces.br0.ipv4.addresses = [{
@@ -242,8 +242,8 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "kvm-amd" ];
-	# boot.kernel.sysctl = {
-	# 	"kernel.unprivileged_userns_clone" = 1; # for plex
+  # boot.kernel.sysctl = {
+  # 	"kernel.unprivileged_userns_clone" = 1; # for plex
   # };
 
   fileSystems = {

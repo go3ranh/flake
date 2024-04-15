@@ -115,7 +115,7 @@ in
   };
 
 
-	environment.systemPackages = with pkgs; [ borgbackup ];
+  environment.systemPackages = with pkgs; [ borgbackup ];
   system.stateVersion = "23.11"; # Did you read the comment?
 
 }

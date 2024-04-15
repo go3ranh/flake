@@ -160,9 +160,9 @@ in
           file
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
-					pika-backup
-					newsflash
-					wike
+          pika-backup
+          newsflash
+          wike
           bitwarden
           chromium
           dbeaver
