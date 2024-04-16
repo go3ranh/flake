@@ -669,8 +669,9 @@ in
     nixpkgs.config.allowUnfree = true;
     networking.firewall.enable = true;
     networking.nftables.enable = true;
-    networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+    networking.nameservers = [ "100.87.17.62" "9.9.9.9" ];
     networking.domain = "netbird.selfhosted";
+    networking.search = [ "netbird.selfhosted" ];
 
     console.keyMap = "de";
 
