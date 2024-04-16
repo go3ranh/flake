@@ -100,6 +100,13 @@ in
         };
       };
     };
+		security = {
+			pki = {
+				certificateFiles = [
+				  ../ca-chain.cert.pem
+				];
+			};
+		};
     nix = {
       registry = {
         fah.flake = self;
@@ -160,10 +167,10 @@ in
           file
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
+					bitwarden
           pika-backup
           newsflash
           wike
-          bitwarden
           chromium
           dbeaver
           #filezilla
@@ -663,7 +670,7 @@ in
     networking.firewall.enable = true;
     networking.nftables.enable = true;
     networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
-    networking.domain = "tailf0ec0.ts.net";
+    networking.domain = "netbird.selfhosted";
 
     console.keyMap = "de";
 
