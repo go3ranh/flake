@@ -152,14 +152,14 @@ in
       enable = true;
       virtualHosts = {
         "${config.networking.hostName}" = {
-					globalRedirect = "${config.networking.fqdn}";
+          globalRedirect = "${config.networking.fqdn}";
         };
         "${config.networking.fqdn}" = {
           sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
           sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
-					extraConfig = ''
-					  ssl_password_file /var/lib/pitest.netbird.selfhosted.pass;
-					'';
+          extraConfig = ''
+            					  ssl_password_file /var/lib/pitest.netbird.selfhosted.pass;
+            					'';
           forceSSL = true;
           locations = {
             "/" = {
