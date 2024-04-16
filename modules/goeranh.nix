@@ -100,13 +100,13 @@ in
         };
       };
     };
-		security = {
-			pki = {
-				certificateFiles = [
-				  ../ca-chain.cert.pem
-				];
-			};
-		};
+    security = {
+      pki = {
+        certificateFiles = [
+          ../ca-chain.cert.pem
+        ];
+      };
+    };
     nix = {
       registry = {
         fah.flake = self;
@@ -167,7 +167,7 @@ in
           file
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
-					bitwarden
+          bitwarden
           pika-backup
           newsflash
           wike
