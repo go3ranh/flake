@@ -9,32 +9,13 @@
 
   goeranh = {
     server = true;
-    #trust-builder = true;
     update = true;
   };
 
   security = {
     sudo = {
       enable = true;
-      # wheelNeedsPassword = false;
-      extraRules = [{
-        commands = [
-          {
-            command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild switch";
-            options = [ "NOPASSWD" ];
-          }
-          {
-            command = "${pkgs.systemd}/bin/reboot";
-            options = [ "NOPASSWD" ];
-          }
-        ];
-        groups = [ "wheel" ];
-      }];
-      extraConfig = with pkgs; ''
-        				Defaults:picloud secure_path="${lib.makeBinPath [
-        					systemd
-        				]}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
-        			'';
+      wheelNeedsPassword = false;
     };
   };
   # Use the systemd-boot EFI boot loader.
@@ -42,13 +23,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   time.timeZone = "Europe/Berlin";
-
-  i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkbOptions in tty.
-  # };
 
   users.users.goeranh = {
     isNormalUser = true;
@@ -72,7 +46,6 @@
     git
     tmux
     wget
-    docker-compose
   ];
 
   virtualisation = {

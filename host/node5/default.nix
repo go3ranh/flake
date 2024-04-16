@@ -52,35 +52,6 @@ in
       startAt = "weekly";
     };
   };
-  nix = {
-    # distributedBuilds = true;
-    # extraOptions = ''
-    #   			builders-use-substitutes = true
-    #   		'';
-    # buildMachines = [
-    #   {
-    #     maxJobs = 50;
-    #     protocol = "ssh-ng";
-    #     hostName = "kbuild";
-    #     publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUp0SGRJaHNPVTNvenExQklLRTZmMWUwS2pMbG91MTNtUU1waFkyYTBlVDQgcm9vdEBidWlsZHZtMQo=";
-    #     sshKey = "/home/goeranh/.ssh/wgidng";
-    #     sshUser = "goeranh";
-    #     supportedFeatures = [
-    #       "nixos-test"
-    #       "benchmark"
-    #       "big-parallel"
-    #       "kvm"
-    #     ];
-    #     speedFactor = 10;
-    #     systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" ];
-    #   }
-    # ];
-  };
-
-  #zramSwap = {
-  #  enable = true;
-  #};
-
   networking = {
     hostName = "node5";
     networkmanager.enable = true;
@@ -160,9 +131,6 @@ in
   hardware.hackrf.enable = true;
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];
 
   environment.systemPackages = with pkgs; [
     usbutils
@@ -172,16 +140,13 @@ in
     lm_sensors
     lsof
     smartmontools
-  ]; # ++ [ self.packages.x86_64-linux.proxmark ];
+  ];
 
   virtualisation.libvirtd.enable = true;
-  # virtualisation.podman.enable = true;
-  # virtualisation.podman.dockerCompat = true;
   programs.dconf.enable = true;
 
   programs.git.enable = true;
-  # networking.firewall.allowedTCPPorts = [ 22 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+
   networking.firewall.enable = true;
 
   system.stateVersion = "23.11";
@@ -203,10 +168,6 @@ in
     #avahi.enable = true;
     #avahi.nssmdns = true;
     openssh.enable = false;
-    #usbmuxd = {
-    #  enable = true;
-    #  package = pkgs.usbmuxd2;
-    #};
 
     mysql = {
       enable = true;
@@ -242,9 +203,6 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "kvm-amd" ];
-  # boot.kernel.sysctl = {
-  # 	"kernel.unprivileged_userns_clone" = 1; # for plex
-  # };
 
   fileSystems = {
     "/" = {
