@@ -38,55 +38,23 @@
             sops-nix.nixosModules.sops
           ];
         };
-        desktop = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            ./host/desktop
-            sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.desktop.config; })
-          ];
-        };
-        node5 = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            ./host/node5
-            sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.node5.config; })
-          ];
-        };
-        workstation = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            ./host/workstation
-            sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.workstation.config; })
-          ];
-        };
-        hostingfw = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            ./host/hostingfw
-            sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.hostingfw.config; })
-          ];
-        };
-        kbuild = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            ./host/kbuild
-            sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.kbuild.config; })
-          ];
-        };
-        dockerhost = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            ./host/dockerhost
-            sops-nix.nixosModules.sops
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.kbuild.config; })
-          ];
-        };
-      };
+      } // builtins.foldl' (result: name: result // {
+					"${name}" = lib.nixosSystem rec {
+            system = "x86_64-linux";
+            modules = [
+              ./host/${name}
+              sops-nix.nixosModules.sops
+              (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
+            ];
+					};
+				}) {} [
+				  "dockerhost"
+				  "kbuild"
+				  "node5"
+				  "hostingfw"
+				  "workstation"
+				  "desktop"
+				];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
       packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgs; };

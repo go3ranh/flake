@@ -626,7 +626,7 @@ in
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
           ] else [ ])
-        ];
+        ];	
       etc = {
         "resolv.conf" = {
 					text = ''
