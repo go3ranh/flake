@@ -628,6 +628,13 @@ in
           ] else [ ])
         ];
       etc = {
+        "resolv.conf" = {
+					text = ''
+            domain netbird.selfhosted
+            nameserver 100.87.17.62
+            nameserver 9.9.9.9
+          '';
+				};
         "nixos/repl.nix" = {
           text = ''
             {
