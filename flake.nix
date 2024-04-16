@@ -57,8 +57,8 @@
 				];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
-      packages.x86_64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgs; };
-      packages.aarch64-linux = import ./packages.nix { inputs = inputs; lib = lib; self = self; archpkgs = pkgsarm64; };
+      packages.x86_64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgs; };
+      packages.aarch64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgsarm64; };
 
       devShells = {
         x86_64-linux = {
