@@ -23,9 +23,18 @@
             command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild switch";
             options = [ "NOPASSWD" ];
           }
+          {
+            command = "${pkgs.systemd}/bin/reboot";
+            options = [ "NOPASSWD" ];
+          }
         ];
         groups = [ "wheel" ];
       }];
+			extraConfig = with pkgs; ''
+				Defaults:picloud secure_path="${lib.makeBinPath [
+					systemd
+				]}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
+			'';
     };
   };
   # Use the systemd-boot EFI boot loader.
@@ -50,8 +59,7 @@
 
   networking = {
     hostName = "dockerhost";
-    firewall.allowedTCPPorts = [ 22 80 ];
-    nameservers = [ "1.1.1.1" ];
+    firewall.allowedTCPPorts = [ 22 80 443 ];
     interfaces.ens18.ipv4.addresses = [{
       address = "10.0.0.132";
       prefixLength = 24;
@@ -81,6 +89,18 @@
     nginx = {
       enable = true;
       virtualHosts."10.0.0.132" = {
+				default = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:2283";
+        };
+      };
+      virtualHosts."${config.networking.fqdn}" = {
+				sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
+				sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
+				extraConfig = ''
+					ssl_password_file /var/lib/${config.networking.fqdn}.pass;
+				'';
+				forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:2283";
         };
