@@ -30,11 +30,11 @@
         ];
         groups = [ "wheel" ];
       }];
-			extraConfig = with pkgs; ''
-				Defaults:picloud secure_path="${lib.makeBinPath [
-					systemd
-				]}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
-			'';
+      extraConfig = with pkgs; ''
+        				Defaults:picloud secure_path="${lib.makeBinPath [
+        					systemd
+        				]}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
+        			'';
     };
   };
   # Use the systemd-boot EFI boot loader.
@@ -89,18 +89,18 @@
     nginx = {
       enable = true;
       virtualHosts."10.0.0.132" = {
-				default = true;
+        default = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:2283";
         };
       };
       virtualHosts."${config.networking.fqdn}" = {
-				sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
-				sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
-				extraConfig = ''
-					ssl_password_file /var/lib/${config.networking.fqdn}.pass;
-				'';
-				forceSSL = true;
+        sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
+        sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
+        extraConfig = ''
+          					ssl_password_file /var/lib/${config.networking.fqdn}.pass;
+          				'';
+        forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:2283";
         };
