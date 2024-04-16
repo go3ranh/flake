@@ -151,6 +151,9 @@ in
     nginx = {
       enable = true;
       virtualHosts = {
+        "${config.networking.hostName}" = {
+					globalRedirect = "${config.networking.fqdn}";
+        };
         "${config.networking.fqdn}" = {
           sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
           sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
