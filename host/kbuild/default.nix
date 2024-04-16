@@ -68,16 +68,19 @@ in
         "${config.networking.fqdn}" = {
           sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
           sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
-					extraConfig = ''
-					  ssl_password_file /var/lib/${config.networking.fqdn}.pass;
-					'';
+          extraConfig = ''
+            ssl_password_file /var/lib/${config.networking.fqdn}.pass;
+          '';
           forceSSL = true;
         };
-        # "${config.networking.fqdn}" = {
-        #   sslCertificate = "/var/lib/${config.networking.fqdn}.crt";
-        #   sslCertificateKey = "/var/lib/${config.networking.fqdn}.key";
-        #   forceSSL = true;
-        # };
+        "onlyoffice.${config.networking.fqdn}" = {
+          sslCertificate = "/var/lib/onlyoffice.${config.networking.fqdn}.cert.pem";
+          sslCertificateKey = "/var/lib/onlyoffice.${config.networking.fqdn}.key.pem";
+          extraConfig = ''
+            ssl_password_file /var/lib/${config.networking.fqdn}.pass;
+          '';
+          forceSSL = true;
+        };
       };
     };
     nextcloud = {
@@ -100,7 +103,7 @@ in
       autoUpdateApps.enable = true;
       extraAppsEnable = true;
       extraApps = with config.services.nextcloud.package.packages.apps; {
-        inherit calendar contacts; # onlyoffice 
+        inherit calendar contacts onlyoffice;
       };
 
       settings = {
@@ -116,10 +119,10 @@ in
         adminpassFile = "${config.sops.secrets.nextcloud-admin-pass.path}";
       };
     };
-    # onlyoffice = {
-    #   enable = true;
-    #   hostname = "${config.networking.fqdn}";
-    # };
+    onlyoffice = {
+      enable = true;
+      hostname = "onlyoffice.${config.networking.fqdn}";
+    };
   };
 
 
