@@ -55,7 +55,8 @@
     };
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = [ 22 53 ];
+      allowedUDPPorts = [ 53 ];
     };
     nat = {
       enable = true;
@@ -79,7 +80,34 @@
     remote-store = false;
   };
 
-  services = { };
+  services = {
+		bind = {
+			enable = true;
+			zones = {
+				"netbird.selfhosted" = 
+				let
+				  zonefile = pkgs.writeText "zone" ''
+$ORIGIN netbird.selfhosted.
+$TTL 3600
+netbird.selfhosted.  IN  SOA   nixfw.netbird.selfhosted. goeranh.netbird.selfhosted. ( 2020091025 7200 3600 1209600 3600 )
+netbird.selfhosted.  IN  NS    nixfw
+
+kbuild          IN  A     100.87.25.209
+pitest          IN  A     100.87.123.127
+nixfw           IN  A     100.87.17.62
+dockerhost      IN  A     10.0.0.132
+node5           IN  A     100.87.55.241
+server-gitea    IN  A     100.87.18.24
+workstation     IN  A     100.87.106.167
+oraclearm       IN  A     100.87.250.85
+					'';
+				in{
+					master = true;
+					file = "${zonefile}";
+				};
+			};
+		};
+	};
 
   system.stateVersion = "23.11";
 }
