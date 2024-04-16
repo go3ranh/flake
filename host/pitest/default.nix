@@ -153,8 +153,11 @@ in
       enable = true;
       virtualHosts = {
         "${config.networking.fqdn}" = {
-          sslCertificate = "/var/lib/${config.networking.fqdn}.crt";
-          sslCertificateKey = "/var/lib/${config.networking.fqdn}.key";
+          sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
+          sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
+					extraConfig = ''
+					  ssl_password_file /var/lib/pitest.netbird.selfhosted.pass;
+					'';
           forceSSL = true;
           locations = {
             "/" = {
