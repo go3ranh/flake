@@ -66,150 +66,196 @@
             plugins);
         vimpkgs = archpkgs.vimPlugins;
         luaconfig = archpkgs.writeText "init.lua" ''
-                              vim.opt.packpath = '${pack}/'
-                              vim.opt.number = true
-                              vim.opt.relativenumber = true
-                              vim.opt.tabstop = 4
-                              vim.opt.softtabstop = 4
-                              vim.opt.shiftwidth = 4
-                              vim.opt.smartindent = true
-                              vim.opt.swapfile = false
-                              vim.opt.backup = false
-                              vim.opt.hlsearch = false
-                              vim.opt.incsearch = true
-                              vim.opt.termguicolors = true
-                              vim.opt.scrolloff = 5
-                              vim.opt.undodir = vim.env.HOME .. '/.vim/undodir'
+          vim.opt.packpath = '${pack}/'
+          vim.opt.number = true
+          vim.opt.relativenumber = true
+          vim.opt.tabstop = 4
+          vim.opt.softtabstop = 4
+          vim.opt.shiftwidth = 4
+          vim.opt.smartindent = true
+          vim.opt.swapfile = false
+          vim.opt.backup = false
+          vim.opt.hlsearch = false
+          vim.opt.incsearch = true
+          vim.opt.termguicolors = true
+          vim.opt.scrolloff = 5
+          vim.opt.undodir = vim.env.HOME .. '/.vim/undodir'
           
-                              vim.g.mapleader = " ";
-                              vim.cmd 'colorscheme slate'
-                              -- vim.cmd 'colorscheme dracula'
+          vim.g.mapleader = " ";
+          vim.cmd 'colorscheme slate'
+          -- vim.cmd 'colorscheme dracula'
           
-                              local builtin = require('telescope.builtin')
+          local builtin = require('telescope.builtin')
           
-                              local cmp = require('cmp')
-                              cmp.setup {
-                              	sources = {
-                              		{ name = 'treesitter' },
-                              		{ name = 'buffer' },
-                              		{ name = 'path' }
-                              	}
-                              }
+          local cmp = require('cmp')
+          cmp.setup {
+						sources = {
+							{ name = 'treesitter' },
+							{ name = 'buffer' },
+							{ name = 'path' }
+						}
+          }
           
-                               require'gitsigns'.setup{
-															 	signs = {
-															 		add          = { text = '┃' },
-															 		change       = { text = '┃' },
-															 		delete       = { text = '_' },
-															 		topdelete    = { text = '‾' },
-															 		changedelete = { text = '~' },
-															 		untracked    = { text = '┆' },
-															 	},
-															 	signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-															 	numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
-															 	linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-															 	word_diff  = true, -- Toggle with `:Gitsigns toggle_word_diff`
-															 	watch_gitdir = {
-															 		follow_files = true
-															 	},
-															 	--auto_attach = true,
-															 	attach_to_untracked = false,
-															 	current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-															 	current_line_blame_opts = {
-															 		virt_text = true,
-															 		virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-															 		delay = 1000,
-															 		ignore_whitespace = false,
-															 		virt_text_priority = 100,
-															 	},
-															 	current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
-															 	current_line_blame_formatter_opts = {
-															 		relative_time = false,
-															 	},
-															 	sign_priority = 6,
-															 	update_debounce = 100,
-															 	status_formatter = nil, -- Use default
-															 	max_file_length = 40000, -- Disable if file is longer than this (in lines)
-															 	preview_config = {
-															 		-- Options passed to nvim_open_win
-															 		border = 'single',
-															 		style = 'minimal',
-															 		relative = 'cursor',
-															 		row = 0,
-															 		col = 1
-															 	},
-                               }
-
-                              require'lspconfig'.phpactor.setup{
-                              		on_attach = on_attach,
-                              		init_options = {
-                              				["language_server_phpstan.enabled"] = false,
-                              				["language_server_psalm.enabled"] = false,
-                              		}
-                              }
+          require'gitsigns'.setup{
+            on_attach = function(bufnr)
+							local gitsigns = require('gitsigns')
+						 	local function map(mode, l, r, opts)
+						 		opts = opts or {}
+						 		opts.buffer = bufnr
+						 		vim.keymap.set(mode, l, r, opts)
+						 	end
+						
+							-- Navigation
+							map('n', '+c', function()
+								if vim.wo.diff then
+									vim.cmd.normal({']c', bang = true})
+								else
+									gitsigns.nav_hunk('next')
+								end
+							end)
+							
+							map('n', 'üc', function()
+								if vim.wo.diff then
+									vim.cmd.normal({'[c', bang = true})
+								else
+									gitsigns.nav_hunk('prev')
+								end
+							end)
+						-- 	
+						-- 	-- Actions
+						-- 	--map('n', '<leader>hs', gitsigns.stage_hunk)
+						-- 	--map('n', '<leader>hr', gitsigns.reset_hunk)
+						-- 	--map('v', '<leader>hs', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+						-- 	--map('v', '<leader>hr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+						-- 	--map('n', '<leader>hS', gitsigns.stage_buffer)
+						-- 	--map('n', '<leader>hu', gitsigns.undo_stage_hunk)
+						-- 	--map('n', '<leader>hR', gitsigns.reset_buffer)
+						-- 	--map('n', '<leader>hp', gitsigns.preview_hunk)
+						-- 	--map('n', '<leader>hb', function() gitsigns.blame_line{full=true} end)
+						-- 	--map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
+						-- 	--map('n', '<leader>hd', gitsigns.diffthis)
+						-- 	--map('n', '<leader>hD', function() gitsigns.diffthis('~') end)
+						-- 	--map('n', '<leader>td', gitsigns.toggle_deleted)
+						-- 	
+						-- 	---- Text object
+						-- 	--map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+            end
+					}
+          -- require'gitsigns'.setup{
+          --   signs = {
+					-- 		add          = { text = '┃' },
+					-- 		change       = { text = '┃' },
+					-- 		delete       = { text = '_' },
+					-- 		topdelete    = { text = '‾' },
+					-- 		changedelete = { text = '~' },
+					-- 		untracked    = { text = '┆' },
+          --   },
+          --   signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+          --   numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
+          --   linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+          --   word_diff  = true, -- Toggle with `:Gitsigns toggle_word_diff`
+          --   watch_gitdir = {
+					-- 		follow_files = true
+          --   },
+          --   --auto_attach = true,
+          --   attach_to_untracked = false,
+          --   current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+          --   current_line_blame_opts = {
+					-- 		virt_text = true,
+					-- 		virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+					-- 		delay = 1000,
+					-- 		ignore_whitespace = false,
+					-- 		virt_text_priority = 100,
+          --   },
+          --   current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+          --   current_line_blame_formatter_opts = {
+					-- 		relative_time = false,
+          --   },
+          --   sign_priority = 6,
+          --   update_debounce = 100,
+          --   status_formatter = nil, -- Use default
+          --   max_file_length = 40000, -- Disable if file is longer than this (in lines)
+          --   preview_config = {
+					-- 		-- Options passed to nvim_open_win
+					-- 		border = 'single',
+					-- 		style = 'minimal',
+					-- 		relative = 'cursor',
+					-- 		row = 0,
+					-- 		col = 1
+          --   },
+          --   --map('n', '<leader>hd', gitsigns.diffthis)
+          -- }
           
-                              local cmp_select = {behavior = cmp.SelectBehavior.Select}
-
-          										require("telescope").load_extension("git_worktree")
-                              vim.keymap.set('n', '<leader>gwn', ':lua require(\'telescope\').extensions.git_worktree.create_git_worktree()<cr>')
-                              vim.keymap.set('n', '<leader>gws', ':lua require(\'telescope\').extensions.git_worktree.git_worktrees()<cr>')
+          require'lspconfig'.phpactor.setup{
+						on_attach = on_attach,
+						init_options = {
+							["language_server_phpstan.enabled"] = false,
+							["language_server_psalm.enabled"] = false,
+						}
+          }
           
-                              -- php keys
-                              vim.keymap.set("n", "<Leader>m", ':call phpactor#ContextMenu()<CR>')
-                              vim.keymap.set("n", "gd", ':call phpactor#GotoDefinition()<CR>')
-                              vim.keymap.set("n", "gr", ':call phpactor#FindReference()<CR>')
+          local cmp_select = {behavior = cmp.SelectBehavior.Select}
           
-                              -- general keybinds
-                              vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
-                              vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
-                              vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
-                              vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-                              vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
-                              vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
-                              vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+          require("telescope").load_extension("git_worktree")
+          vim.keymap.set('n', '<leader>gwn', ':lua require(\'telescope\').extensions.git_worktree.create_git_worktree()<cr>')
+          vim.keymap.set('n', '<leader>gws', ':lua require(\'telescope\').extensions.git_worktree.git_worktrees()<cr>')
           
-                              vim.keymap.set('v', '<silent>*', ":call VisualSelection('f')<CR>")
-                              vim.keymap.set('v', '<silent>#', ":call VisualSelection('b')<CR>")
-                              -- vnoremap <silent> * :call VisualSelection('f')<CR>
-                              -- vnoremap <silent> # :call VisualSelection('b')<CR>
-                              -- " Treat long lines as break lines (useful when moving around in them)
-                              -- map j gj
-                              -- map k gk
-                              vim.keymap.set('n', '<leader>tn', ':tabnew<CR>')
-                              vim.keymap.set('n', '<leader>to', ':tabonly<CR>')
-                              vim.keymap.set('n', '<leader>tc', ':tabclose<CR>')
+          -- php keys
+          vim.keymap.set("n", "<Leader>m", ':call phpactor#ContextMenu()<CR>')
+          vim.keymap.set("n", "gd", ':call phpactor#GotoDefinition()<CR>')
+          vim.keymap.set("n", "gr", ':call phpactor#FindReference()<CR>')
           
-                              -- undotree
-                              vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>')
+          -- general keybinds
+          vim.keymap.set("n", "<leader><CR>", ':FloatermToggle<CR>')
+          vim.keymap.set("t", "<leader><CR>", '<C-\\><C-n>:FloatermToggle<CR>')
+          vim.keymap.set('n', '<leader>e', vim.cmd.Ex, {})
+          vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+          vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
+          vim.keymap.set('n', '<leader>gf', builtin.live_grep, {})
+          vim.keymap.set('n', '<leader>b', builtin.buffers, {})
           
-                    					vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-                    					vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-                    					vim.keymap.set('v', 'H', "<gv")
-                    					vim.keymap.set('v', 'L', ">gv")
-                              -- vnoremap J :m '>+1<CR>gv=gv
-                              -- vnoremap K :m '<-2<CR>gv=gv
-                              -- vnoremap H <gv
-                              -- vnoremap L >gv
-
-                              vim.keymap.set('n', '<leader>gd', ':Gdiffsplit<CR>')
-                              vim.keymap.set('n', '<leader>gb', ':Git blame<CR>')
-                              vim.keymap.set('n', '<leader>gsb', ':Gitsigns toggle_current_line_blame<CR>')
-                              vim.keymap.set('n', '<leader>gl', ':Git log<CR>')
-                              vim.keymap.set('n', '<leader>gc', ':Git commit<CR>')
-                              vim.keymap.set('n', '<leader>gp', ':Git push<CR>')
-                              vim.keymap.set('n', '<leader>1', ':resize 10<CR>')
-                              vim.keymap.set('n', '<leader>2', ':resize 20<CR>')
-                              vim.keymap.set('n', '<leader>3', ':resize 30<CR>')
-                              vim.keymap.set('n', '<leader>4', ':resize 40<CR>')
-                              vim.keymap.set('n', '<leader>5', ':resize 50<CR>')
-                              vim.keymap.set('n', '<leader>6', ':vertical resize 20<CR>')
-                              vim.keymap.set('n', '<leader>7', ':vertical resize 40<CR>')
-                              vim.keymap.set('n', '<leader>8', ':vertical resize 60<CR>')
-                              vim.keymap.set('n', '<leader>9', ':vertical resize 80<CR>')
-                              vim.keymap.set('n', '<leader>0', ':vertical resize 100<CR>')
-                              vim.keymap.set('n', '<leader>db', ':DBUIToggle<CR>')
-                              vim.keymap.set('n', '<leader>gs', ':Git<CR>')
-        '';
+          vim.keymap.set('v', '<silent>*', ":call VisualSelection('f')<CR>")
+          vim.keymap.set('v', '<silent>#', ":call VisualSelection('b')<CR>")
+          -- vnoremap <silent> * :call VisualSelection('f')<CR>
+          -- vnoremap <silent> # :call VisualSelection('b')<CR>
+          -- " Treat long lines as break lines (useful when moving around in them)
+          -- map j gj
+          -- map k gk
+          vim.keymap.set('n', '<leader>tn', ':tabnew<CR>')
+          vim.keymap.set('n', '<leader>to', ':tabonly<CR>')
+          vim.keymap.set('n', '<leader>tc', ':tabclose<CR>')
+          
+          -- undotree
+          vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>')
+          
+          vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+          vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+          vim.keymap.set('v', 'H', "<gv")
+          vim.keymap.set('v', 'L', ">gv")
+          -- vnoremap J :m '>+1<CR>gv=gv
+          -- vnoremap K :m '<-2<CR>gv=gv
+          -- vnoremap H <gv
+          -- vnoremap L >gv
+          
+          vim.keymap.set('n', '<leader>gd', ':Gdiffsplit<CR>')
+          vim.keymap.set('n', '<leader>gb', ':Git blame<CR>')
+          vim.keymap.set('n', '<leader>gsb', ':Gitsigns toggle_current_line_blame<CR>')
+          vim.keymap.set('n', '<leader>gl', ':Git log<CR>')
+          vim.keymap.set('n', '<leader>gc', ':Git commit<CR>')
+          vim.keymap.set('n', '<leader>gp', ':Git push<CR>')
+          vim.keymap.set('n', '<leader>1', ':resize 10<CR>')
+          vim.keymap.set('n', '<leader>2', ':resize 20<CR>')
+          vim.keymap.set('n', '<leader>3', ':resize 30<CR>')
+          vim.keymap.set('n', '<leader>4', ':resize 40<CR>')
+          vim.keymap.set('n', '<leader>5', ':resize 50<CR>')
+          vim.keymap.set('n', '<leader>6', ':vertical resize 20<CR>')
+          vim.keymap.set('n', '<leader>7', ':vertical resize 40<CR>')
+          vim.keymap.set('n', '<leader>8', ':vertical resize 60<CR>')
+          vim.keymap.set('n', '<leader>9', ':vertical resize 80<CR>')
+          vim.keymap.set('n', '<leader>0', ':vertical resize 100<CR>')
+          vim.keymap.set('n', '<leader>db', ':DBUIToggle<CR>')
+          vim.keymap.set('n', '<leader>gs', ':Git<CR>')
+'';
       in
       {
         packages.myPlugins = with archpkgs.vimPlugins; {
