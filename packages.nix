@@ -391,4 +391,11 @@
       maintainers = with maintainers; [ nyanotech ];
     };
   };
+	updateAll = archpkgs.writeShellScriptBin "updateAll" ''
+    echo "update all"
+		for host in $(echo "${builtins.concatStringsSep " " (builtins.attrNames self.nixosConfigurations)}"); do
+			echo $host
+			${archpkgs.nixos-rebuild.outPath}/bin/nixos-rebuild switch --flake .#$host --target-host $host --build-host $host --use-remote-sudo
+		done
+	'';
 }
