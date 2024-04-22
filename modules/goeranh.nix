@@ -168,19 +168,19 @@ in
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
-          pika-backup
-          newsflash
-          wike
           chromium
           dbeaver
-          #filezilla
           ferdium
+          filezilla
           firefox
           gajim
           gnome3.gnome-terminal
           gpa
           libreoffice
+					logseq
+          newsflash
           okular
+          pika-backup
           poppler_utils
           quickemu
           shotwell
@@ -192,6 +192,7 @@ in
           virt-manager
           virt-viewer
           vlc
+          wike
 
           # discord
           # obsidian
