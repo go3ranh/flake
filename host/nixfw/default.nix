@@ -108,6 +108,10 @@
             file = "${zonefile}";
           };
       };
+			extraOptions = ''
+			recursion yes;
+			allow-recursion { any; };
+			'';
     };
   };
 
