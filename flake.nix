@@ -66,7 +66,9 @@
             buildInputs = with pkgs; [
               sops
               ssh-to-age
-            ];
+            ] ++ (with self.packages.x86_64-linux; [
+						  updateAll
+						]);
           };
           phpshell = pkgs.mkShell {
             buildInputs = with pkgs; [
