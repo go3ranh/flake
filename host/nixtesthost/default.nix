@@ -49,15 +49,12 @@
 
 	services = {
 		openssh.enable = true;
-		# gitlab = {
-		# 	enable = true;
-		# };
 	};
 	networking = {
-		hostName = "gitlab";
+		hostName = "nixtesthost";
 
 		interfaces.ens18.ipv4.addresses = [{
-			address = "10.0.0.21";
+			address = "10.0.0.22";
 			prefixLength = 24;
 		}];
 		defaultGateway = "10.0.0.1";

@@ -38,15 +38,6 @@
             sops-nix.nixosModules.sops
           ];
         };
-        gitlab = lib.nixosSystem rec {
-          system = "x86_64-linux";
-          modules = [
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.pitest.config; })
-						./host/gitlab
-						disko.nixosModules.disko
-            sops-nix.nixosModules.sops
-          ];
-        };
       } // builtins.foldl' (result: name: result // {
 					"${name}" = lib.nixosSystem rec {
             system = "x86_64-linux";
@@ -63,6 +54,19 @@
 				  "nixfw"
 				  "workstation"
 				  #"desktop"
+				] // builtins.foldl' (result: name: result // {
+					"${name}" = lib.nixosSystem rec {
+            system = "x86_64-linux";
+            modules = [
+              ./host/${name}
+              sops-nix.nixosModules.sops
+							disko.nixosModules.disko
+              (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
+            ];
+					};
+				}) {} [
+				  "gitlab"
+				  "nixtesthost"
 				];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
