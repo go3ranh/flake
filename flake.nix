@@ -38,6 +38,15 @@
             sops-nix.nixosModules.sops
           ];
         };
+        gitlab = lib.nixosSystem rec {
+          system = "x86_64-linux";
+          modules = [
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.pitest.config; })
+						./host/gitlab
+						disko.nixosModules.disko
+            sops-nix.nixosModules.sops
+          ];
+        };
       } // builtins.foldl' (result: name: result // {
 					"${name}" = lib.nixosSystem rec {
             system = "x86_64-linux";
