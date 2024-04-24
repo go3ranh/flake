@@ -97,6 +97,7 @@
               pitest             IN  A     100.87.123.127
               nixfw              IN  A     100.87.17.62
               dockerhost         IN  A     10.0.0.132
+              git-website        IN  A     10.0.0.23
               node5              IN  A     100.87.55.241
               server-gitea       IN  A     100.87.18.24
               workstation        IN  A     100.87.106.167

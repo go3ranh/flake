@@ -45,7 +45,13 @@
 		nginx = {
       enable = true;
       virtualHosts = {
-        "${config.networking.hostName}" = {
+        "${config.networking.fqdn}" = {
+          sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
+          sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
+          extraConfig = ''
+						ssl_password_file /var/lib/${config.networking.fqdn}.pass;
+					'';
+          forceSSL = true;
 					default = true;
           locations = {
             "/" = 
@@ -73,6 +79,6 @@
 			prefixLength = 24;
 		}];
 		defaultGateway = "10.0.0.1";
-		firewall.interfaces.ens18.allowedTCPPorts = [ 80 ];
+		firewall.interfaces.ens18.allowedTCPPorts = [ 80 443 ];
 	};
 }
