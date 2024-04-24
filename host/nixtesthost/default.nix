@@ -39,13 +39,6 @@
     "/".device = lib.mkForce "/dev/sda2";
     "/boot".device = lib.mkForce "/dev/sda1";
   };
-	boot = {
-		initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-    kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-		loader.systemd-boot.enable = true;
-  };
-
-  security.sudo.wheelNeedsPassword = false;
 
 	services = {
 		openssh.enable = true;

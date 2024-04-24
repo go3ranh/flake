@@ -62,11 +62,22 @@
               sops-nix.nixosModules.sops
 							disko.nixosModules.disko
               (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
+							{
+								boot = {
+									initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+									kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+									loader.systemd-boot.enable = true;
+								};
+
+								security.sudo.wheelNeedsPassword = false;
+								system.stateVersion = "23.11";
+							}
             ];
 					};
 				}) {} [
 				  "gitlab"
 				  "nixtesthost"
+				  "git-website"
 				];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
