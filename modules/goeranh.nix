@@ -703,14 +703,8 @@ in
           git
         ];
         script = ''
-          					if [ ! -d /tmp/flakeathome ]; then
-          						cd /tmp
-          						${pkgs.git}/bin/git clone https://pitest.tailf0ec0.ts.net/git/goeranh/flakeathome.git
-          					fi
-          					cd /tmp/flakeathome
-          					${pkgs.git}/bin/git pull
-          				  nixos-rebuild switch --flake .#
-          				'';
+					nixos-rebuild switch --flake fah#
+				'';
         startAt = "daily";
       };
       # tscert = mkIf config.services.nginx.enable {
