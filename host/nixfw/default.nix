@@ -98,6 +98,7 @@
               nixfw              IN  A     100.87.17.62
               dockerhost         IN  A     10.0.0.132
               git-website        IN  A     10.0.0.23
+              monitoring         IN  A     10.0.0.26
               node5              IN  A     100.87.55.241
               server-gitea       IN  A     100.87.18.24
               workstation        IN  A     100.87.106.167
@@ -109,10 +110,10 @@
             file = "${zonefile}";
           };
       };
-			extraOptions = ''
-			recursion yes;
-			allow-recursion { any; };
-			'';
+      extraOptions = ''
+        			recursion yes;
+        			allow-recursion { any; };
+        			'';
     };
   };
 

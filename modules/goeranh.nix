@@ -177,7 +177,7 @@ in
           gnome3.gnome-terminal
           gpa
           libreoffice
-					logseq
+          logseq
           newsflash
           okular
           pika-backup
@@ -627,15 +627,15 @@ in
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
           ] else [ ])
-        ];	
+        ];
       etc = {
         "resolv.conf" = {
-					text = ''
+          text = ''
             domain netbird.selfhosted
             nameserver 100.87.17.62
             nameserver 9.9.9.9
           '';
-				};
+        };
         "nixos/repl.nix" = {
           text = ''
             {
@@ -703,8 +703,8 @@ in
           git
         ];
         script = ''
-					nixos-rebuild switch --flake fah#
-				'';
+          					nixos-rebuild switch --flake fah#
+          				'';
         startAt = "daily";
       };
       # tscert = mkIf config.services.nginx.enable {

@@ -38,48 +38,52 @@
             sops-nix.nixosModules.sops
           ];
         };
-      } // builtins.foldl' (result: name: result // {
-					"${name}" = lib.nixosSystem rec {
+      } // builtins.foldl'
+        (result: name: result // {
+          "${name}" = lib.nixosSystem rec {
             system = "x86_64-linux";
             modules = [
               ./host/${name}
               sops-nix.nixosModules.sops
               (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
             ];
-					};
-				}) {} [
-				  "dockerhost"
-				  "kbuild"
-				  "node5"
-				  "nixfw"
-				  "workstation"
-				  #"desktop"
-				] // builtins.foldl' (result: name: result // {
-					"${name}" = lib.nixosSystem rec {
+          };
+        })
+        { } [
+        "dockerhost"
+        "kbuild"
+        "node5"
+        "nixfw"
+        "workstation"
+        #"desktop"
+      ] // builtins.foldl'
+        (result: name: result // {
+          "${name}" = lib.nixosSystem rec {
             system = "x86_64-linux";
             modules = [
               ./host/${name}
               sops-nix.nixosModules.sops
-							disko.nixosModules.disko
+              disko.nixosModules.disko
               (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
-							{
-								boot = {
-									initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-									kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-									loader.systemd-boot.enable = true;
-								};
+              {
+                boot = {
+                  initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+                  kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+                  loader.systemd-boot.enable = true;
+                };
 
-								security.sudo.wheelNeedsPassword = false;
-								system.stateVersion = "23.11";
-							}
+                security.sudo.wheelNeedsPassword = false;
+                system.stateVersion = "23.11";
+              }
             ];
-					};
-				}) {} [
-				  "gitlab"
-				  "nixtesthost"
-				  "git-website"
-				  "monitoring"
-				];
+          };
+        })
+        { } [
+        "gitlab"
+        "nixtesthost"
+        "git-website"
+        "monitoring"
+      ];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
       packages.x86_64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgs; };
@@ -92,8 +96,8 @@
               sops
               ssh-to-age
             ] ++ (with self.packages.x86_64-linux; [
-						  updateAll
-						]);
+              updateAll
+            ]);
           };
           phpshell = pkgs.mkShell {
             buildInputs = with pkgs; [
