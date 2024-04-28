@@ -67,6 +67,7 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 8080 1980 ];
+  networking.firewall.interfaces.wt0.allowedTCPPorts = [ 9002 ];
   system.stateVersion = "23.11";
 }
 

@@ -58,6 +58,7 @@ in
     server = true;
     trust-builder = true;
     update = true;
+    monitoring = false;
   };
 
   networking = {

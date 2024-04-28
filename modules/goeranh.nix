@@ -73,6 +73,12 @@ in
       example = true;
       description = "update the system from flake sources";
     };
+    monitoring = mkOption {
+      type = types.bool;
+      default = true;
+      example = true;
+      description = "enable prometheus and loki monitoring and log aggregation";
+    };
   };
   config = {
     sops = mkIf (cfg.trust-builder || cfg.remote-store) {
@@ -690,10 +696,49 @@ in
     services.netbird = {
       enable = true;
     };
-    # services.tailscale = {
-    #   enable = false;
-    #   permitCertUid = mkIf config.services.nginx.enable "${builtins.toString config.users.users.nginx.uid}";
-    # };
+		services.prometheus.exporters = mkIf cfg.monitoring {
+			node = {
+				enable = true;
+				enabledCollectors = [ 
+					"cpu"
+					"ethtool"
+					"netdev"
+					"systemd"
+				];
+				port = 9002;
+			};
+		};
+    services.promtail = mkIf cfg.monitoring {
+      enable = true;
+      configuration = {
+        server = {
+          http_listen_port = 3031;
+          grpc_listen_port = 0;
+        };
+        positions = {
+          filename = "/tmp/positions.yaml";
+        };
+        clients = [{
+          url = "http://monitoring.netbird.selfhosted:3030/loki/api/v1/push";
+        }];
+        scrape_configs = [
+          {
+            job_name = "journal";
+            journal = {
+              max_age = "12h";
+              labels = {
+                job = "systemd-journal";
+                host = "${config.networking.hostName}";
+              };
+            };
+            relabel_configs = [{
+              source_labels = [ "__journal__systemd_unit" ];
+              target_label = "unit";
+            }];
+          }
+        ];
+      };
+    };
 
     systemd.services = {
       autoupdate = mkIf cfg.update {
