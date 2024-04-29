@@ -34,8 +34,6 @@
   boot.loader = {
     systemd-boot.enable = lib.mkForce false;
     grub.enable = true;
-    #grub.device = "/dev/sda";
-    #grub.mirroredBoots = [];
   };
 
   users.users.goeranh.initialPassword = "testtest";
@@ -46,7 +44,6 @@
   networking = {
     hostName = "hetzner-wg";
 
-    firewall.interfaces.eth0.allowedTCPPorts = [ 80 443 3030 ];
     useDHCP = false;
     usePredictableInterfaceNames = false;
   };
