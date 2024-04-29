@@ -83,6 +83,7 @@
         "nixtesthost"
         "git-website"
         "monitoring"
+        "hetzner-wg"
       ];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 

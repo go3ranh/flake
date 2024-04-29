@@ -1,0 +1,113 @@
+{ self, config, lib, pkgs, ... }: {
+  disko.devices = {
+    disk = {
+      sda = {
+        device = "/dev/sda";
+        type = "disk";
+        content = {
+          type = "gpt";
+          partitions = {
+            boot = {
+              size = "1M";
+              type = "EF02"; # for grub MBR
+            };
+            root = {
+              size = "100%";
+              name = "nixos";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/";
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+  goeranh = {
+    server = true;
+    update = true;
+    monitoring = false;
+  };
+
+  boot.loader = {
+    systemd-boot.enable = lib.mkForce false;
+    grub.enable = true;
+    #grub.device = "/dev/sda";
+    #grub.mirroredBoots = [];
+  };
+
+  users.users.goeranh.initialPassword = "testtest";
+
+  services = {
+    openssh.enable = true;
+  };
+  networking = {
+    hostName = "hetzner-wg";
+
+    firewall.interfaces.eth0.allowedTCPPorts = [ 80 443 3030 ];
+    useDHCP = false;
+    usePredictableInterfaceNames = false;
+  };
+  systemd = {
+    services = {
+      wireguard-setup = {
+        enable = true;
+        script = ''
+          if [ ! -d /var/lib/wireguard ]; then
+            mkdir /var/lib/wireguard
+          fi
+          if [ ! -f /var/lib/wireguard/private ]; then
+            ${pkgs.wireguard-tools.outPath}/bin/wg genkey > /var/lib/wireguard/private
+          fi
+        '';
+        wantedBy = [ "multiuser.target" ];
+      };
+    };
+    network = {
+      enable = true;
+      netdevs = {
+        "50-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 51820;
+          };
+          wireguardPeers = [
+            {
+              wireguardPeerConfig = {
+                PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
+                AllowedIPs = [ "10.200.0.2" ];
+              };
+            }
+          ];
+        };
+      };
+      networks = {
+        wg0 = {
+          matchConfig.Name = "wg0";
+          address = [ "10.200.0.1/24" ];
+          networkConfig = {
+            IPMasquerade = "ipv4";
+            IPForward = true;
+          };
+        };
+        "eth0".extraConfig = ''
+          [Match]
+          Name = eth0
+          [Network]
+          Address = 2a01:4f8:c013:27a4::1
+          Gateway = fe80::1
+          # Address = 49.13.134.146
+          # Gateway = 172.31.1.1
+          DHCP=yes
+        '';
+      };
+    };
+  };
+}
