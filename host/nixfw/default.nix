@@ -55,16 +55,16 @@
     };
     firewall = {
       enable = true;
-			interfaces = {
-				wt0 = {
-					allowedTCPPorts = [ 53 9002 ];
-					allowedUDPPorts = [ 53 ];
-				};
-				ens19 = {
-					allowedTCPPorts = [ 53 9002 ];
-					allowedUDPPorts = [ 53 ];
-				};
-			};
+      interfaces = {
+        wt0 = {
+          allowedTCPPorts = [ 53 9002 ];
+          allowedUDPPorts = [ 53 ];
+        };
+        ens19 = {
+          allowedTCPPorts = [ 53 9002 ];
+          allowedUDPPorts = [ 53 ];
+        };
+      };
       allowedTCPPorts = [ 22 ];
     };
     nat = {
