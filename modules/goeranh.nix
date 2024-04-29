@@ -635,7 +635,7 @@ in
           ] else [ ])
         ];
       etc = {
-        "resolv.conf" = {
+        "resolv.conf" = lib.mkDefault {
           text = ''
             domain netbird.selfhosted
             nameserver 100.87.17.62
@@ -696,18 +696,18 @@ in
     services.netbird = {
       enable = true;
     };
-		services.prometheus.exporters = mkIf cfg.monitoring {
-			node = {
-				enable = true;
-				enabledCollectors = [ 
-					"cpu"
-					"ethtool"
-					"netdev"
-					"systemd"
-				];
-				port = 9002;
-			};
-		};
+    services.prometheus.exporters = mkIf cfg.monitoring {
+      node = {
+        enable = true;
+        enabledCollectors = [
+          "cpu"
+          "ethtool"
+          "netdev"
+          "systemd"
+        ];
+        port = 9002;
+      };
+    };
     services.promtail = mkIf cfg.monitoring {
       enable = true;
       configuration = {
