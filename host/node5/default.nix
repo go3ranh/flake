@@ -14,42 +14,104 @@ let
 
 in
 {
-  systemd.services = {
-    ModemManager.enable = false;
-    zfs-mount.enable = false;
-    NetworkManager-wait-online.enable = false;
-    home-snapshot = {
-      path = [
-        pkgs.zfs
-      ];
-      script = "zfs snap rpool/nixos/home@$(date +%d-%m-%Y-%H-%M)";
-      serviceConfig = {
-        User = config.users.users.goeranh.name;
+  systemd = {
+    network = {
+      enable = true;
+      netdevs = {
+        "10-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 9918;
+          };
+          wireguardPeers = [
+            {
+              wireguardPeerConfig = {
+                PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
+                AllowedIPs = [ "10.200.0.0/24" ];
+                Endpoint = "49.13.134.146:51820";
+              };
+            }
+          ];
+        };
+				"20-br0" = {
+          netdevConfig = {
+            Kind = "bridge";
+            Name = "br0";
+          };
+        };
       };
-      startAt = "hourly";
+      networks = {
+				wg0 = {
+          matchConfig.Name = "wg0";
+          address = [
+            "10.200.0.2/24"
+          ];
+          DHCP = "no";
+          # gateway = [
+          #   "10.200.0.1"
+          # ];
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+				};
+				"40-br0" = {
+          matchConfig.Name = "br0";
+          bridgeConfig = {};
+          # Disable address autoconfig when no IP configuration is required
+          networkConfig.LinkLocalAddressing = "no";
+					address = [
+            "10.20.0.1/24"
+          ];
+          networkConfig = {
+            # or "routable" with IP addresses configured
+            #RequiredForOnline = "carrier";
+						ConfigureWithoutCarrier = true;
+          };
+        };
+      };
     };
-    home-backup = {
-      path = [
-        pkgs.zfs
-        pkgs.openssh
-        pkgs.iproute2
-        pkgs.gawk
-      ];
-      script = builtins.readFile ./backup;
-      serviceConfig = {
-        User = config.users.users.root.name;
+    services = {
+      ModemManager.enable = false;
+      zfs-mount.enable = false;
+      NetworkManager-wait-online.enable = false;
+      home-snapshot = {
+        path = [
+          pkgs.zfs
+        ];
+        script = "zfs snap rpool/nixos/home@$(date +%d-%m-%Y-%H-%M)";
+        serviceConfig = {
+          User = config.users.users.goeranh.name;
+        };
+        startAt = "hourly";
       };
-      startAt = "hourly";
-    };
-    var-snapshot = {
-      path = [
-        pkgs.zfs
-      ];
-      script = "zfs snap -r rpool/nixos/var@$(date +%d-%m-%Y-%H-%M)";
-      serviceConfig = {
-        User = config.users.users.goeranh.name;
+      home-backup = {
+        path = [
+          pkgs.zfs
+          pkgs.openssh
+          pkgs.iproute2
+          pkgs.gawk
+        ];
+        script = builtins.readFile ./backup;
+        serviceConfig = {
+          User = config.users.users.root.name;
+        };
+        startAt = "hourly";
       };
-      startAt = "weekly";
+      var-snapshot = {
+        path = [
+          pkgs.zfs
+        ];
+        script = "zfs snap -r rpool/nixos/var@$(date +%d-%m-%Y-%H-%M)";
+        serviceConfig = {
+          User = config.users.users.goeranh.name;
+        };
+        startAt = "weekly";
+      };
     };
   };
   networking = {
@@ -60,15 +122,6 @@ in
       "10.20.0.2" = [ "ipa.goeranh.lan" ];
       "10.30.0.2" = [ "ipa.goeranh.test" ];
     };
-
-    bridges = {
-      "br0" = { interfaces = [ ]; };
-    };
-
-    interfaces.br0.ipv4.addresses = [{
-      address = "10.20.0.1";
-      prefixLength = 24;
-    }];
 
     nat = {
       enable = true;
@@ -261,7 +314,7 @@ in
     })
     zfsRoot.bootDevices);
 
-  networking.useDHCP = lib.mkDefault true;
+  #networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode =
