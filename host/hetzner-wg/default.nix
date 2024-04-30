@@ -39,12 +39,19 @@
   users.users.goeranh.initialPassword = "testtest";
 
   services = {
-    openssh.enable = true;
+    openssh = {
+			enable = true;
+			settings = {
+				PasswordAuthentication = false;
+			};
+		};
   };
   networking = {
     hostName = "hetzner-wg";
 
     useDHCP = false;
+    # allow wireguard port
+		firewall.allowedUDPPorts = [ 51820 ];
     usePredictableInterfaceNames = false;
   };
   systemd = {
@@ -77,9 +84,17 @@
           };
           wireguardPeers = [
             {
+              # node5
               wireguardPeerConfig = {
                 PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
                 AllowedIPs = [ "10.200.0.2" ];
+              };
+            }
+            {
+              # fedora vm
+              wireguardPeerConfig = {
+                PublicKey = "D0QJSN9zM1lxNsfrgYVA5DVyE6woz5U27kqQpQF13CQ=";
+                AllowedIPs = [ "10.200.0.3" ];
               };
             }
           ];
