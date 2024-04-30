@@ -109,16 +109,19 @@
             IPForward = true;
           };
         };
-        "eth0".extraConfig = ''
-          [Match]
-          Name = eth0
-          [Network]
-          Address = 2a01:4f8:c013:27a4::1
-          Gateway = fe80::1
-          # Address = 49.13.134.146
-          # Gateway = 172.31.1.1
-          DHCP=yes
-        '';
+        "eth0" = {
+          matchConfig.Name = "eth0";
+          address = [ 
+					  "2a01:4f8:c013:27a4::1"
+					];
+          gateway = [
+            "fe80::1"
+          ];
+          DHCP = "yes";
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+				};
       };
     };
   };
