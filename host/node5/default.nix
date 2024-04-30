@@ -38,7 +38,7 @@ in
             }
           ];
         };
-				"20-br0" = {
+        "20-br0" = {
           netdevConfig = {
             Kind = "bridge";
             Name = "br0";
@@ -46,7 +46,7 @@ in
         };
       };
       networks = {
-				wg0 = {
+        wg0 = {
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.2/24"
@@ -58,19 +58,19 @@ in
           networkConfig = {
             IPv6AcceptRA = false;
           };
-				};
-				"40-br0" = {
+        };
+        "40-br0" = {
           matchConfig.Name = "br0";
-          bridgeConfig = {};
+          bridgeConfig = { };
           # Disable address autoconfig when no IP configuration is required
           networkConfig.LinkLocalAddressing = "no";
-					address = [
+          address = [
             "10.20.0.1/24"
           ];
           networkConfig = {
             # or "routable" with IP addresses configured
             #RequiredForOnline = "carrier";
-						ConfigureWithoutCarrier = true;
+            ConfigureWithoutCarrier = true;
           };
         };
       };

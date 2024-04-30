@@ -31,18 +31,7 @@
 
   networking = {
     hostName = "nixfw";
-    interfaces = {
-      ens18.ipv4.addresses = [{
-        address = "10.16.23.95";
-        prefixLength = 21;
-      }];
-      ens19.ipv4.addresses = [{
-        address = "10.0.0.1";
-        prefixLength = 24;
-      }];
-    };
-    defaultGateway = "10.16.23.1";
-    nameservers = [ "1.1.1.1" ];
+		useDHCP = lib.mkForce false;
     nftables = {
       enable = true;
       ruleset = ''
@@ -123,6 +112,59 @@
         			recursion yes;
         			allow-recursion { any; };
         			'';
+    };
+  };
+
+  systemd = {
+    network = {
+			enable = true;
+      netdevs = {
+        "10-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 9918;
+          };
+          wireguardPeers = [
+            {
+              wireguardPeerConfig = {
+                PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
+                AllowedIPs = [ "10.200.0.0/24" ];
+                Endpoint = "49.13.134.146:51820";
+              };
+            }
+          ];
+        };
+      };
+      networks = {
+        wg0 = {
+          matchConfig.Name = "wg0";
+          address = [
+            "10.200.0.5/24"
+          ];
+          DHCP = "no";
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+        ens18 = {
+          matchConfig.Name = "ens18";
+          address = [
+            "10.16.23.95/21"
+          ];
+          DHCP = "no";
+          gateway = [
+            "10.16.23.1"
+          ];
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+      };
     };
   };
 

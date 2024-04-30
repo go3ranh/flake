@@ -40,18 +40,18 @@
 
   services = {
     openssh = {
-			enable = true;
-			settings = {
-				PasswordAuthentication = false;
-			};
-		};
+      enable = true;
+      settings = {
+        PasswordAuthentication = false;
+      };
+    };
   };
   networking = {
     hostName = "hetzner-wg";
 
     useDHCP = false;
     # allow wireguard port
-		firewall.allowedUDPPorts = [ 51820 ];
+    firewall.allowedUDPPorts = [ 51820 ];
     usePredictableInterfaceNames = false;
   };
   systemd = {
@@ -97,6 +97,20 @@
                 AllowedIPs = [ "10.200.0.3" ];
               };
             }
+            {
+              # pitest
+              wireguardPeerConfig = {
+                PublicKey = "F4yaZ9zabNpQSpV+fXAvla6klsv6SppG3Ic3IMlAxnE=";
+                AllowedIPs = [ "10.200.0.4" ];
+              };
+            }
+            {
+              # nixfw
+              wireguardPeerConfig = {
+                PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
+                AllowedIPs = [ "10.200.0.5" ];
+              };
+            }
           ];
         };
       };
@@ -111,9 +125,9 @@
         };
         "eth0" = {
           matchConfig.Name = "eth0";
-          address = [ 
-					  "2a01:4f8:c013:27a4::1"
-					];
+          address = [
+            "2a01:4f8:c013:27a4::1"
+          ];
           gateway = [
             "fe80::1"
           ];
@@ -121,7 +135,7 @@
           networkConfig = {
             IPv6AcceptRA = false;
           };
-				};
+        };
       };
     };
   };

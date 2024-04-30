@@ -65,27 +65,11 @@ in
     hostName = "pitest"; # Define your hostname.
     nftables.enable = true;
     useDHCP = false;
-    bridges.br0.interfaces = [ ];
-    interfaces = {
-      eth0.ipv4.addresses = [
-        {
-          address = "192.168.178.2";
-          prefixLength = 24;
-        }
-      ];
-      br0.ipv4.addresses = [
-        {
-          address = "10.10.0.1";
-          prefixLength = 24;
-        }
-      ];
-    };
-    defaultGateway = "192.168.178.1";
-
     firewall = {
       enable = true;
       interfaces = {
         "wt0".allowedTCPPorts = [ 22 80 443 2222 ];
+        "wg0".allowedTCPPorts = [ 22 80 443 2222 ];
         "eth0".allowedTCPPorts = [ 22 ];
       };
     };
@@ -232,6 +216,73 @@ in
   };
 
   systemd = {
+    network = {
+      enable = true;
+      netdevs = {
+        "10-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 9918;
+          };
+          wireguardPeers = [
+            {
+              wireguardPeerConfig = {
+                PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
+                AllowedIPs = [ "10.200.0.0/24" ];
+                Endpoint = "49.13.134.146:51820";
+              };
+            }
+          ];
+        };
+        "20-br0" = {
+          netdevConfig = {
+            Kind = "bridge";
+            Name = "br0";
+          };
+        };
+      };
+      networks = {
+        eth0 = {
+          matchConfig.Name = "eth0";
+          address = [
+            "192.168.178.2/24"
+          ];
+          DHCP = "no";
+          gateway = [
+            "192.168.178.1"
+          ];
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+        wg0 = {
+          matchConfig.Name = "wg0";
+          address = [
+            "10.200.0.4/24"
+          ];
+          DHCP = "no";
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+        "40-br0" = {
+          matchConfig.Name = "br0";
+          bridgeConfig = { };
+          networkConfig.LinkLocalAddressing = "no";
+          address = [
+            "10.10.0.1/24"
+          ];
+          networkConfig = {
+            ConfigureWithoutCarrier = true;
+          };
+        };
+      };
+    };
     services = {
       nix-daemon.serviceConfig = {
         LimitNOFILE = lib.mkForce 8192;
