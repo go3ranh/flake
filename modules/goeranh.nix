@@ -551,6 +551,7 @@ in
         plugins = with nixpkgs.legacyPackages.${arch}.tmuxPlugins; [
           sidebar # prefix + tab / backspace
           fingers # quick copy paste prefix + f
+          vim-tmux-navigator
         ];
         extraConfig = ''
           bind '§' splitw -hc '#{pane_current_path}'
@@ -559,30 +560,51 @@ in
           bind y copy-mode
           #vi scrolling
           set-window-option -g mode-keys vi
-          set -g pane-border-status top
-          set -g pane-border-format " [ ###P #T ] "
+          # set -g pane-border-status top
+          # set -g pane-border-format " [ ###P #T ] "
           #u/f pageup/pagedown
           bind -T copy-mode u send -X page-up
           bind -T copy-mode f send -X page-down
+					is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
+
+  bind-key -n 'M-h' if-shell "$is_vim" 'send-keys M-h'  'select-pane -L'
+  bind-key -n 'M-j' if-shell "$is_vim" 'send-keys M-j'  'select-pane -D'
+  bind-key -n 'M-k' if-shell "$is_vim" 'send-keys M-k'  'select-pane -U'
+  bind-key -n 'M-l' if-shell "$is_vim" 'send-keys M-l'  'select-pane -R'
+
+  # Forwarding <C-\\> needs different syntax, depending on tmux version
+  tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
+  if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
+  if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+
+  bind-key -T copy-mode-vi 'M-h' select-pane -L
+  bind-key -T copy-mode-vi 'M-j' select-pane -D
+  bind-key -T copy-mode-vi 'M-k' select-pane -U
+  bind-key -T copy-mode-vi 'M-l' select-pane -R
+  bind-key -T copy-mode-vi 'M-\' select-pane -l
           
-          bind -n M-h select-pane -L
-          bind -n M-l select-pane -R
-          bind -n M-k select-pane -U
-          bind -n M-j select-pane -D
-          bind -n M-H select-pane -L
-          bind -n M-L select-pane -R
-          bind -n M-K select-pane -U
-          bind -n M-J select-pane -D
-          bind -n M-O display-popup
-          bind -n M-t display-popup
-          bind u display-popup
-          bind h select-pane -L
-          bind j select-pane -D
-          bind k select-pane -U
-          bind l select-pane -R
-          
-          bind -n M-H previous-window
-          bind -n M-L next-window
+# use bind keys
+          # bind -n M-h select-pane -L
+          # bind -n M-l select-pane -R
+          # bind -n M-k select-pane -U
+          # bind -n M-j select-pane -D
+          # bind -n M-H select-pane -L
+          # bind -n M-L select-pane -R
+          # bind -n M-K select-pane -U
+          # bind -n M-J select-pane -D
+          # bind -n M-O display-popup
+          # bind -n M-t display-popup
+          # bind u display-popup
+          # bind h select-pane -L
+          # bind j select-pane -D
+          # bind k select-pane -U
+          # bind l select-pane -R
+          # 
+          # bind -n M-H previous-window
+          # bind -n M-L next-window
         '';
       };
     };

@@ -31,6 +31,8 @@
           nvim-treesitter-parsers.sql
           nvim-treesitter-parsers.ssh_config
 
+					vim-tmux-navigator
+
           plenary-nvim
           telescope-nvim
 
@@ -265,6 +267,12 @@
           opt = plugins;
         };
         customRC = ''
+				  let g:tmux_navigator_no_mappings = 1
+					noremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
+          noremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
+          noremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
+          noremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
+          noremap <silent> <M-#> :<C-U>TmuxNavigatePrevious<cr>
 
           autocmd FileType nix set tabstop=2
           autocmd FileType nix set softtabstop=2
