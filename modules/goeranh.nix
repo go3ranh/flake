@@ -171,6 +171,7 @@ in
           rsync
           # tailscale
           file
+					zoxide
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
