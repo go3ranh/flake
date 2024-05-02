@@ -29,13 +29,14 @@ in
             ListenPort = 9918;
           };
           wireguardPeers = [
-            {
+						{
               wireguardPeerConfig = {
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
                 AllowedIPs = [ "10.200.0.0/24" ];
                 Endpoint = "49.13.134.146:51820";
+								PersistentKeepalive = 30;
               };
-            }
+						}
           ];
         };
         "20-br0" = {
@@ -52,8 +53,13 @@ in
             "10.200.0.2/24"
           ];
           DHCP = "no";
-          # gateway = [
-          #   "10.200.0.1"
+          # routes = [
+					#   {
+					# 		routeConfig = {
+					# 			Gateway = "10.200.0.5";
+					# 			Destination = "10.0.0.0/24";
+					# 		};
+					# 	}
           # ];
           networkConfig = {
             IPv6AcceptRA = false;
