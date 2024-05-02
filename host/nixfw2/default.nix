@@ -88,8 +88,39 @@
     network = {
 			enable = true;
       netdevs = {
+        "10-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 9918;
+          };
+          wireguardPeers = [
+						{
+              wireguardPeerConfig = {
+                PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
+                AllowedIPs = [ "10.220.0.0/24" ];
+                Endpoint = "10.16.23.95:51820";
+								PersistentKeepalive = 30;
+              };
+						}
+          ];
+        };
       };
       networks = {
+        wg0 = {
+          matchConfig.Name = "wg0";
+          address = [
+            "10.220.0.2/24"
+          ];
+          DHCP = "no";
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
         ens18 = {
           matchConfig.Name = "ens18";
           address = [

@@ -45,6 +45,8 @@
     firewall = {
       enable = true;
       interfaces = {
+        ens18 = {
+				};
         wt0 = {
           allowedTCPPorts = [ 53 9002 ];
           allowedUDPPorts = [ 53 ];
@@ -55,6 +57,7 @@
         };
       };
       allowedTCPPorts = [ 22 ];
+			allowedUDPPorts = [ 51820 ];
     };
     nat = {
       enable = true;
@@ -119,6 +122,26 @@
     network = {
 			enable = true;
       netdevs = {
+        "50-wg1" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg1";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 51820;
+          };
+          wireguardPeers = [
+            {
+              # node5
+              wireguardPeerConfig = {
+                PublicKey = "hcqq9ayewp2ZuNvqI/BZ+y31G6yuosdmkIFJwO24hUg=";
+                AllowedIPs = [ "10.220.0.2" ];
+              };
+            }
+          ];
+        };
         "10-wg0" = {
           netdevConfig = {
             Kind = "wireguard";
@@ -150,6 +173,14 @@
           DHCP = "no";
           networkConfig = {
             IPv6AcceptRA = false;
+          };
+        };
+        wg1 = {
+          matchConfig.Name = "wg1";
+          address = [ "10.220.0.1/24" ];
+          networkConfig = {
+            IPMasquerade = "ipv4";
+            IPForward = true;
           };
         };
         ens18 = {
