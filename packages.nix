@@ -1,4 +1,4 @@
-{ inputs, lib, self, archpkgs, ... }@input: {
+{ inputs, lib, self, archpkgs, ... }@input: rec {
   customvim = archpkgs.neovim.override {
     vimAlias = true;
     configure =
@@ -31,7 +31,7 @@
           nvim-treesitter-parsers.sql
           nvim-treesitter-parsers.ssh_config
 
-					vim-tmux-navigator
+          vim-tmux-navigator
 
           plenary-nvim
           telescope-nvim
@@ -267,21 +267,21 @@
           opt = plugins;
         };
         customRC = ''
-				  let g:tmux_navigator_no_mappings = 1
-					noremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
-          noremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
-          noremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
-          noremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
-          noremap <silent> <M-#> :<C-U>TmuxNavigatePrevious<cr>
+          				  let g:tmux_navigator_no_mappings = 1
+          					noremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
+                    noremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
+                    noremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
+                    noremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
+                    noremap <silent> <M-#> :<C-U>TmuxNavigatePrevious<cr>
 
-          autocmd FileType nix set tabstop=2
-          autocmd FileType nix set softtabstop=2
-          autocmd FileType nix set shiftwidth=2
-          autocmd FileType yaml set tabstop=2
-          autocmd FileType yaml set softtabstop=2
-          autocmd FileType yaml set shiftwidth=2
+                    autocmd FileType nix set tabstop=2
+                    autocmd FileType nix set softtabstop=2
+                    autocmd FileType nix set shiftwidth=2
+                    autocmd FileType yaml set tabstop=2
+                    autocmd FileType yaml set softtabstop=2
+                    autocmd FileType yaml set shiftwidth=2
 
-          luafile ${luaconfig}
+                    luafile ${luaconfig}
         '';
       };
   };
