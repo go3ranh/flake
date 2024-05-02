@@ -219,7 +219,7 @@ in
 
           # gitkraken
           # jetbrains.clion
-          # jetbrains.idea-community
+          jetbrains.idea-community
           # jetbrains.datagrip
           # jetbrains.jdk
           # jetbrains.phpstorm
