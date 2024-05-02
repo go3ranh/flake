@@ -603,8 +603,8 @@ in
                     # bind k select-pane -U
                     # bind l select-pane -R
                     # 
-                    # bind -n M-H previous-window
-                    # bind -n M-L next-window
+                    bind -n M-H previous-window
+                    bind -n M-L next-window
         '';
       };
     };
