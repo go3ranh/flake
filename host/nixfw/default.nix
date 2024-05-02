@@ -165,6 +165,16 @@
             IPv6AcceptRA = false;
           };
         };
+        ens19 = {
+          matchConfig.Name = "ens19";
+          address = [
+            "10.0.0.1/24"
+          ];
+          DHCP = "no";
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
       };
     };
   };
