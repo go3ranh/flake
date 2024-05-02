@@ -171,7 +171,6 @@ in
           rsync
           # tailscale
           file
-					zoxide
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
@@ -652,6 +651,7 @@ in
             unzip
             wget
             zellij
+						zoxide
           ])
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
