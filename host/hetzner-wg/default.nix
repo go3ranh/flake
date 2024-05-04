@@ -122,14 +122,25 @@
             IPMasquerade = "ipv4";
             IPForward = true;
           };
+          routes = [
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.0.0.0/24";
+							};
+						}
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.0.0.0/24";
+							};
+						}
+						];
         };
         "eth0" = {
           matchConfig.Name = "eth0";
           address = [
             "2a01:4f8:c013:27a4::1"
-          ];
-          gateway = [
-            "fe80::1"
           ];
           DHCP = "yes";
           networkConfig = {
