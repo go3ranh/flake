@@ -661,7 +661,8 @@ in
         "resolv.conf" = lib.mkDefault {
           text = ''
             domain netbird.selfhosted
-            nameserver 100.87.17.62
+            #nameserver 100.87.17.62
+            nameserver 10.0.0.1
             nameserver 9.9.9.9
           '';
         };
