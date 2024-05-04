@@ -103,12 +103,12 @@
 
               onlyoffice.kbuild  IN  CNAME kbuild
               kbuild             IN  A     100.87.25.209
-              pitest             IN  A     100.87.123.127
-              nixfw              IN  A     100.87.17.62
+              pitest             IN  A     10.200.0.4
+              nixfw              IN  A     10.200.0.5
               dockerhost         IN  A     10.0.0.132
               git-website        IN  A     10.0.0.23
               monitoring         IN  A     10.0.0.26
-              node5              IN  A     100.87.55.241
+              node5              IN  A     10.200.0.2
               server-gitea       IN  A     100.87.18.24
               workstation        IN  A     100.87.106.167
               oraclearm          IN  A     100.87.250.85
