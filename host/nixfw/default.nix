@@ -145,7 +145,7 @@
               # node5
               wireguardPeerConfig = {
                 PublicKey = "hcqq9ayewp2ZuNvqI/BZ+y31G6yuosdmkIFJwO24hUg=";
-                AllowedIPs = [ "10.220.0.2" ];
+                AllowedIPs = [ "10.220.0.2" "10.0.1.0/24" ];
               };
             }
           ];
@@ -181,13 +181,21 @@
           DHCP = "no";
           networkConfig = {
             IPv6AcceptRA = false;
+            IPForward = true;
           };
         };
         wg1 = {
           matchConfig.Name = "wg1";
           address = [ "10.220.0.1/24" ];
+					routes = [
+					  {
+							routeConfig = {
+								Gateway = "10.220.0.2";
+								Destination = "10.0.1.0/24";
+							};
+						}
+					];
           networkConfig = {
-            IPMasquerade = "ipv4";
             IPForward = true;
           };
         };
