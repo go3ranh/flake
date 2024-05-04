@@ -108,7 +108,7 @@
               # nixfw
               wireguardPeerConfig = {
                 PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
-                AllowedIPs = [ "10.200.0.5" ];
+                AllowedIPs = [ "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" ];
               };
             }
           ];

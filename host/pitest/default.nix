@@ -233,8 +233,9 @@ in
             {
               wireguardPeerConfig = {
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
-                AllowedIPs = [ "10.200.0.0/24" ];
+                AllowedIPs = [ "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" ];
                 Endpoint = "49.13.134.146:51820";
+								PersistentKeepalive = 30;
               };
             }
           ];
