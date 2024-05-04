@@ -61,13 +61,13 @@
       };
       allowedTCPPorts = [ 22 ];
     };
-    # nat = {
-    #   enable = true;
-    #   internalInterfaces = [ "ens19" ];
-    #   externalInterface = "ens18";
-    #   forwardPorts = [
-    #   ];
-    # };
+    nat = {
+      enable = true;
+      internalInterfaces = [ "ens19" ];
+      externalInterface = "ens18";
+      forwardPorts = [
+      ];
+    };
   };
 
   security.sudo = {
@@ -102,7 +102,7 @@
 						{
               wireguardPeerConfig = {
                 PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
-                AllowedIPs = [ "10.220.0.0/24" ];
+                AllowedIPs = [ "10.220.0.0/24" "10.0.0.0/24" ];
                 Endpoint = "10.16.23.95:51820";
 								PersistentKeepalive = 30;
               };
@@ -120,6 +120,14 @@
           networkConfig = {
             IPv6AcceptRA = false;
           };
+					routes = [
+					  {
+							routeConfig = {
+								Gateway = "10.220.0.1";
+								Destination = "10.0.0.0/24";
+							};
+						}
+					];
         };
         ens18 = {
           matchConfig.Name = "ens18";
@@ -137,9 +145,10 @@
         ens19 = {
           matchConfig.Name = "ens19";
           address = [
-            "10.0.0.2/24"
+            "10.0.1.1/24"
           ];
           DHCP = "no";
+					dns = [ "9.9.9.9" ];
           networkConfig = {
             IPv6AcceptRA = false;
           };
