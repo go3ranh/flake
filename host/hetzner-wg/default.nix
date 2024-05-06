@@ -26,6 +26,7 @@
     };
   };
   goeranh = {
+    netbird = false;
     server = true;
     update = true;
     monitoring = false;
@@ -52,7 +53,47 @@
     useDHCP = false;
     # allow wireguard port
     firewall.allowedUDPPorts = [ 51820 ];
+    firewall.enable = lib.mkForce false;
     usePredictableInterfaceNames = false;
+
+		nftables = {
+			ruleset = ''
+			  table inet filter {
+					counter wireguard-udp {}
+					counter node5-traffic {}
+					counter node5-ping {}
+					counter node5-forward-traffic {}
+					counter node5-forward-ping {}
+					counter drop-input {}
+					chain input {
+						type filter hook input priority 0;
+						iifname lo accept
+						ct state {established, related} accept
+						# allow wireguard traffic
+						ip daddr 49.13.134.146 udp dport { 51820 } counter name wireguard-udp accept
+						# ip daddr 49.13.134.146 tcp dport { 22 } counter name public-ssh accept
+						ip saddr { 10.200.0.2 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter name node5-ping accept
+						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter name node5-traffic accept
+
+						counter name drop-input drop
+					}
+
+					chain output {
+						type filter hook output priority 0;
+						accept
+					}
+
+					chain forward {
+						type filter hook forward priority 0;
+						ct state {established, related} accept
+						#iifname wg0 oifname wg0 counter accept
+						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } tcp dport { 22, 80, 443 } counter name node5-forward-traffic accept
+						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter name node5-forward-ping accept
+						counter drop
+					}
+				}
+			'';
+		};
   };
   systemd = {
     services = {
@@ -108,7 +149,28 @@
               # nixfw
               wireguardPeerConfig = {
                 PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
-                AllowedIPs = [ "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" ];
+                AllowedIPs = [ "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
+              };
+            }
+            {
+              # iphone 6
+              wireguardPeerConfig = {
+                PublicKey = "37dTDJ0/ThwTvJLHDzPSHq7bERSREAgnhCIgKAhc4Qc=";
+                AllowedIPs = [ "10.200.0.6" ];
+              };
+            }
+            {
+              # iphone 13
+              wireguardPeerConfig = {
+                PublicKey = "KvqfWEJYeBSQfPZ5c9J57izdG6HQ8rLWLaeINf0nHk4=";
+                AllowedIPs = [ "10.200.0.7" ];
+              };
+            }
+            {
+              # pi5
+              wireguardPeerConfig = {
+                PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
+                AllowedIPs = [ "10.200.0.8" ];
               };
             }
           ];
@@ -132,7 +194,13 @@
 					  {
 							routeConfig = {
 								Gateway = "10.200.0.5";
-								Destination = "10.0.0.0/24";
+								Destination = "10.0.1.0/24";
+							};
+						}
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.16.17.0/21";
 							};
 						}
 						];
