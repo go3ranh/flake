@@ -79,6 +79,12 @@ in
       example = true;
       description = "enable prometheus and loki monitoring and log aggregation";
     };
+    netbird = mkOption {
+      type = types.bool;
+      default = true;
+      example = false;
+      description = "enable netbird vpn";
+    };
   };
   config = {
     sops = mkIf (cfg.trust-builder || cfg.remote-store) {
@@ -707,7 +713,7 @@ in
     nixpkgs.config.allowUnfree = true;
     networking.firewall.enable = true;
     networking.nftables.enable = true;
-    networking.nameservers = [ "100.87.17.62" "9.9.9.9" ];
+    networking.nameservers = [ "10.0.0.1" "9.9.9.9" ];
     networking.domain = "netbird.selfhosted";
     networking.search = [ "netbird.selfhosted" ];
 
@@ -717,7 +723,7 @@ in
       enable = true;
       openFirewall = true;
     };
-    services.netbird = {
+    services.netbird = lib.mkIf cfg.netbird {
       enable = true;
     };
     services.prometheus.exporters = mkIf cfg.monitoring {

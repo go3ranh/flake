@@ -127,6 +127,12 @@
 								Destination = "10.0.0.0/24";
 							};
 						}
+					  {
+							routeConfig = {
+								Gateway = "10.220.0.1";
+								Destination = "10.200.0.0/24";
+							};
+						}
 					];
         };
         ens18 = {

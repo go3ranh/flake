@@ -32,7 +32,7 @@ in
 						{
               wireguardPeerConfig = {
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
-                AllowedIPs = [ "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" ];
+                AllowedIPs = [ "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
                 Endpoint = "49.13.134.146:51820";
 								PersistentKeepalive = 30;
               };
@@ -65,6 +65,12 @@ in
 							routeConfig = {
 								Gateway = "10.200.0.5";
 								Destination = "10.0.1.0/24";
+							};
+						}
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.16.17.0/21";
 							};
 						}
           ];
@@ -188,6 +194,7 @@ in
   };
 
   goeranh = {
+    netbird = false;
     desktop = true;
     trust-builder = true;
     development = true;

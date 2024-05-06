@@ -84,6 +84,7 @@
     wheelNeedsPassword = false;
   };
   goeranh = {
+		netbird = false;
     server = true;
     trust-builder = false;
     remote-store = false;

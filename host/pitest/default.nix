@@ -55,6 +55,7 @@ in
   };
 
   goeranh = {
+    netbird = false;
     server = true;
     trust-builder = true;
     update = true;
@@ -267,6 +268,20 @@ in
             "10.200.0.4/24"
           ];
           DHCP = "no";
+          routes = [
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.0.0.0/24";
+							};
+						}
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.0.1.0/24";
+							};
+						}
+					];
           networkConfig = {
             IPv6AcceptRA = false;
           };
