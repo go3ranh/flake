@@ -64,6 +64,7 @@
 					counter node5-ping {}
 					counter node5-forward-traffic {}
 					counter node5-forward-ping {}
+					counter immich-iphone {}
 					counter drop-input {}
 					chain input {
 						type filter hook input priority 0;
@@ -89,6 +90,7 @@
 						#iifname wg0 oifname wg0 counter accept
 						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } tcp dport { 22, 80, 443 } counter name node5-forward-traffic accept
 						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter name node5-forward-ping accept
+						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter name immich-iphone accept
 						counter drop
 					}
 				}
