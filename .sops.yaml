@@ -43,3 +43,9 @@ creation_rules:
     - pgp: *admins
       age:
       - *kbuild
+
+  - path_regex: host/nixfw/[^/]+\.yaml$
+    key_groups:
+    - pgp: *admins
+      age:
+      - *nixfw
