@@ -80,11 +80,12 @@
         })
         { } [
         "gitlab"
-        "nixtesthost"
         "git-website"
-        "monitoring"
         "hetzner-wg"
+        "kanidm"
+        "monitoring"
         "nixfw2"
+        "nixtesthost"
       ];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
