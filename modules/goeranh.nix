@@ -638,6 +638,7 @@ in
           [ self.packages.${arch}.customvim ]
           (with nixpkgs.legacyPackages.${arch}; [
             linuxKernel.packages.linux_zen.perf
+						wireguard-tools
             bpftrace
             bash
             bat

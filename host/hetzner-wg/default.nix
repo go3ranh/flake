@@ -31,6 +31,9 @@
     update = true;
     monitoring = false;
   };
+	environment.systemPackages = with pkgs; [
+	  wireguard-tools
+	];
 
   boot.loader = {
     systemd-boot.enable = lib.mkForce false;
@@ -84,19 +87,59 @@
 						accept
 					}
 
+					chain forward-wg {
+						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } tcp dport { 22, 80, 443 } counter name node5-forward-traffic accept
+						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter name node5-forward-ping accept
+						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter name immich-iphone accept
+					}
 					chain forward {
 						type filter hook forward priority 0;
 						ct state {established, related} accept
 						#iifname wg0 oifname wg0 counter accept
-						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } tcp dport { 22, 80, 443 } counter name node5-forward-traffic accept
-						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter name node5-forward-ping accept
-						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter name immich-iphone accept
+						iifname "wg0" oifname "wg0" jump forward-wg
 						counter drop
 					}
 				}
 			'';
 		};
+    nat = {
+      enable = true;
+      internalInterfaces = [ "br0" ];
+      externalInterface = "eth0";
+		};
   };
+
+  containers = {
+    public-ssh = {
+      autoStart = true;
+      privateNetwork = true;
+      hostBridge = "br0";
+      localAddress = "10.10.0.2/24";
+      config = { config, pkgs, ... }: {
+
+        system.stateVersion = "23.11";
+
+				users.users.goeranh = {
+					isNormalUser = true;
+				};
+				services.openssh.enable = true;
+				environment.systemPackages = with pkgs; [
+				  htop
+			  ];
+
+        networking = {
+          defaultGateway.address = "10.10.0.1";
+          firewall = {
+            enable = true;
+            allowedTCPPorts = [ 22 ];
+          };
+        };
+
+        environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
+      };
+    };
+  };
+
   systemd = {
     services = {
       wireguard-setup = {
@@ -177,6 +220,12 @@
             }
           ];
         };
+        "20-br0" = {
+          netdevConfig = {
+            Kind = "bridge";
+            Name = "br0";
+          };
+        };
       };
       networks = {
         wg0 = {
@@ -215,6 +264,17 @@
           DHCP = "yes";
           networkConfig = {
             IPv6AcceptRA = false;
+          };
+        };
+        "40-br0" = {
+          matchConfig.Name = "br0";
+          bridgeConfig = { };
+          networkConfig.LinkLocalAddressing = "no";
+          address = [
+            "10.20.0.1/24"
+          ];
+          networkConfig = {
+            ConfigureWithoutCarrier = true;
           };
         };
       };
