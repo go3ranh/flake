@@ -71,12 +71,13 @@
 						#ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } tcp dport { 22, 80, 443 } counter accept
 						#ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
 						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { icmp, tcp, udp } counter accept
-						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
+						ip saddr 10.200.0.7 ip daddr { 10.0.0.132, 10.200.0.1, 10.0.0.1 } ip protocol tcp counter accept
 						counter drop
 					}
 
 					chain lan-outbound {
 						ip saddr { 10.0.0.0/24 } tcp dport { 80, 443 } counter accept
+						ip saddr { 10.0.0.0/24 } ip protocol icmp counter accept
 						counter drop
 					}
 
