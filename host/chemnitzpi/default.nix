@@ -55,7 +55,6 @@ in
   };
 
   goeranh = {
-    netbird = false;
     server = true;
     trust-builder = true;
     update = true;

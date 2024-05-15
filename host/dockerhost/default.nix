@@ -10,7 +10,6 @@
   goeranh = {
     server = true;
     update = true;
-    netbird = false;
   };
 
   security = {

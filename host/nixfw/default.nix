@@ -148,7 +148,6 @@
     wheelNeedsPassword = false;
   };
   goeranh = {
-		netbird = false;
     server = true;
     trust-builder = false;
     remote-store = false;
@@ -158,13 +157,13 @@
     bind = {
       enable = true;
       zones = {
-        "netbird.selfhosted" =
+        "${config.networking.domain}" =
           let
             zonefile = pkgs.writeText "zone" ''
-              $ORIGIN netbird.selfhosted.
+              $ORIGIN ${config.networking.domain}.
               $TTL 3600
-              netbird.selfhosted.  IN  SOA   nixfw.netbird.selfhosted. goeranh.netbird.selfhosted. ( 2020091025 7200 3600 1209600 3600 )
-              netbird.selfhosted.  IN  NS    nixfw
+              ${config.networking.domain}.  IN  SOA   nixfw.${config.networking.domain}. goeranh.${config.networking.domain}. ( 2020091025 7200 3600 1209600 3600 )
+              ${config.networking.domain}.  IN  NS    nixfw
 
               onlyoffice.kbuild  IN  CNAME kbuild
               kbuild             IN  A     100.87.25.209

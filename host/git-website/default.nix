@@ -52,7 +52,7 @@
           filename = "/tmp/positions.yaml";
         };
         clients = [{
-          url = "http://monitoring.netbird.selfhosted:3030/loki/api/v1/push";
+          url = "http://monitoring.${config.networking.domain}:3030/loki/api/v1/push";
         }];
         scrape_configs = [
           {

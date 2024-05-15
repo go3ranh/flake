@@ -1,6 +1,7 @@
 { self, inputs, config, arch, nixpkgs, lib, ... }:
 with lib;
 let
+  domain = "goeranh.local";
   gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
     gnome.baobab # disk usage analyzer
     gnome.cheese # photo booth
@@ -78,12 +79,6 @@ in
       default = true;
       example = true;
       description = "enable prometheus and loki monitoring and log aggregation";
-    };
-    netbird = mkOption {
-      type = types.bool;
-      default = true;
-      example = false;
-      description = "enable netbird vpn";
     };
   };
   config = {
@@ -667,8 +662,7 @@ in
       etc = {
         "resolv.conf" = lib.mkDefault {
           text = ''
-            domain netbird.selfhosted
-            #nameserver 100.87.17.62
+            domain ${domain}
             nameserver 10.0.0.1
             nameserver 9.9.9.9
           '';
@@ -715,17 +709,14 @@ in
     networking.firewall.enable = true;
     networking.nftables.enable = true;
     networking.nameservers = [ "10.0.0.1" "9.9.9.9" ];
-    networking.domain = "netbird.selfhosted";
-    networking.search = [ "netbird.selfhosted" ];
+    networking.domain = "${domain}";
+    networking.search = [ "${domain}" ];
 
     console.keyMap = "de";
 
     services.openssh = mkIf cfg.server {
       enable = true;
       openFirewall = true;
-    };
-    services.netbird = lib.mkIf cfg.netbird {
-      enable = true;
     };
     services.prometheus.exporters = mkIf cfg.monitoring {
       node = {
@@ -750,7 +741,7 @@ in
           filename = "/tmp/positions.yaml";
         };
         clients = [{
-          url = "http://monitoring.netbird.selfhosted:3030/loki/api/v1/push";
+          url = "http://monitoring.${domain}:3030/loki/api/v1/push";
         }];
         scrape_configs = [
           {

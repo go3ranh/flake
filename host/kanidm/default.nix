@@ -34,17 +34,19 @@
   goeranh = {
     server = true;
     update = true;
-    netbird = false;
   };
 
   services = {
     openssh.enable = true;
 		# kanidm = {
-		# 	enable = true;
+		# 	enableServer = true;
+		# 	enableClient = true;
+		# 	serverSettings = {
+		# 	};
 		# };
   };
   networking = {
-    hostName = "gitlab";
+    hostName = "kanidm";
 
     interfaces.ens18.ipv4.addresses = [{
       address = "10.0.0.2";

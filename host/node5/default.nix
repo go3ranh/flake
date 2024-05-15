@@ -194,7 +194,6 @@ in
   };
 
   goeranh = {
-    netbird = false;
     desktop = true;
     trust-builder = true;
     development = true;
