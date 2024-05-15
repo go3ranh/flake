@@ -1,19 +1,19 @@
 { config, pkgs, lib, ... }:
 
 {
-  sops = {
-    # This will automatically import SSH keys as age keys
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-    defaultSopsFile = ./secrets.yaml;
-    defaultSopsFormat = "yaml";
-    secrets = {
-      "dbpass" = {
-        owner = "librenms";
-        group = "librenms";
-        mode = "0440";
-      };
-    };
-  };
+  # sops = {
+  #   # This will automatically import SSH keys as age keys
+  #   age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  #   defaultSopsFile = ./secrets.yaml;
+  #   defaultSopsFormat = "yaml";
+  #   secrets = {
+  #     "dbpass" = {
+  #       owner = "librenms";
+  #       group = "librenms";
+  #       mode = "0440";
+  #     };
+  #   };
+  # };
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   fileSystems."/" =
@@ -53,11 +53,13 @@
 						type filter hook input priority 0;
 						iifname lo accept
 						ct state {established, related} accept
-						ip saddr { 10.200.0.2, 10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter accept
-						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
+						ip saddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24, 10.220.0.2 } ip protocol icmp counter accept
+						ip saddr { 10.200.0.2 } ip protocol { tcp, udp, icmp } accept
+
 						ip daddr { 10.16.23.95 } tcp dport 22 accept
+
 						ip daddr { 10.0.0.1, 10.200.0.5, 10.220.0.1 } udp dport { 53 } accept
-						ip daddr { 10.0.0.0/24, 10.0.1.0/24, 10.200.0.0/24, 10.220.0.0/24 } tcp dport { 53 } accept
+						ip daddr { 10.0.0.1, 10.200.0.5, 10.220.0.1 } tcp dport { 53 } accept
 
 						counter drop
 					}
@@ -68,8 +70,8 @@
 					}
 
 					chain wireguard-to-lan {
-						#ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } tcp dport { 22, 80, 443 } counter accept
-						#ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
+						ip saddr 10.200.0.0/24 ip daddr { 10.0.0.1, 10.200.0.5 } tcp dport { 22, 53 } counter accept
+						ip saddr 10.200.0.0/24 ip daddr { 10.0.0.1, 10.200.0.5 } udp dport { 53 } counter accept
 						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { icmp, tcp, udp } counter accept
 						ip saddr 10.200.0.7 ip daddr { 10.0.0.132, 10.200.0.1, 10.0.0.1 } ip protocol tcp counter accept
 						counter drop
@@ -82,9 +84,9 @@
 					}
 
 					chain lan-to-lan {
-						ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } tcp dport { 80, 443 } counter accept
-						ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter accept
-						counter drop
+						# ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } tcp dport { 80, 443 } counter accept
+						# ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter accept
+						counter accept
 					}
 
 					chain forward {
@@ -190,7 +192,7 @@
         			'';
     };
 		librenms = {
-			enable = true;
+			enable = false;
 			database = {
 				passwordFile = "/run/secrets/dbpass";
 				createLocally = true;
