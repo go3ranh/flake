@@ -41,9 +41,38 @@
 
   swapDevices = [ ];
 
-  networking.useDHCP = lib.mkDefault true;
+  networking = {
+    useDHCP = lib.mkForce false;
+    hostName = "workstation";
+		nftables = {
+			enable = true;
+			ruleset = ''
+			  table inet filter {
+					chain input {
+						type filter hook input priority 0;
+						iifname lo accept
+						ct state {established, related} accept
 
-  networking.hostName = "workstation";
+						ip saddr { 10.200.0.0/24, 10.0.0.0/24 } ip protocol { tcp, udp, icmp } counter accept
+
+						counter drop
+					}
+
+					chain output {
+						type filter hook output priority 0;
+						accept
+					}
+
+					chain forward {
+						type filter hook forward priority 0;
+						ct state {established, related} accept
+						counter drop
+					}
+				}
+			'';
+		};
+	};
+
   time.timeZone = "Europe/Berlin";
 
   virtualisation.libvirtd.enable = true;
@@ -66,8 +95,71 @@
     openssh.settings.X11Forwarding = true;
   };
 
-  networking.firewall.allowedTCPPorts = [ 8080 1980 ];
-  networking.firewall.interfaces.wt0.allowedTCPPorts = [ 9002 ];
+  systemd = {
+    network = {
+      enable = true;
+      netdevs = {
+        "10-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 9918;
+          };
+          wireguardPeers = [
+						{
+              wireguardPeerConfig = {
+                PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
+                AllowedIPs = [ "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
+                Endpoint = "49.13.134.146:51820";
+								PersistentKeepalive = 30;
+              };
+						}
+          ];
+        };
+      };
+      networks = {
+        wg0 = {
+          matchConfig.Name = "wg0";
+          address = [
+            "10.200.0.3/24"
+          ];
+          DHCP = "no";
+          routes = [
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.0.0.0/24";
+							};
+						}
+					  {
+							routeConfig = {
+								Gateway = "10.200.0.5";
+								Destination = "10.0.1.0/24";
+							};
+						}
+          ];
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+        "ens18" = {
+          matchConfig.Name = "ens18";
+          address = [
+            "10.16.17.42/21"
+          ];
+          DHCP = "no";
+					gateway = [ "10.16.23.1" ];
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+      };
+    };
+  };
   system.stateVersion = "23.11";
 }
 

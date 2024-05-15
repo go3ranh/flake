@@ -87,8 +87,7 @@
 					}
 
 					chain forward-wg {
-						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } tcp dport { 22, 80, 443 } counter name node5-forward-traffic accept
-						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter name node5-forward-ping accept
+						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter name node5-forward-traffic accept
 						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter name immich-iphone accept
 					}
 					chain forward {
@@ -176,9 +175,9 @@
               };
             }
             {
-              # fedora vm
+              # workstation
               wireguardPeerConfig = {
-                PublicKey = "D0QJSN9zM1lxNsfrgYVA5DVyE6woz5U27kqQpQF13CQ=";
+                PublicKey = "Y76XADOksxcVc8oooxjOHgW4M1aPckMoMV4K844BYBw=";
                 AllowedIPs = [ "10.200.0.3" ];
               };
             }
