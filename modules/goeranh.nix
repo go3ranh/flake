@@ -606,6 +606,7 @@ in
                     # 
                     bind -n M-H previous-window
                     bind -n M-L next-window
+                    bind -n M-Enter new-window
         '';
       };
     };
