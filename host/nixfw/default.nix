@@ -70,10 +70,7 @@
 					}
 
 					chain wireguard-to-lan {
-						ip saddr 10.200.0.0/24 ip daddr { 10.0.0.1, 10.200.0.5 } tcp dport { 22, 53 } counter accept
-						ip saddr 10.200.0.0/24 ip daddr { 10.0.0.1, 10.200.0.5 } udp dport { 53 } counter accept
-						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { icmp, tcp, udp } counter accept
-						ip saddr 10.200.0.7 ip daddr { 10.0.0.132, 10.200.0.1, 10.0.0.1 } ip protocol tcp counter accept
+						ip saddr 10.200.0.0/24 ip daddr { 10.0.0.0/24, 10.0.1.0/24 } ip protocol { icmp, tcp, udp } counter accept
 						counter drop
 					}
 
