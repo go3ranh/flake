@@ -423,7 +423,7 @@ in
 
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
               binding = "<Shift><Super>o";
-              command = "obsidian";
+              command = "logseq";
               name = "obsidian";
             };
 
