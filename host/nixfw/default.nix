@@ -152,7 +152,7 @@
               monitoring         IN  A     10.0.0.26
               node5              IN  A     10.200.0.2
               server-gitea       IN  A     100.87.18.24
-              workstation        IN  A     100.87.106.167
+              workstation        IN  A     10.200.0.3
               oraclearm          IN  A     100.87.250.85
               					'';
           in
