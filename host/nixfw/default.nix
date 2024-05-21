@@ -54,12 +54,12 @@
 						iifname lo accept
 						ct state {established, related} accept
 						ip saddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24, 10.220.0.2 } ip protocol icmp counter accept
-						ip saddr { 10.200.0.2 } ip protocol { tcp, udp, icmp } accept
+						ip saddr { 10.200.0.0/24 } ip protocol { tcp, udp, icmp } accept
 
 						ip daddr { 10.16.23.95 } tcp dport 22 accept
 
-						ip daddr { 10.0.0.1, 10.200.0.5, 10.220.0.1 } udp dport { 53 } accept
-						ip daddr { 10.0.0.1, 10.200.0.5, 10.220.0.1 } tcp dport { 53 } accept
+						iifname { "ens19", "wg0", "wg1" } udp dport { 53 } accept
+						iifname { "ens19", "wg0", "wg1" } tcp dport { 53 } accept
 
 						counter drop
 					}
