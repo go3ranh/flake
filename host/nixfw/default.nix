@@ -108,28 +108,6 @@
     };
     firewall = {
       enable = lib.mkForce false;
-      # interfaces = {
-      #   ens18 = {
-			# 		allowedUDPPorts = [ 51820 ];
-			# 	};
-      #   wt0 = {
-      #     allowedTCPPorts = [ 53 9002 ];
-      #     allowedUDPPorts = [ 53 ];
-      #   };
-      #   ens19 = {
-      #     allowedTCPPorts = [ 53 9002 ];
-      #     allowedUDPPorts = [ 53 ];
-      #   };
-      #   wg0 = {
-      #     allowedTCPPorts = [ 53 ];
-      #     allowedUDPPorts = [ 53 ];
-      #   };
-      #   wg1 = {
-      #     allowedTCPPorts = [ 53 ];
-      #     allowedUDPPorts = [ 53 ];
-      #   };
-      # };
-      allowedTCPPorts = [ 22 ];
     };
     nat = {
       enable = true;
