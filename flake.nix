@@ -79,7 +79,7 @@
           };
         })
         { } [
-        "gitlab"
+        "forgejo"
         "git-website"
         "hetzner-wg"
         "kanidm"
