@@ -38,6 +38,25 @@ in
 						}
           ];
         };
+        "11-wg1" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg1";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+          };
+          wireguardPeers = [
+						{
+              wireguardPeerConfig = {
+                PublicKey = "/xN0cEPxD9mS/Zq2DCfPfn9AxlpZxODBrXtJdeNr4gw=";
+                AllowedIPs = [ "10.230.0.0/24" ];
+                Endpoint = "goeranh.de:1194";
+              };
+						}
+          ];
+        };
         "20-br0" = {
           netdevConfig = {
             Kind = "bridge";
@@ -73,6 +92,16 @@ in
 							};
 						}
           ];
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+        wg1 = {
+          matchConfig.Name = "wg1";
+          address = [
+            "10.230.0.2/24"
+          ];
+          DHCP = "no";
           networkConfig = {
             IPv6AcceptRA = false;
           };
