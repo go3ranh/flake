@@ -59,26 +59,38 @@
     usePredictableInterfaceNames = false;
 
 		nftables = {
+			# tables = {
+			# 	filter = {
+			# 		family = "inet";
+			# 		enable = true;
+			# 		content = ''
+      #       chain input {
+      #         type filter hook input priority 0;
+      #         iifname lo accept
+      #         ct state {established, related} accept
+
+      #         # allow wireguard traffic
+      #         ip daddr 49.13.134.146 udp dport { 51820 } counter name wireguard-udp accept
+
+      #         ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter name node5-ping accept
+      #         ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter name node5-traffic accept
+      #       }
+			# 		'';
+			# 	};
+			# };
 			ruleset = ''
 			  table inet filter {
-					counter wireguard-udp {}
-					counter node5-traffic {}
-					counter node5-ping {}
-					counter node5-forward-traffic {}
-					counter node5-forward-ping {}
-					counter immich-iphone {}
-					counter drop-input {}
 					chain input {
 						type filter hook input priority 0;
 						iifname lo accept
 						ct state {established, related} accept
 						# allow wireguard traffic
-						ip daddr 49.13.134.146 udp dport { 51820 } counter name wireguard-udp accept
-						# ip daddr 49.13.134.146 tcp dport { 22 } counter name public-ssh accept
-						ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter name node5-ping accept
-						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter name node5-traffic accept
+						ip daddr 49.13.134.146 udp dport { 51820 } counter accept
+						# ip daddr 49.13.134.146 tcp dport { 22 } counter accept
+						ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
+						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
 
-						counter name drop-input drop
+						counter drop
 					}
 
 					chain output {
@@ -87,8 +99,8 @@
 					}
 
 					chain forward-wg {
-						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter name node5-forward-traffic accept
-						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter name immich-iphone accept
+						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
+						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
 					}
 					chain forward {
 						type filter hook forward priority 0;
