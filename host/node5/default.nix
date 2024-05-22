@@ -161,6 +161,13 @@ in
       };
     };
   };
+
+  documentation.man = {
+    man-db.enable = false;
+    mandoc.enable = true;
+		generateCaches = true;
+  };
+
   networking = {
     hostName = "node5";
     networkmanager.enable = true;
