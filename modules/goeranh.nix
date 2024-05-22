@@ -14,7 +14,6 @@ let
     gnome.geary # email client
 
     # these should be self explanatory
-    gnome.gnome-calculator
     gnome.gnome-calendar
     gnome.gnome-clocks
     gnome.gnome-contacts
@@ -176,7 +175,7 @@ in
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
           chromium
-          dbeaver
+          dbeaver-bin
           ferdium
           filezilla
           firefox
@@ -351,6 +350,10 @@ in
 
             "org/gnome/nautilus/compression" = {
               default-compression-format = "zip";
+            };
+
+            "org/gnome/nautilus/list-view" = {
+              use-tree-view = "true";
             };
 
             # [org/gnome/nautilus/list-view]
