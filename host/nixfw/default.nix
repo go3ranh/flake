@@ -59,6 +59,7 @@
 						ip daddr { 10.16.23.95 } tcp dport 22 accept
 
 						iifname { "ens19", "wg0", "wg1" } udp dport { 53 } accept
+						iifname { "ens19" } udp dport { 67 } accept
 						iifname { "ens19", "wg0", "wg1" } tcp dport { 53 } accept
 
 						counter drop
@@ -268,8 +269,19 @@
           ];
           DHCP = "no";
           networkConfig = {
+						DHCPServer = true;
+						DNS = "10.0.0.1, 9.9.9.9";
+
             IPv6AcceptRA = false;
           };
+					extraConfig = ''
+					[DHCPSERVER]
+						ServerAddress = "10.0.0.0/24";
+            PoolOffset = 150;
+						PoolSize = 80;
+						EmitDNS = true;
+
+					'';
         };
       };
     };
