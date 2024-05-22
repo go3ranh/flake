@@ -167,6 +167,13 @@
     };
     network = {
       enable = true;
+			config = {
+				routeTables = {
+					wg-blade = 10;
+					wg-pi = 20;
+					wg-wg = 30;
+				};
+			};
       netdevs = {
         "50-wg0" = {
           netdevConfig = {
@@ -245,26 +252,40 @@
             IPMasquerade = "ipv4";
             IPForward = true;
           };
+					routingPolicyRules = [
+						{
+							routingPolicyRuleConfig = {
+								Family = "ipv4";
+								From = "10.200.0.0/24";
+								To = "10.0.0.0/23";
+								Table = "wg-blade";
+							};
+						}
+						{
+							routingPolicyRuleConfig = {
+								Family = "ipv4";
+								From = "10.200.0.0/24";
+								To = "10.200.0.0/24";
+								Table = "wg-wg";
+							};
+						}
+					];
           routes = [
 					  {
 							routeConfig = {
 								Gateway = "10.200.0.5";
-								Destination = "10.0.0.0/24";
+								Destination = "10.0.0.0/23";
+								Table = "wg-blade";
 							};
 						}
 					  {
 							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.0.1.0/24";
+								Gateway = "10.200.0.1";
+								Destination = "10.200.0.0/24";
+								Table = "wg-wg";
 							};
 						}
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.16.17.0/21";
-							};
-						}
-						];
+					];
         };
         "eth0" = {
           matchConfig.Name = "eth0";
