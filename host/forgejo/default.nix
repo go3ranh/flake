@@ -68,5 +68,23 @@
       prefixLength = 24;
     }];
     defaultGateway = "10.0.0.1";
+		nftables = {
+			tables = {
+				filter = {
+					family = "inet";
+					enable = true;
+					content = ''
+            chain input {
+              type filter hook input priority 0;
+              iifname lo accept
+              ct state vmap { established : accept, related : accept, invalid : drop }
+
+              ip saddr { 10.0.0.0/23, 10.200.0.0/24 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter name node5-ping accept
+              ip saddr { 10.0.0.0/23, 10.200.0.0/24 } tcp dport { 22, 80, 443 } counter name node5-traffic accept
+            }
+					'';
+				};
+			};
+		};
   };
 }
