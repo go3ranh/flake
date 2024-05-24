@@ -54,7 +54,7 @@
 
     useDHCP = false;
     # allow wireguard port
-    firewall.allowedUDPPorts = [ 51820 ];
+    firewall.allowedUDPPorts = [ 1194 ];
     firewall.enable = lib.mkForce false;
     usePredictableInterfaceNames = false;
 
@@ -85,7 +85,7 @@
 						iifname lo accept
 						ct state {established, related} accept
 						# allow wireguard traffic
-						ip daddr 49.13.134.146 udp dport { 51820 } counter accept
+						ip daddr 49.13.134.146 udp dport { 1194 } counter accept
 						# ip daddr 49.13.134.146 tcp dport { 22 } counter accept
 						ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
 						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
@@ -183,7 +183,7 @@
           };
           wireguardConfig = {
             PrivateKeyFile = "/var/lib/wireguard/private";
-            ListenPort = 51820;
+            ListenPort = 1194;
           };
           wireguardPeers = [
             {
@@ -233,6 +233,13 @@
               wireguardPeerConfig = {
                 PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
                 AllowedIPs = [ "10.200.0.8" ];
+              };
+            }
+            {
+              # kbuild
+              wireguardPeerConfig = {
+                PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
+                AllowedIPs = [ "10.200.0.9" ];
               };
             }
           ];
