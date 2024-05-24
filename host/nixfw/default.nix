@@ -145,10 +145,12 @@
               ${config.networking.domain}.  IN  NS    nixfw
 
               onlyoffice.kbuild  IN  CNAME kbuild
-              kbuild             IN  A     100.87.25.209
+              kbuild             IN  A     10.200.0.9
               pitest             IN  A     10.200.0.4
               nixfw              IN  A     10.200.0.5
+              pi5                IN  A     10.200.0.8
               dockerhost         IN  A     10.0.0.132
+              gitlab             IN  A     10.0.0.21
               git-website        IN  A     10.0.0.23
               monitoring         IN  A     10.0.0.26
               node5              IN  A     10.200.0.2
