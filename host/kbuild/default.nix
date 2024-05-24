@@ -18,10 +18,67 @@ in
   swapDevices = [ ];
 
   networking = {
-    useDHCP = true;
+    useDHCP = false;
     hostName = "kbuild";
     firewall.allowedTCPPorts = [ 22 80 443 ];
   };
+  systemd = {
+    network = {
+			enable = true;
+			config = {
+				routeTables = {
+					wg-blade = 10;
+					wg-wg1 = 20;
+				};
+			};
+      netdevs = {
+        "10-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+            ListenPort = 9918;
+          };
+          wireguardPeers = [
+            {
+              wireguardPeerConfig = {
+                PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
+                AllowedIPs = [ "10.200.0.0/24" ];
+                Endpoint = "49.13.134.146:1194";
+								PersistentKeepalive = 30;
+              };
+            }
+          ];
+        };
+      };
+      networks = {
+        wg0 = {
+          matchConfig.Name = "wg0";
+          address = [
+            "10.200.0.9/24"
+          ];
+          DHCP = "no";
+          networkConfig = {
+            IPv6AcceptRA = false;
+            IPForward = true;
+          };
+        };
+        ens18 = {
+          matchConfig.Name = "ens18";
+          DHCP = "yes";
+          gateway = [
+            "10.16.23.1"
+          ];
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+			};
+		};
+	};
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
@@ -41,11 +98,6 @@ in
         #group = "root";
         mode = "0400";
       };
-      "nextcloud-admin-pass" = {
-        owner = "nextcloud";
-        group = "nextcloud";
-        mode = "0440";
-      };
     };
   };
 
@@ -62,67 +114,6 @@ in
   };
 
   services = {
-    nginx = {
-      enable = true;
-      virtualHosts = {
-        "${config.networking.fqdn}" = {
-          sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
-          sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
-          extraConfig = ''
-            ssl_password_file /var/lib/${config.networking.fqdn}.pass;
-          '';
-          forceSSL = true;
-        };
-        "onlyoffice.${config.networking.fqdn}" = {
-          sslCertificate = "/var/lib/onlyoffice.${config.networking.fqdn}.cert.pem";
-          sslCertificateKey = "/var/lib/onlyoffice.${config.networking.fqdn}.key.pem";
-          extraConfig = ''
-            ssl_password_file /var/lib/${config.networking.fqdn}.pass;
-          '';
-          forceSSL = true;
-        };
-      };
-    };
-    nextcloud = {
-      enable = true;
-      hostName = "${config.networking.fqdn}";
-
-      # Need to manually increment with every major upgrade.
-      package = pkgs.nextcloud28;
-
-      # Let NixOS install and configure the database automatically.
-      database.createLocally = true;
-
-      # Let NixOS install and configure Redis caching automatically.
-      configureRedis = true;
-
-      # Increase the maximum file upload size to avoid problems uploading videos.
-      maxUploadSize = "16G";
-      https = true;
-
-      autoUpdateApps.enable = true;
-      extraAppsEnable = true;
-      extraApps = with config.services.nextcloud.package.packages.apps; {
-        inherit calendar contacts onlyoffice;
-      };
-
-      settings = {
-        overwriteprotocol = "https";
-        default_phone_region = "DE";
-        trusted_domains = [
-          "kbuild"
-        ];
-      };
-      config = {
-        # dbtype = "pgsql";
-        adminuser = "admin";
-        adminpassFile = "${config.sops.secrets.nextcloud-admin-pass.path}";
-      };
-    };
-    onlyoffice = {
-      enable = true;
-      hostname = "onlyoffice.${config.networking.fqdn}";
-    };
   };
 
 
