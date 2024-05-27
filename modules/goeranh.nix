@@ -1,7 +1,7 @@
 { self, inputs, config, arch, nixpkgs, lib, ... }:
 with lib;
 let
-  domain = "goeranh.local";
+  domain = "goeranh.selfhosted";
   gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
     gnome.baobab # disk usage analyzer
     gnome.cheese # photo booth
@@ -668,7 +668,7 @@ in
           text = ''
             domain ${domain}
             nameserver 10.0.0.1
-            nameserver 9.9.9.9
+            #nameserver 9.9.9.9
           '';
         };
         "nixos/repl.nix" = {

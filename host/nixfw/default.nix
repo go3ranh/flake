@@ -1,19 +1,24 @@
 { config, pkgs, lib, ... }:
 
 {
-  # sops = {
-  #   # This will automatically import SSH keys as age keys
-  #   age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  #   defaultSopsFile = ./secrets.yaml;
-  #   defaultSopsFormat = "yaml";
-  #   secrets = {
-  #     "dbpass" = {
-  #       owner = "librenms";
-  #       group = "librenms";
-  #       mode = "0440";
-  #     };
-  #   };
-  # };
+  sops = {
+    # This will automatically import SSH keys as age keys
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFormat = "yaml";
+    secrets = {
+      # "dbpass" = {
+      #   owner = "librenms";
+      #   group = "librenms";
+      #   mode = "0440";
+      # };
+      "intermediatePasswordFile" = {
+        owner = "step-ca";
+        group = "step-ca";
+        mode = "0440";
+      };
+    };
+  };
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   fileSystems."/" =
@@ -158,9 +163,10 @@
               git-website        IN  A     10.0.0.23
               monitoring         IN  A     10.0.0.26
               node5              IN  A     10.200.0.2
-              node5              IN  AAA   fd4:10c9:3065:56db::2
+              node5              IN  AAAA  fd4:10c9:3065:56db::2
               server-gitea       IN  A     100.87.18.24
               workstation        IN  A     10.200.0.3
+              workstation        IN  AAAA  fd4:10c9:3065:56db::4
               oraclearm          IN  A     100.87.250.85
               					'';
           in
@@ -181,7 +187,18 @@
 				createLocally = true;
 			};
 		};
+		step-ca = {
+			enable = true;
+			settings = import ./step-ca.nix {domain = config.networking.domain;};
+			address = "10.0.0.1";
+			port = 8443;
+			intermediatePasswordFile = "${config.sops.secrets.intermediatePasswordFile.path}";
+		};
   };
+	environment.systemPackages = with pkgs; [ step-ca ];
+	environment.etc."step-ca/password.txt" = {
+		source = "${config.sops.secrets.intermediatePasswordFile.path}";
+	};
 
   systemd = {
     network = {
@@ -281,7 +298,7 @@
           DHCP = "no";
           networkConfig = {
 						DHCPServer = true;
-						DNS = "10.0.0.1, 9.9.9.9";
+						DNS = "10.0.0.1";
 
             IPv6AcceptRA = false;
 						IPv6SendRA = true;
