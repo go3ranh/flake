@@ -67,6 +67,7 @@
 						iifname { "ens19", "wg0", "wg1" } udp dport { 53 } accept
 						iifname { "ens19" } udp dport { 67 } accept
 						iifname { "ens19", "wg0", "wg1" } tcp dport { 53 } accept
+						iifname { "ens19", "wg0", "wg1" } tcp dport { 8443 } accept
 
 						counter drop
 					}
@@ -85,6 +86,7 @@
 					chain lan-outbound {
 						ip saddr { 10.0.0.0/24 } tcp dport { 80, 443 } counter accept
 						ip saddr { 10.0.0.0/24 } ip protocol icmp counter accept
+						iifname "ens19" oifname "ens18" accept
 						counter drop
 					}
 
@@ -108,6 +110,11 @@
 					}
 				}
         table ip nat {
+          chain PREROUTING {
+            type nat hook prerouting priority dstnat; policy accept;
+          }
+        }
+        table ip6 nat {
           chain PREROUTING {
             type nat hook prerouting priority dstnat; policy accept;
           }
@@ -154,16 +161,13 @@
               onlyoffice.kbuild  IN  CNAME kbuild
               kbuild             IN  A     10.200.0.9
               pitest             IN  A     10.200.0.4
-              nixfw              IN  A     10.200.0.5
-              nixfw              IN  AAAA  fd4:10c9:3065:56db::3
+              nixfw              IN  A     10.0.0.1
               pi5                IN  A     10.200.0.8
               dockerhost         IN  A     10.0.0.132
-              dockerhost         IN  AAAA  fe80::be24:11ff:fe66:a73a
-              gitlab             IN  A     10.0.0.21
+              forgejo            IN  A     10.0.0.21
               git-website        IN  A     10.0.0.23
               monitoring         IN  A     10.0.0.26
               node5              IN  A     10.200.0.2
-              node5              IN  AAAA  fd4:10c9:3065:56db::2
               server-gitea       IN  A     100.87.18.24
               workstation        IN  A     10.200.0.3
               workstation        IN  AAAA  fd4:10c9:3065:56db::4
@@ -286,7 +290,7 @@
             "10.16.23.1"
           ];
           networkConfig = {
-            IPv6AcceptRA = false;
+            IPv6AcceptRA = true;
           };
         };
         ens19 = {
@@ -302,6 +306,8 @@
 
             IPv6AcceptRA = false;
 						IPv6SendRA = true;
+						#DHCPv6PrefixDelegation = "dhcpv6";
+						IPv6DuplicateAddressDetection = 1;
           };
 					ipv6Prefixes = [
 					  {
@@ -313,6 +319,14 @@
 						}
 					];
 					extraConfig = ''
+					[DHCPv6PrefixDelegation]
+            SubnetId=2
+            Assign=yes
+            
+            [IPv6PrefixDelegation]
+            RouterLifetimeSec=900
+            EmitDNS=yes
+            DNS=_link_local
 					[DHCPSERVER]
 						ServerAddress = "10.0.0.0/24";
             PoolOffset = 150;
@@ -324,6 +338,7 @@
       };
     };
 		services = {
+			"systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
 			snmpd = 
 			let
 			  snmpd-config = pkgs.writeText "snmpd.conf" ''

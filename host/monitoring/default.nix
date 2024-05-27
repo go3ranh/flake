@@ -191,12 +191,8 @@
 
     nginx.enable = true;
     nginx.virtualHosts.${config.services.grafana.settings.server.domain} = {
-      sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
-      sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
-      extraConfig = ''
-        ssl_password_file /var/lib/${config.networking.fqdn}.pass;
-      '';
       forceSSL = true;
+			enableACME = true;
       default = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString config.services.grafana.settings.server.http_port}";

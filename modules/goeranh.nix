@@ -112,6 +112,16 @@ in
           ../ca-chain.cert.pem
         ];
       };
+			acme = {
+				defaults = {
+					server = "https://nixfw.goeranh.selfhosted:8443/acme/acme/directory";
+					email = "goeran@karsdorf.net";
+					enableDebugLogs = true;
+					extraLegoRunFlags = [
+					];
+				};
+				acceptTerms = true;
+			};
     };
     nix = {
       registry = {
@@ -664,13 +674,13 @@ in
           ] else [ ])
         ];
       etc = {
-        "resolv.conf" = lib.mkDefault {
-          text = ''
-            domain ${domain}
-            nameserver 10.0.0.1
-            #nameserver 9.9.9.9
-          '';
-        };
+        # "resolv.conf" = lib.mkDefault {
+        #   text = ''
+        #     domain ${domain}
+        #     nameserver 10.0.0.1
+        #     #nameserver 9.9.9.9
+        #   '';
+        # };
         "nixos/repl.nix" = {
           text = ''
             {
@@ -712,12 +722,17 @@ in
     nixpkgs.config.allowUnfree = true;
     networking.firewall.enable = true;
     networking.nftables.enable = true;
-    networking.nameservers = [ "10.0.0.1" "9.9.9.9" ];
+    networking.nameservers = [ "10.0.0.1" ];
     networking.domain = "${domain}";
     networking.search = [ "${domain}" ];
 
     console.keyMap = "de";
 
+		services.resolved = {
+			enable = true;
+			domains = [ "goeranh.selfhosted" ];
+			fallbackDns = [ "10.0.0.1" "9.9.9.9" ];
+		};
     services.openssh = mkIf cfg.server {
       enable = true;
       openFirewall = true;
