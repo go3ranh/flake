@@ -87,12 +87,12 @@
         };
       };
       virtualHosts."${config.networking.fqdn}" = {
-        sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
-        sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
-        extraConfig = ''
-          					ssl_password_file /var/lib/${config.networking.fqdn}.pass;
-          				'';
-        forceSSL = true;
+        #sslCertificate = "/var/lib/${config.networking.fqdn}.cert.pem";
+        #sslCertificateKey = "/var/lib/${config.networking.fqdn}.key.pem";
+        #extraConfig = ''
+        #  					ssl_password_file /var/lib/${config.networking.fqdn}.pass;
+        #  				'';
+        #forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:2283";
         };
