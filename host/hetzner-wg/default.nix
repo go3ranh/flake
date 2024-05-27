@@ -54,7 +54,6 @@
 
     useDHCP = false;
     # allow wireguard port
-    firewall.allowedUDPPorts = [ 1194 ];
     firewall.enable = lib.mkForce false;
     usePredictableInterfaceNames = false;
 
@@ -88,6 +87,7 @@
 						ip daddr 49.13.134.146 udp dport { 1194 } counter accept
 						# ip daddr 49.13.134.146 tcp dport { 22 } counter accept
 						ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
+						iifname "wg0" ip6 saddr { fd4:10c9:3065:56db::2 } counter accept
 						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
 
 						counter drop
@@ -99,8 +99,11 @@
 					}
 
 					chain forward-wg {
+						ip6 saddr {fd4:10c9:3065:56db::/64 } ip6 daddr { fd4:10c9:3065:56db::/64, fd6:266a:7309:60ca::/64 } counter accept
 						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
 						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
+						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } tcp dport { 53 } counter accept
+						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } udp dport { 53 } counter accept
 					}
 					chain forward {
 						type filter hook forward priority 0;
@@ -190,7 +193,7 @@
               # node5
               wireguardPeerConfig = {
                 PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
-                AllowedIPs = [ "10.200.0.2" ];
+                AllowedIPs = [ "10.200.0.2" "fd4:10c9:3065:56db::2" ];
               };
             }
             {
@@ -211,7 +214,7 @@
               # nixfw
               wireguardPeerConfig = {
                 PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
-                AllowedIPs = [ "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
+                AllowedIPs = [ "fd4:10c9:3065:56db::3" "fd6:266a:7309:60ca::/64" "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
               };
             }
             {
@@ -254,17 +257,48 @@
       networks = {
         wg0 = {
           matchConfig.Name = "wg0";
-          address = [ "10.200.0.1/24" ];
+          address = [
+					  "10.200.0.1/24"
+					  "fd4:10c9:3065:56db::1/64"
+          ];
           networkConfig = {
             IPMasquerade = "ipv4";
             IPForward = true;
+						DHCPServer = true;
+						DNS = "10.0.0.1, 9.9.9.9";
+
+            IPv6AcceptRA = false;
+						IPv6SendRA = true;
           };
+					ipv6Prefixes = [
+					  {
+							ipv6PrefixConfig = {
+								AddressAutoconfiguration = true;
+								Prefix = "fd4:10c9:3065:56db::/64";
+							};
+						}
+					];
+					ipv6RoutePrefixes = [
+						{
+							ipv6RoutePrefixConfig = {
+								Route = "fd4:10c9:3065:56db::/64";
+							};
+						}
+					];
 					routingPolicyRules = [
 						{
 							routingPolicyRuleConfig = {
 								Family = "ipv4";
 								From = "10.200.0.0/24";
 								To = "10.0.0.0/23";
+								Table = "wg-blade";
+							};
+						}
+						{
+							routingPolicyRuleConfig = {
+								Family = "ipv6";
+								From = "fd4:10c9:3065:56db::/64";
+								To = "fd6:266a:7309:60ca::/644";
 								Table = "wg-blade";
 							};
 						}
@@ -287,6 +321,20 @@
 						}
 					  {
 							routeConfig = {
+								Gateway = "fd4:10c9:3065:56db::3";
+								Destination = "fd6:266a:7309:60ca::/64";
+								Table = "wg-blade";
+							};
+						}
+					  {
+							routeConfig = {
+								Gateway = "fd4:10c9:3065:56db::3";
+								Destination = "fd6:266a:7309:60ca::/64";
+								Table = "wg-blade";
+							};
+						}
+					  {
+							routeConfig = {
 								Gateway = "10.200.0.1";
 								Destination = "10.200.0.0/24";
 								Table = "wg-wg";
@@ -297,9 +345,12 @@
         "eth0" = {
           matchConfig.Name = "eth0";
           address = [
-            "2a01:4f8:c013:27a4::1"
+            "2a01:4f8:c013:27a4::1/64"
           ];
           DHCP = "yes";
+					gateway = [
+					  "fe80::1"
+					];
           networkConfig = {
             IPv6AcceptRA = false;
           };

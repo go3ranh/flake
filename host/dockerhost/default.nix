@@ -34,12 +34,31 @@
   networking = {
     hostName = "dockerhost";
     firewall.allowedTCPPorts = [ 22 80 443 ];
-    interfaces.ens18.ipv4.addresses = [{
-      address = "10.0.0.132";
-      prefixLength = 24;
-    }];
     defaultGateway = "10.0.0.1";
+		useDHCP = false;
   };
+
+  systemd = {
+    network = {
+			enable = true;
+      networks = {
+        ens18 = {
+          matchConfig.Name = "ens18";
+          address = [
+            "10.0.0.132/24"
+          ];
+          DHCP = "no";
+          gateway = [
+            "10.0.0.1"
+          ];
+          networkConfig = {
+            IPv6AcceptRA = true;
+          };
+        };
+      };
+    };
+  };
+
 
   environment.systemPackages = with pkgs; [
     vim

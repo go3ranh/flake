@@ -55,6 +55,7 @@
 						ct state {established, related} accept
 						ip saddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24, 10.220.0.2 } ip protocol icmp counter accept
 						ip saddr { 10.200.0.0/24 } ip protocol { tcp, udp, icmp } accept
+						ip6 saddr { fd4:10c9:3065:56db::/64 } counter accept
 
 						ip daddr { 10.16.23.95 } tcp dport 22 accept
 
@@ -71,6 +72,7 @@
 					}
 
 					chain wireguard-to-lan {
+						ip6 saddr { fd4:10c9:3065:56db::/64 } counter accept
 						ip saddr 10.200.0.0/24 ip daddr { 10.0.0.0/24, 10.0.1.0/24 } ip protocol { icmp, tcp, udp } counter accept
 						counter drop
 					}
@@ -148,12 +150,15 @@
               kbuild             IN  A     10.200.0.9
               pitest             IN  A     10.200.0.4
               nixfw              IN  A     10.200.0.5
+              nixfw              IN  AAAA  fd4:10c9:3065:56db::3
               pi5                IN  A     10.200.0.8
               dockerhost         IN  A     10.0.0.132
+              dockerhost         IN  AAAA  fe80::be24:11ff:fe66:a73a
               gitlab             IN  A     10.0.0.21
               git-website        IN  A     10.0.0.23
               monitoring         IN  A     10.0.0.26
               node5              IN  A     10.200.0.2
+              node5              IN  AAA   fd4:10c9:3065:56db::2
               server-gitea       IN  A     100.87.18.24
               workstation        IN  A     10.200.0.3
               oraclearm          IN  A     100.87.250.85
@@ -197,7 +202,7 @@
               # node5
               wireguardPeerConfig = {
                 PublicKey = "hcqq9ayewp2ZuNvqI/BZ+y31G6yuosdmkIFJwO24hUg=";
-                AllowedIPs = [ "10.220.0.2" "10.0.1.0/24" ];
+                AllowedIPs = [ "fd4:10c9:3065:56db::/64" "10.220.0.2" "10.0.1.0/24" ];
               };
             }
           ];
@@ -215,7 +220,7 @@
             {
               wireguardPeerConfig = {
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
-                AllowedIPs = [ "10.200.0.0/24" ];
+                AllowedIPs = [ "fd4:10c9:3065:56db::/64" "10.200.0.0/24" ];
                 Endpoint = "49.13.134.146:1194";
 								PersistentKeepalive = 30;
               };
@@ -228,16 +233,20 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.5/24"
+						"fd4:10c9:3065:56db::3/64"
           ];
           DHCP = "no";
           networkConfig = {
+						#IPMasquerade = true;
             IPv6AcceptRA = false;
             IPForward = true;
           };
         };
         wg1 = {
           matchConfig.Name = "wg1";
-          address = [ "10.220.0.1/24" ];
+          address = [ 
+					  "10.220.0.1/24"
+					];
 					routes = [
 					  {
 							routeConfig = {
@@ -267,6 +276,7 @@
           matchConfig.Name = "ens19";
           address = [
             "10.0.0.1/24"
+						"fd6:266a:7309:60ca::1/64"
           ];
           DHCP = "no";
           networkConfig = {
@@ -274,7 +284,17 @@
 						DNS = "10.0.0.1, 9.9.9.9";
 
             IPv6AcceptRA = false;
+						IPv6SendRA = true;
           };
+					ipv6Prefixes = [
+					  {
+							ipv6PrefixConfig = {
+								AddressAutoconfiguration = true;
+								# Assign = true;
+								Prefix = "fd6:266a:7309:60ca::/64";
+							};
+						}
+					];
 					extraConfig = ''
 					[DHCPSERVER]
 						ServerAddress = "10.0.0.0/24";
