@@ -113,8 +113,8 @@
 						{
               wireguardPeerConfig = {
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
-                AllowedIPs = [ "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
-                Endpoint = "49.13.134.146:51820";
+                AllowedIPs = [ "fd4:10c9:3065:56db::2" "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
+                Endpoint = "49.13.134.146:1194";
 								PersistentKeepalive = 30;
               };
 						}
@@ -126,6 +126,7 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.3/24"
+						"fd4:10c9:3065:56db::4/64"
           ];
           DHCP = "no";
           routes = [
