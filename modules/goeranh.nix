@@ -115,6 +115,7 @@ in
 			acme = {
 				defaults = {
 					server = "https://nixfw.goeranh.selfhosted:8443/acme/acme/directory";
+					renewInterval = "daily";
 					email = "goeran@karsdorf.net";
 					enableDebugLogs = true;
 					extraLegoRunFlags = [
