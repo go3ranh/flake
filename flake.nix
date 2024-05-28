@@ -81,6 +81,7 @@
         { } [
         "forgejo"
         "git-website"
+        "git"
         "hetzner-wg"
         "kanidm"
         "monitoring"
