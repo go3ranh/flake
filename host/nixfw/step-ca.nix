@@ -46,6 +46,10 @@
       {
         type = "ACME";
         name = "acme";
+				challenges = [
+					"http-01"
+					"tls-alpn-01"
+				];
       }
     ];
     claims = {
