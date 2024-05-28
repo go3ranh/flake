@@ -175,7 +175,7 @@
               workstation        IN  A     10.200.0.3
               workstation        IN  AAAA  fd4:10c9:3065:56db::4
               oraclearm          IN  A     100.87.250.85
-              					'';
+            '';
           in
           {
             master = true;
@@ -183,9 +183,9 @@
           };
       };
       extraOptions = ''
-        			recursion yes;
-        			allow-recursion { any; };
-        			'';
+				recursion yes;
+				allow-recursion { any; };
+			'';
     };
 		librenms = {
 			enable = false;
