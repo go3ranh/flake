@@ -83,6 +83,7 @@
         "git-website"
         "git"
         "hetzner-wg"
+        "hydra"
         "kanidm"
         "monitoring"
         "nixfw2"
