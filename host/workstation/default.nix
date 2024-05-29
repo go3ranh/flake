@@ -44,34 +44,34 @@
   networking = {
     useDHCP = lib.mkForce false;
     hostName = "workstation";
-		nftables = {
-			enable = true;
-			ruleset = ''
-			  table inet filter {
-					chain input {
-						type filter hook input priority 0;
-						iifname lo accept
-						ct state {established, related} accept
+    nftables = {
+      enable = true;
+      ruleset = ''
+        			  table inet filter {
+        					chain input {
+        						type filter hook input priority 0;
+        						iifname lo accept
+        						ct state {established, related} accept
 
-						ip saddr { 10.200.0.0/24, 10.0.0.0/24 } ip protocol { tcp, udp, icmp } counter accept
+        						ip saddr { 10.200.0.0/24, 10.0.0.0/24 } ip protocol { tcp, udp, icmp } counter accept
 
-						counter drop
-					}
+        						counter drop
+        					}
 
-					chain output {
-						type filter hook output priority 0;
-						accept
-					}
+        					chain output {
+        						type filter hook output priority 0;
+        						accept
+        					}
 
-					chain forward {
-						type filter hook forward priority 0;
-						ct state {established, related} accept
-						counter drop
-					}
-				}
-			'';
-		};
-	};
+        					chain forward {
+        						type filter hook forward priority 0;
+        						ct state {established, related} accept
+        						counter drop
+        					}
+        				}
+        			'';
+    };
+  };
 
   time.timeZone = "Europe/Berlin";
 
@@ -110,14 +110,14 @@
             ListenPort = 9918;
           };
           wireguardPeers = [
-						{
+            {
               wireguardPeerConfig = {
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
                 AllowedIPs = [ "fd4:10c9:3065:56db::2" "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
                 Endpoint = "49.13.134.146:1194";
-								PersistentKeepalive = 30;
+                PersistentKeepalive = 30;
               };
-						}
+            }
           ];
         };
       };
@@ -126,22 +126,22 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.3/24"
-						"fd4:10c9:3065:56db::4/64"
+            "fd4:10c9:3065:56db::4/64"
           ];
           DHCP = "no";
           routes = [
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.0.0.0/24";
-							};
-						}
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.0.1.0/24";
-							};
-						}
+            {
+              routeConfig = {
+                Gateway = "10.200.0.5";
+                Destination = "10.0.0.0/24";
+              };
+            }
+            {
+              routeConfig = {
+                Gateway = "10.200.0.5";
+                Destination = "10.0.1.0/24";
+              };
+            }
           ];
           networkConfig = {
             IPv6AcceptRA = false;
@@ -153,7 +153,7 @@
             "10.16.17.42/21"
           ];
           DHCP = "no";
-					gateway = [ "10.16.23.1" ];
+          gateway = [ "10.16.23.1" ];
           networkConfig = {
             IPv6AcceptRA = false;
           };

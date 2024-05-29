@@ -44,17 +44,17 @@
     openssh.enable = true;
     nginx = {
       enable = true;
-      # virtualHosts."10.0.0.21" = {
-      #   default = true;
-      #   locations."/" = {
-      #     proxyPass = "unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
-      #   };
-      # };
+      virtualHosts."10.0.0.21" = {
+        default = true;
+        locations."/" = {
+          proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
+        };
+      };
       virtualHosts."${config.networking.fqdn}" = {
-				enableACME = true;
+        #enableACME = true;
         # forceSSL = true;
         locations."/" = {
-          proxyPass = "unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
+          proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
         };
       };
     };
@@ -64,7 +64,7 @@
         service.DISABLE_REGISTRATION = true;
         server = {
           ROOT_URL = "https://${config.networking.fqdn}/";
-					PROTOCOL = "http+unix";
+          PROTOCOL = "http+unix";
           WORK_PATH = "/var/lib/forgejo";
           DISABLE_SSH = false;
           DOMAIN = "${config.networking.fqdn}";
@@ -79,20 +79,20 @@
   };
   networking = {
     hostName = "forgejo";
-		useDHCP = false;
-		firewall.enable = lib.mkForce false;
+    useDHCP = false;
+    firewall.enable = lib.mkForce false;
 
     interfaces.ens18.ipv4.addresses = [{
       address = "10.0.0.21";
       prefixLength = 24;
     }];
     defaultGateway = "10.0.0.1";
-		nftables = {
-			# tables = {
-			# 	filter = {
-			# 		family = "inet";
-			# 		enable = true;
-			# 		content = ''
+    nftables = {
+      # tables = {
+      # 	filter = {
+      # 		family = "inet";
+      # 		enable = true;
+      # 		content = ''
       #       chain input {
       #         type filter hook input priority 0;
       #         iifname lo accept
@@ -100,11 +100,11 @@
 
       #         ip saddr { 10.0.0.0/23, 10.200.0.0/24 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
       #         ip saddr { 10.0.0.0/23, 10.200.0.0/24 } tcp dport { 22, 80, 443 } counter accept
-			# 				drop
+      # 				drop
       #       }
-			# 		'';
-			# 	};
-			# };
-		};
+      # 		'';
+      # 	};
+      # };
+    };
   };
 }

@@ -10,12 +10,12 @@
     hostName = "git";
     firewall.allowedTCPPorts = [ 22 80 443 ];
     defaultGateway = "10.0.0.1";
-		useDHCP = false;
+    useDHCP = false;
   };
 
   systemd = {
     network = {
-			enable = true;
+      enable = true;
       networks = {
         ens18 = {
           matchConfig.Name = "ens18";
@@ -42,7 +42,7 @@
         service.DISABLE_REGISTRATION = true;
         server = {
           ROOT_URL = "https://${config.networking.fqdn}/";
-					PROTOCOL = "http+unix";
+          PROTOCOL = "http+unix";
           WORK_PATH = "/var/lib/forgejo";
           DISABLE_SSH = false;
           DOMAIN = "${config.networking.fqdn}";
@@ -57,7 +57,7 @@
     nginx = {
       enable = true;
       virtualHosts."${config.networking.fqdn}" = {
-				enableACME = true;
+        enableACME = true;
         forceSSL = true;
         locations."/" = {
           proxyPass = "unix:${config.services.forgejo.settings.server.HTTP_ADDR}";

@@ -112,17 +112,17 @@ in
           ../ca-chain.cert.pem
         ];
       };
-			acme = {
-				defaults = {
-					server = "https://nixfw.goeranh.selfhosted:8443/acme/acme/directory";
-					renewInterval = "daily";
-					email = "goeran@karsdorf.net";
-					enableDebugLogs = true;
-					extraLegoRunFlags = [
-					];
-				};
-				acceptTerms = true;
-			};
+      acme = {
+        defaults = {
+          server = "https://nixfw.goeranh.selfhosted:8443/acme/acme/directory";
+          renewInterval = "daily";
+          email = "goeran@karsdorf.net";
+          enableDebugLogs = true;
+          extraLegoRunFlags = [
+          ];
+        };
+        acceptTerms = true;
+      };
     };
     nix = {
       registry = {
@@ -648,7 +648,7 @@ in
           [ self.packages.${arch}.customvim ]
           (with nixpkgs.legacyPackages.${arch}; [
             linuxKernel.packages.linux_zen.perf
-						wireguard-tools
+            wireguard-tools
             bpftrace
             bash
             bat
@@ -668,7 +668,7 @@ in
             unzip
             wget
             zellij
-						zoxide
+            zoxide
           ])
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
@@ -729,11 +729,11 @@ in
 
     console.keyMap = "de";
 
-		services.resolved = {
-			enable = true;
-			domains = [ "goeranh.selfhosted" ];
-			fallbackDns = [ "10.0.0.1" "9.9.9.9" ];
-		};
+    services.resolved = {
+      enable = true;
+      domains = [ "goeranh.selfhosted" ];
+      fallbackDns = [ "10.0.0.1" "9.9.9.9" ];
+    };
     services.openssh = mkIf cfg.server {
       enable = true;
       openFirewall = true;

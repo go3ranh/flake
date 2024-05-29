@@ -49,75 +49,76 @@
 
   networking = {
     hostName = "nixfw";
-		useDHCP = lib.mkForce false;
+    useDHCP = lib.mkForce false;
     nftables = {
       enable = true;
       ruleset = ''
-			  table inet filter {
-					chain input {
-						type filter hook input priority 0;
-						iifname lo accept
-						ct state {established, related} accept
-						ip saddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24, 10.220.0.2 } ip protocol icmp counter accept
-						ip saddr { 10.200.0.0/24 } ip protocol { tcp, udp, icmp } accept
-						ip6 saddr { fd4:10c9:3065:56db::/64 } counter accept
+        table inet filter {
+        	chain input {
+        		type filter hook input priority 0;
+        		iifname lo accept
+        		ct state {established, related} accept
+        		ip saddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24, 10.220.0.2 } ip protocol icmp counter accept
+        		ip saddr { 10.200.0.0/24 } ip protocol { tcp, udp, icmp } accept
+        		ip6 saddr { fd4:10c9:3065:56db::/64 } counter accept
 
-						ip daddr { 10.16.23.95 } tcp dport 22 accept
+        		ip daddr { 10.16.23.95 } tcp dport 22 accept
+        		iifname "ens19" counter accept
 
-						iifname { "ens19", "wg0", "wg1" } udp dport { 53 } accept
-						iifname { "ens19" } udp dport { 67 } accept
-						iifname { "ens19", "wg0", "wg1" } tcp dport { 53 } accept
-						iifname { "ens19", "wg0", "wg1" } tcp dport { 8443 } accept
+        		iifname { "ens19", "wg0", "wg1" } udp dport { 53 } accept
+        		iifname { "ens19" } udp dport { 67 } accept
+        		iifname { "ens19", "wg0", "wg1" } tcp dport { 53 } accept
+        		iifname { "ens19", "wg0", "wg1" } tcp dport { 8443 } accept
 
-						counter drop
-					}
+        		counter drop
+        	}
 
-					chain output {
-						type filter hook output priority 0;
-						accept
-					}
+        	chain output {
+        		type filter hook output priority 0;
+        		accept
+        	}
 
-					chain wireguard-to-lan {
-						ip6 saddr { fd4:10c9:3065:56db::/64 } counter accept
-						ip saddr 10.200.0.0/24 ip daddr { 10.0.0.0/24, 10.0.1.0/24 } ip protocol { icmp, tcp, udp } counter accept
-						counter drop
-					}
+        	chain wireguard-to-lan {
+        		ip6 saddr { fd4:10c9:3065:56db::/64 } counter accept
+        		ip saddr 10.200.0.0/24 ip daddr { 10.0.0.0/24, 10.0.1.0/24 } ip protocol { icmp, tcp, udp } counter accept
+        		counter drop
+        	}
 
-					chain lan-outbound {
-						ip saddr { 10.0.0.0/24 } tcp dport { 80, 443 } counter accept
-						ip saddr { 10.0.0.0/24 } ip protocol icmp counter accept
-						iifname "ens19" oifname "ens18" accept
-						counter drop
-					}
+        	chain lan-outbound {
+        		ip saddr { 10.0.0.0/24 } tcp dport { 80, 443 } counter accept
+        		ip saddr { 10.0.0.0/24 } ip protocol icmp counter accept
+        		iifname "ens19" oifname "ens18" accept
+        		counter drop
+        	}
 
-					chain lan-to-lan {
-						# ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } tcp dport { 80, 443 } counter accept
-						# ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter accept
-						counter accept
-					}
+        	chain lan-to-lan {
+        		# ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } tcp dport { 80, 443 } counter accept
+        		# ip saddr { 10.0.0.0/24, 10.0.1.0/24 } ip daddr {10.0.0.0/24, 10.0.1.0/24 } ip protocol icmp counter accept
+        		counter accept
+        	}
 
-					chain forward {
-						type filter hook forward priority 0;
-						ct state {established, related} accept
-						iifname "wg0" oifname { "ens18", "ens19", "wg1" } jump wireguard-to-lan
-						iifname "ens19" oifname { "ens18" } jump lan-outbound
-						iifname "wg1" oifname { "ens19" } jump lan-to-lan
-						iifname "ens19" oifname { "wg1" } jump lan-to-lan
+        	chain forward {
+        		type filter hook forward priority 0;
+        		ct state {established, related} accept
+        		iifname "wg0" oifname { "ens18", "ens19", "wg1" } jump wireguard-to-lan
+        		iifname "ens19" oifname { "ens18" } jump lan-outbound
+        		iifname "wg1" oifname { "ens19" } jump lan-to-lan
+        		iifname "ens19" oifname { "wg1" } jump lan-to-lan
 
-						ip saddr { 10.0.0.0/24 } ip daddr { 10.16.23.1 } accept
-						iifname "ens18" counter drop
-						counter accept
-					}
-				}
+        		ip saddr { 10.0.0.0/24 } ip daddr { 10.16.23.1 } accept
+        		iifname "ens18" counter drop
+        		counter accept
+        	}
+        }
         table ip nat {
-          chain PREROUTING {
-            type nat hook prerouting priority dstnat; policy accept;
-          }
+        	chain PREROUTING {
+        		type nat hook prerouting priority dstnat; policy accept;
+        	}
         }
         table ip6 nat {
-          chain PREROUTING {
-            type nat hook prerouting priority dstnat; policy accept;
-          }
+        	chain PREROUTING {
+        		type nat hook prerouting priority dstnat; policy accept;
+        	}
         }
       '';
     };
@@ -184,33 +185,33 @@
           };
       };
       extraOptions = ''
-				recursion yes;
-				allow-recursion { any; };
-			'';
+        	recursion yes;
+        	allow-recursion { any; };
+      '';
     };
-		librenms = {
-			enable = false;
-			database = {
-				passwordFile = "/run/secrets/dbpass";
-				createLocally = true;
-			};
-		};
-		step-ca = {
-			enable = true;
-			settings = import ./step-ca.nix {domain = config.networking.domain;};
-			address = "10.0.0.1";
-			port = 8443;
-			intermediatePasswordFile = "${config.sops.secrets.intermediatePasswordFile.path}";
-		};
+    librenms = {
+      enable = false;
+      database = {
+        passwordFile = "/run/secrets/dbpass";
+        createLocally = true;
+      };
+    };
+    step-ca = {
+      enable = true;
+      settings = import ./step-ca.nix { domain = config.networking.domain; };
+      address = "0.0.0.0";
+      port = 8443;
+      intermediatePasswordFile = "${config.sops.secrets.intermediatePasswordFile.path}";
+    };
   };
-	environment.systemPackages = with pkgs; [ step-ca ];
-	environment.etc."step-ca/password.txt" = {
-		source = "${config.sops.secrets.intermediatePasswordFile.path}";
-	};
+  environment.systemPackages = with pkgs; [ step-ca ];
+  environment.etc."step-ca/password.txt" = {
+    source = "${config.sops.secrets.intermediatePasswordFile.path}";
+  };
 
   systemd = {
     network = {
-			enable = true;
+      enable = true;
       netdevs = {
         "50-wg1" = {
           netdevConfig = {
@@ -247,7 +248,7 @@
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
                 AllowedIPs = [ "fd4:10c9:3065:56db::/64" "10.200.0.0/24" ];
                 Endpoint = "49.13.134.146:1194";
-								PersistentKeepalive = 30;
+                PersistentKeepalive = 30;
               };
             }
           ];
@@ -258,28 +259,28 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.5/24"
-						"fd4:10c9:3065:56db::3/64"
+            "fd4:10c9:3065:56db::3/64"
           ];
           DHCP = "no";
           networkConfig = {
-						#IPMasquerade = true;
+            #IPMasquerade = true;
             IPv6AcceptRA = false;
             IPForward = true;
           };
         };
         wg1 = {
           matchConfig.Name = "wg1";
-          address = [ 
-					  "10.220.0.1/24"
-					];
-					routes = [
-					  {
-							routeConfig = {
-								Gateway = "10.220.0.2";
-								Destination = "10.0.1.0/24";
-							};
-						}
-					];
+          address = [
+            "10.220.0.1/24"
+          ];
+          routes = [
+            {
+              routeConfig = {
+                Gateway = "10.220.0.2";
+                Destination = "10.0.1.0/24";
+              };
+            }
+          ];
           networkConfig = {
             IPForward = true;
           };
@@ -301,75 +302,76 @@
           matchConfig.Name = "ens19";
           address = [
             "10.0.0.1/24"
-						"fd6:266a:7309:60ca::1/64"
+            "fd6:266a:7309:60ca::1/64"
           ];
           DHCP = "no";
           networkConfig = {
-						DHCPServer = true;
-						DNS = "10.0.0.1";
+            DHCPServer = true;
+            DNS = "10.0.0.1";
 
             IPv6AcceptRA = false;
-						IPv6SendRA = true;
-						#DHCPv6PrefixDelegation = "dhcpv6";
-						IPv6DuplicateAddressDetection = 1;
+            IPv6SendRA = true;
+            #DHCPv6PrefixDelegation = "dhcpv6";
+            IPv6DuplicateAddressDetection = 1;
           };
-					ipv6Prefixes = [
-					  {
-							ipv6PrefixConfig = {
-								AddressAutoconfiguration = true;
-								# Assign = true;
-								Prefix = "fd6:266a:7309:60ca::/64";
-							};
-						}
-					];
-					extraConfig = ''
-					[DHCPv6PrefixDelegation]
-            SubnetId=2
-            Assign=yes
-            
-            [IPv6PrefixDelegation]
-            RouterLifetimeSec=900
-            EmitDNS=yes
-            DNS=_link_local
-					[DHCPSERVER]
-						ServerAddress = "10.0.0.0/24";
-            PoolOffset = 150;
-						PoolSize = 80;
-						EmitDNS = true;
+          ipv6Prefixes = [
+            {
+              ipv6PrefixConfig = {
+                AddressAutoconfiguration = true;
+                # Assign = true;
+                Prefix = "fd6:266a:7309:60ca::/64";
+              };
+            }
+          ];
+          extraConfig = ''
+            [DHCPv6PrefixDelegation]
+            	SubnetId=2
+            	Assign=yes
 
-					'';
+            	[IPv6PrefixDelegation]
+            	RouterLifetimeSec=900
+            	EmitDNS=yes
+            	DNS=_link_local
+            [DHCPSERVER]
+            	ServerAddress = "10.0.0.0/24";
+            	PoolOffset = 150;
+            	PoolSize = 80;
+            	EmitDNS = true;
+
+          '';
         };
       };
     };
-		services = {
-			"systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
-			snmpd = 
-			let
-			  snmpd-config = pkgs.writeText "snmpd.conf" ''
-				  rocommunity test123 127.0.0.1/32
-				  com2sec notConfigUser  default       public
-				  group   notConfigGroup v2c           notConfigUser
-				  access  notConfigGroup ""      any       noauth    exact  systemview none  none
-				  view    systemview    included   .1.3.6.1.2.1.1
-					view    systemview    included   .1.3.6.1.2.1.25.1.1
-					sysLocation Bladeserver, Keller, Karsdorf
-					sysContact goeran@karsdorf.net
-					sysName ${config.networking.fqdn}
-				'';
-			in{
-				enable = true;
-				wantedBy = [ "multiuser.target" ];
-				description = "SNMP agent";
-				after = [ "network.target" ];
-				restartIfChanged = true;
-				serviceConfig = {
-					User = "root";
-					Group = "root";
-					Restart = "always";
-					ExecStart = "${pkgs.net-snmp}/bin/snmpd -Lf /var/log/snmpd.log -c ${snmpd-config.outPath}";
-				};
-			};
-		};
+    services = {
+      "systemd-networkd".environment.SYSTEMD_LOG_LEVEL = "debug";
+      snmpd =
+        let
+          snmpd-config = pkgs.writeText "snmpd.conf" ''
+            	rocommunity test123 127.0.0.1/32
+            	com2sec notConfigUser  default       public
+            	group   notConfigGroup v2c           notConfigUser
+            	access  notConfigGroup ""      any       noauth    exact  systemview none  none
+            	view    systemview    included   .1.3.6.1.2.1.1
+            	view    systemview    included   .1.3.6.1.2.1.25.1.1
+            	sysLocation Bladeserver, Keller, Karsdorf
+            	sysContact goeran@karsdorf.net
+            	sysName ${config.networking.fqdn}
+          '';
+        in
+        {
+          enable = true;
+          wantedBy = [ "multiuser.target" ];
+          description = "SNMP agent";
+          after = [ "network.target" ];
+          restartIfChanged = true;
+          serviceConfig = {
+            User = "root";
+            Group = "root";
+            Restart = "always";
+            ExecStart = "${pkgs.net-snmp}/bin/snmpd -Lf /var/log/snmpd.log -c ${snmpd-config.outPath}";
+          };
+        };
+    };
   };
 
   system.stateVersion = "23.11";

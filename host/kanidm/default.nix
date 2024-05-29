@@ -38,12 +38,12 @@
 
   services = {
     openssh.enable = true;
-		# kanidm = {
-		# 	enableServer = true;
-		# 	enableClient = true;
-		# 	serverSettings = {
-		# 	};
-		# };
+    # kanidm = {
+    # 	enableServer = true;
+    # 	enableClient = true;
+    # 	serverSettings = {
+    # 	};
+    # };
   };
   networking = {
     hostName = "kanidm";

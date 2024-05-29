@@ -35,12 +35,12 @@
     hostName = "dockerhost";
     firewall.allowedTCPPorts = [ 22 80 443 ];
     defaultGateway = "10.0.0.1";
-		useDHCP = false;
+    useDHCP = false;
   };
 
   systemd = {
     network = {
-			enable = true;
+      enable = true;
       networks = {
         ens18 = {
           matchConfig.Name = "ens18";
@@ -87,7 +87,7 @@
         };
       };
       virtualHosts."${config.networking.fqdn}" = {
-				enableACME = true;
+        enableACME = true;
         forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:2283";

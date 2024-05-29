@@ -30,9 +30,9 @@
     update = true;
     monitoring = false;
   };
-	environment.systemPackages = with pkgs; [
-	  wireguard-tools
-	];
+  environment.systemPackages = with pkgs; [
+    wireguard-tools
+  ];
 
   boot.loader = {
     systemd-boot.enable = lib.mkForce false;
@@ -57,12 +57,12 @@
     firewall.enable = lib.mkForce false;
     usePredictableInterfaceNames = false;
 
-		nftables = {
-			# tables = {
-			# 	filter = {
-			# 		family = "inet";
-			# 		enable = true;
-			# 		content = ''
+    nftables = {
+      # tables = {
+      # 	filter = {
+      # 		family = "inet";
+      # 		enable = true;
+      # 		content = ''
       #       chain input {
       #         type filter hook input priority 0;
       #         iifname lo accept
@@ -74,52 +74,52 @@
       #         ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter name node5-ping accept
       #         ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter name node5-traffic accept
       #       }
-			# 		'';
-			# 	};
-			# };
-			ruleset = ''
-			  table inet filter {
-					chain input {
-						type filter hook input priority 0;
-						iifname lo accept
-						ct state {established, related} accept
-						# allow wireguard traffic
-						ip daddr 49.13.134.146 udp dport { 1194 } counter accept
-						# ip daddr 49.13.134.146 tcp dport { 22 } counter accept
-						ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
-						iifname "wg0" ip6 saddr { fd4:10c9:3065:56db::2 } counter accept
-						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
+      # 		'';
+      # 	};
+      # };
+      ruleset = ''
+        			  table inet filter {
+        					chain input {
+        						type filter hook input priority 0;
+        						iifname lo accept
+        						ct state {established, related} accept
+        						# allow wireguard traffic
+        						ip daddr 49.13.134.146 udp dport { 1194 } counter accept
+        						# ip daddr 49.13.134.146 tcp dport { 22 } counter accept
+        						ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
+        						iifname "wg0" ip6 saddr { fd4:10c9:3065:56db::2 } counter accept
+        						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
 
-						counter drop
-					}
+        						counter drop
+        					}
 
-					chain output {
-						type filter hook output priority 0;
-						accept
-					}
+        					chain output {
+        						type filter hook output priority 0;
+        						accept
+        					}
 
-					chain forward-wg {
-						ip6 saddr {fd4:10c9:3065:56db::/64 } ip6 daddr { fd4:10c9:3065:56db::/64, fd6:266a:7309:60ca::/64 } counter accept
-						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
-						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
-						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } tcp dport { 53 } counter accept
-						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } udp dport { 53 } counter accept
-					}
-					chain forward {
-						type filter hook forward priority 0;
-						ct state {established, related} accept
-						#iifname wg0 oifname wg0 counter accept
-						iifname "wg0" oifname "wg0" jump forward-wg
-						counter drop
-					}
-				}
-			'';
-		};
+        					chain forward-wg {
+        						ip6 saddr {fd4:10c9:3065:56db::/64 } ip6 daddr { fd4:10c9:3065:56db::/64, fd6:266a:7309:60ca::/64 } counter accept
+        						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
+        						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
+        						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } tcp dport { 53 } counter accept
+        						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } udp dport { 53 } counter accept
+        					}
+        					chain forward {
+        						type filter hook forward priority 0;
+        						ct state {established, related} accept
+        						#iifname wg0 oifname wg0 counter accept
+        						iifname "wg0" oifname "wg0" jump forward-wg
+        						counter drop
+        					}
+        				}
+        			'';
+    };
     nat = {
       enable = true;
       internalInterfaces = [ "br0" ];
       externalInterface = "eth0";
-		};
+    };
   };
 
   containers = {
@@ -132,13 +132,13 @@
 
         system.stateVersion = "23.11";
 
-				users.users.goeranh = {
-					isNormalUser = true;
-				};
-				services.openssh.enable = true;
-				environment.systemPackages = with pkgs; [
-				  htop
-			  ];
+        users.users.goeranh = {
+          isNormalUser = true;
+        };
+        services.openssh.enable = true;
+        environment.systemPackages = with pkgs; [
+          htop
+        ];
 
         networking = {
           defaultGateway.address = "10.10.0.1";
@@ -170,13 +170,13 @@
     };
     network = {
       enable = true;
-			config = {
-				routeTables = {
-					wg-blade = 10;
-					wg-pi = 20;
-					wg-wg = 30;
-				};
-			};
+      config = {
+        routeTables = {
+          wg-blade = 10;
+          wg-pi = 20;
+          wg-wg = 30;
+        };
+      };
       netdevs = {
         "50-wg0" = {
           netdevConfig = {
@@ -258,89 +258,89 @@
         wg0 = {
           matchConfig.Name = "wg0";
           address = [
-					  "10.200.0.1/24"
-					  "fd4:10c9:3065:56db::1/64"
+            "10.200.0.1/24"
+            "fd4:10c9:3065:56db::1/64"
           ];
           networkConfig = {
             IPMasquerade = "ipv4";
             IPForward = true;
-						DHCPServer = true;
-						DNS = "10.0.0.1, 9.9.9.9";
+            DHCPServer = true;
+            DNS = "10.0.0.1, 9.9.9.9";
 
             IPv6AcceptRA = false;
-						IPv6SendRA = true;
+            IPv6SendRA = true;
           };
-					ipv6Prefixes = [
-					  {
-							ipv6PrefixConfig = {
-								AddressAutoconfiguration = true;
-								Prefix = "fd4:10c9:3065:56db::/64";
-							};
-						}
-					];
-					ipv6RoutePrefixes = [
-						{
-							ipv6RoutePrefixConfig = {
-								Route = "fd4:10c9:3065:56db::/64";
-							};
-						}
-					];
-					routingPolicyRules = [
-						{
-							routingPolicyRuleConfig = {
-								Family = "ipv4";
-								From = "10.200.0.0/24";
-								To = "10.0.0.0/23";
-								Table = "wg-blade";
-							};
-						}
-						{
-							routingPolicyRuleConfig = {
-								Family = "ipv6";
-								From = "fd4:10c9:3065:56db::/64";
-								To = "fd6:266a:7309:60ca::/644";
-								Table = "wg-blade";
-							};
-						}
-						{
-							routingPolicyRuleConfig = {
-								Family = "ipv4";
-								From = "10.200.0.0/24";
-								To = "10.200.0.0/24";
-								Table = "wg-wg";
-							};
-						}
-					];
+          ipv6Prefixes = [
+            {
+              ipv6PrefixConfig = {
+                AddressAutoconfiguration = true;
+                Prefix = "fd4:10c9:3065:56db::/64";
+              };
+            }
+          ];
+          ipv6RoutePrefixes = [
+            {
+              ipv6RoutePrefixConfig = {
+                Route = "fd4:10c9:3065:56db::/64";
+              };
+            }
+          ];
+          routingPolicyRules = [
+            {
+              routingPolicyRuleConfig = {
+                Family = "ipv4";
+                From = "10.200.0.0/24";
+                To = "10.0.0.0/23";
+                Table = "wg-blade";
+              };
+            }
+            {
+              routingPolicyRuleConfig = {
+                Family = "ipv6";
+                From = "fd4:10c9:3065:56db::/64";
+                To = "fd6:266a:7309:60ca::/644";
+                Table = "wg-blade";
+              };
+            }
+            {
+              routingPolicyRuleConfig = {
+                Family = "ipv4";
+                From = "10.200.0.0/24";
+                To = "10.200.0.0/24";
+                Table = "wg-wg";
+              };
+            }
+          ];
           routes = [
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.0.0.0/23";
-								Table = "wg-blade";
-							};
-						}
-					  {
-							routeConfig = {
-								Gateway = "fd4:10c9:3065:56db::3";
-								Destination = "fd6:266a:7309:60ca::/64";
-								Table = "wg-blade";
-							};
-						}
-					  {
-							routeConfig = {
-								Gateway = "fd4:10c9:3065:56db::3";
-								Destination = "fd6:266a:7309:60ca::/64";
-								Table = "wg-blade";
-							};
-						}
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.1";
-								Destination = "10.200.0.0/24";
-								Table = "wg-wg";
-							};
-						}
-					];
+            {
+              routeConfig = {
+                Gateway = "10.200.0.5";
+                Destination = "10.0.0.0/23";
+                Table = "wg-blade";
+              };
+            }
+            {
+              routeConfig = {
+                Gateway = "fd4:10c9:3065:56db::3";
+                Destination = "fd6:266a:7309:60ca::/64";
+                Table = "wg-blade";
+              };
+            }
+            {
+              routeConfig = {
+                Gateway = "fd4:10c9:3065:56db::3";
+                Destination = "fd6:266a:7309:60ca::/64";
+                Table = "wg-blade";
+              };
+            }
+            {
+              routeConfig = {
+                Gateway = "10.200.0.1";
+                Destination = "10.200.0.0/24";
+                Table = "wg-wg";
+              };
+            }
+          ];
         };
         "eth0" = {
           matchConfig.Name = "eth0";
@@ -348,9 +348,9 @@
             "2a01:4f8:c013:27a4::1/64"
           ];
           DHCP = "yes";
-					gateway = [
-					  "fe80::1"
-					];
+          gateway = [
+            "fe80::1"
+          ];
           networkConfig = {
             IPv6AcceptRA = false;
           };

@@ -24,13 +24,13 @@ in
   };
   systemd = {
     network = {
-			enable = true;
-			config = {
-				routeTables = {
-					wg-blade = 10;
-					wg-wg1 = 20;
-				};
-			};
+      enable = true;
+      config = {
+        routeTables = {
+          wg-blade = 10;
+          wg-wg1 = 20;
+        };
+      };
       netdevs = {
         "10-wg0" = {
           netdevConfig = {
@@ -48,7 +48,7 @@ in
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
                 AllowedIPs = [ "10.200.0.0/24" ];
                 Endpoint = "49.13.134.146:1194";
-								PersistentKeepalive = 30;
+                PersistentKeepalive = 30;
               };
             }
           ];
@@ -76,9 +76,9 @@ in
             IPv6AcceptRA = false;
           };
         };
-			};
-		};
-	};
+      };
+    };
+  };
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
@@ -113,8 +113,7 @@ in
     wheelNeedsPassword = false;
   };
 
-  services = {
-  };
+  services = { };
 
 
   environment.systemPackages = with pkgs; [ borgbackup ];

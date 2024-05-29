@@ -1,4 +1,4 @@
-{domain, ...}:{
+{ domain, ... }: {
   root = "/var/lib/step-ca/certs/root_ca.crt";
   federatedRoots = null;
   crt = "/var/lib/step-ca/certs/intermediate_ca.crt";
@@ -36,7 +36,7 @@
         };
         encryptedKey = "eyJhbGciOiJQQkVTMi1IUzI1NitBMTI4S1ciLCJjdHkiOiJqd2sranNvbiIsImVuYyI6IkEyNTZHQ00iLCJwMmMiOjYwMDAwMCwicDJzIjoiODI4SlIzd0N3Q2RUc2MwdnR6eUhhQSJ9.avoDKcXPk682WcLrKWNF2oXDljX7PEzIEClF06UlHSi86NkzBOI_uA.CsenoehhYaorgE9S.r5I1PdMGiQP2pdnk2q6915v2xHLCAH__jhieL9uzmuQNKatmidq9WiS4_7h-LBFDt790rnapyhmhLB86K1v1xIOf86-7-5VHJI4VhLQ1WfP7fG9K7Egf5S-Colkupytu6-oe3KYfJOQOwimIJk-hrif_LhaYevh0XjMckThoMYMC_tntOVvrvkdqjmt0NC8lKF1qQ9hHnOAHUxbJQ-CnpfculowQQTGLZI0P8Ivq3DGxyWto0ezpNmqz2WGOEIbdmtTsYUCiToXcsTaK-g_pCgABYM0j18XK8Iebjdr_wwWGSh1Kw3nCQIjiLNx6K1vK70nDF9Bq-kHJIwVk-xQ.6jWqHlZIU0VtIVDBLc1AhQ";
       }
-			{
+      {
         type = "SSHPOP";
         name = "sshpop-smallstep";
         claims = {
@@ -46,10 +46,10 @@
       {
         type = "ACME";
         name = "acme";
-				challenges = [
-					"http-01"
-					"tls-alpn-01"
-				];
+        challenges = [
+          "http-01"
+          "tls-alpn-01"
+        ];
       }
     ];
     claims = {

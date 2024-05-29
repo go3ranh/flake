@@ -28,14 +28,14 @@ in
             PrivateKeyFile = "/var/lib/wireguard/private";
           };
           wireguardPeers = [
-						{
+            {
               wireguardPeerConfig = {
                 PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
                 AllowedIPs = [ "fd4:10c9:3065:56db::/64" "fd6:266a:7309:60ca::/64" "fe80::/64" "10.200.0.0/24" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
                 Endpoint = "49.13.134.146:1194";
-								PersistentKeepalive = 30;
+                PersistentKeepalive = 30;
               };
-						}
+            }
           ];
         };
         "11-wg1" = {
@@ -48,13 +48,13 @@ in
             PrivateKeyFile = "/var/lib/wireguard/private";
           };
           wireguardPeers = [
-						{
+            {
               wireguardPeerConfig = {
                 PublicKey = "/xN0cEPxD9mS/Zq2DCfPfn9AxlpZxODBrXtJdeNr4gw=";
                 AllowedIPs = [ "10.230.0.0/24" ];
                 Endpoint = "goeranh.de:1194";
               };
-						}
+            }
           ];
         };
         "20-br0" = {
@@ -72,26 +72,26 @@ in
             "fd4:10c9:3065:56db::2/64"
           ];
           DHCP = "no";
-					# gateway = [ "10.200.0.5" ];
+          # gateway = [ "10.200.0.5" ];
           routes = [
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.0.0.0/24";
-							};
-						}
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.0.1.0/24";
-							};
-						}
-					  {
-							routeConfig = {
-								Gateway = "10.200.0.5";
-								Destination = "10.16.17.0/21";
-							};
-						}
+            {
+              routeConfig = {
+                Gateway = "10.200.0.5";
+                Destination = "10.0.0.0/24";
+              };
+            }
+            {
+              routeConfig = {
+                Gateway = "10.200.0.5";
+                Destination = "10.0.1.0/24";
+              };
+            }
+            {
+              routeConfig = {
+                Gateway = "10.200.0.5";
+                Destination = "10.16.17.0/21";
+              };
+            }
           ];
           networkConfig = {
             IPv6AcceptRA = false;
@@ -166,7 +166,7 @@ in
   documentation.man = {
     man-db.enable = false;
     mandoc.enable = true;
-		generateCaches = true;
+    generateCaches = true;
   };
 
   networking = {

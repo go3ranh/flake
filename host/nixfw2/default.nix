@@ -36,7 +36,7 @@
 
   networking = {
     hostName = "nixfw2";
-		useDHCP = lib.mkForce false;
+    useDHCP = lib.mkForce false;
     nftables = {
       enable = true;
       ruleset = ''
@@ -81,12 +81,12 @@
   };
 
   services = {
-		openssh.enable = true;
+    openssh.enable = true;
   };
 
   systemd = {
     network = {
-			enable = true;
+      enable = true;
       netdevs = {
         "10-wg0" = {
           netdevConfig = {
@@ -99,14 +99,14 @@
             ListenPort = 9918;
           };
           wireguardPeers = [
-						{
+            {
               wireguardPeerConfig = {
                 PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
                 AllowedIPs = [ "10.220.0.0/24" "10.0.0.0/24" "10.200.0.0/24" ];
                 Endpoint = "10.16.23.95:51820";
-								PersistentKeepalive = 30;
+                PersistentKeepalive = 30;
               };
-						}
+            }
           ];
         };
       };
@@ -120,20 +120,20 @@
           networkConfig = {
             IPv6AcceptRA = false;
           };
-					routes = [
-					  {
-							routeConfig = {
-								Gateway = "10.220.0.1";
-								Destination = "10.0.0.0/24";
-							};
-						}
-					  {
-							routeConfig = {
-								Gateway = "10.220.0.1";
-								Destination = "10.200.0.0/24";
-							};
-						}
-					];
+          routes = [
+            {
+              routeConfig = {
+                Gateway = "10.220.0.1";
+                Destination = "10.0.0.0/24";
+              };
+            }
+            {
+              routeConfig = {
+                Gateway = "10.220.0.1";
+                Destination = "10.200.0.0/24";
+              };
+            }
+          ];
         };
         ens18 = {
           matchConfig.Name = "ens18";
@@ -154,7 +154,7 @@
             "10.0.1.1/24"
           ];
           DHCP = "no";
-					dns = [ "9.9.9.9" ];
+          dns = [ "9.9.9.9" ];
           networkConfig = {
             IPv6AcceptRA = false;
           };
