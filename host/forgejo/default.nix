@@ -44,15 +44,15 @@
     openssh.enable = true;
     nginx = {
       enable = true;
-      virtualHosts."10.0.0.21" = {
-        default = true;
-        locations."/" = {
-          proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
-        };
-      };
+      # virtualHosts."10.0.0.21" = {
+      #   locations."/" = {
+      #     proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
+      #   };
+      # };
       virtualHosts."${config.networking.fqdn}" = {
-        #enableACME = true;
-        # forceSSL = true;
+        enableACME = true;
+        default = true;
+        forceSSL = true;
         locations."/" = {
           proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
         };
@@ -69,8 +69,8 @@
           DISABLE_SSH = false;
           DOMAIN = "${config.networking.fqdn}";
           SSH_DOMAIN = "${config.networking.fqdn}";
-          SSH_PORT = 2222;
-          START_SSH_SERVER = true;
+          SSH_PORT = 22;
+          START_SSH_SERVER = false;
         };
         log.LEVEL = "Warn";
       };
