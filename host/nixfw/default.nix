@@ -167,7 +167,6 @@
               pi5                IN  A     10.200.0.8
               dockerhost         IN  A     10.0.0.132
               vaultwarden        IN  A     10.0.0.16
-              git                IN  A     10.0.0.17
               forgejo            IN  A     10.0.0.21
               git-website        IN  A     10.0.0.23
               monitoring         IN  A     10.0.0.26
