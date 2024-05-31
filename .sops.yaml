@@ -7,6 +7,7 @@ keys:
   - &kbuild age163a30j4vuvmcpqap7lrmyd545jqcjftq99hadhjhk6cre8yx6s0q85ekk4
   - &nixfw age1j7ua3ze7kjep7lpc32nptz809d69cuxttnc5sz952q93vp5fzdss5shsnx
   - &dockerhost age19nwhfx3ntpeev93lptd5f8gfcnpshuxhfjjphqagcgntdvkylqmsu322t2
+  - &hydra age1uj9gz4mkfqj4mctqmuyhu9nm882ux0wt0ncrfaavtcprygnuma9qhc0gl7
   - &servers
     - *node5
     - *pitest
@@ -49,3 +50,9 @@ creation_rules:
     - pgp: *admins
       age:
       - *nixfw
+
+  - path_regex: host/hydra/[^/]+\.yaml$
+    key_groups:
+    - pgp: *admins
+      age:
+      - *hydra

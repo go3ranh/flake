@@ -1,12 +1,24 @@
 { config, pkgs, ... }:
 {
+  sops = {
+    # This will automatically import SSH keys as age keys
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFormat = "yaml";
+    secrets = {
+      "cache-key" = {
+        owner = "hydra";
+        group = "hydra";
+        mode = "0440";
+      };
+    };
+  };
   security = {
     sudo = {
       enable = true;
       wheelNeedsPassword = false;
     };
   };
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   networking = {
     hostName = "hydra";
     firewall.allowedTCPPorts = [ 22 80 443 ];
@@ -39,8 +51,8 @@
   services.openssh.enable = true;
   services = {
     nix-serve = {
-      # enable = true;
-      # secretKeyFile = "/var/cache-priv-key.pem";
+      enable = true;
+      secretKeyFile = "/run/secrets/cache-key";
     };
     hydra = {
       enable = true;
