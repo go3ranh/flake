@@ -1,6 +1,11 @@
 {
   description = "A very basic flake";
 
+	nixConfig = {
+    extra-substituters = [ "https://hydra.goeranh.selfhosted" ];
+    extra-trusted-public-keys = [ "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI=" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
