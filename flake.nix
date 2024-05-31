@@ -85,7 +85,6 @@
         })
         { } [
         "forgejo"
-        "git"
         "hetzner-wg"
         "hydra"
         "kanidm"
