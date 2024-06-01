@@ -55,6 +55,8 @@
 			"github:NixOS/nixpkgs/"
 			"github:Mic92/sops-nix/"
 			"github:nix-community/"
+			"github:numtide/flake-utils/"
+			"github:nix-systems/default/"
 		];
 		allowed-users = [
 			"goeranh"
