@@ -49,7 +49,6 @@
     };
   };
 
-  services.openssh.enable = true;
 	nix.settings = {
 		allowed-uris = [
 			"github:NixOS/nixpkgs/"
@@ -64,6 +63,7 @@
 		];
 	};
   services = {
+    openssh.enable = true;
     nix-serve = {
       enable = true;
       secretKeyFile = "/run/secrets/cache-key";
