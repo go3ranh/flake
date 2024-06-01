@@ -114,10 +114,11 @@ in
       };
       acme = {
         defaults = {
-          server = "https://nixfw.goeranh.selfhosted:8443/acme/acme/directory";
+          server = "https://nixfw.${config.networking.domain}:8443/acme/acme/directory";
           renewInterval = "daily";
           email = "goeran@karsdorf.net";
           enableDebugLogs = true;
+					validMinDays = 1;
           extraLegoRunFlags = [
           ];
         };
@@ -137,7 +138,7 @@ in
         ];
         trusted-substituters = mkIf cfg.trust-builder [
 				  "https://hydra.nixos.org/"
-					"https://hydra.goeranh.selfhosted"
+					"https://hydra.${config.networking.domain}"
         ];
 				allowed-users = [
 				  "goeranh"
@@ -735,7 +736,7 @@ in
 
     services.resolved = {
       enable = true;
-      domains = [ "goeranh.selfhosted" ];
+      domains = [ "${config.networking.domain}" ];
       fallbackDns = [ "10.0.0.1" "9.9.9.9" ];
     };
     services.openssh = mkIf cfg.server {

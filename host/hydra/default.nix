@@ -71,7 +71,7 @@
     hydra = {
       enable = true;
       useSubstitutes = true;
-      notificationSender = "notify@hydra.goeranh.selfhosted";
+      notificationSender = "notify@hydra.${config.networking.domain}";
       minimumDiskFree = 5;
       minimumDiskFreeEvaluator = 10;
       listenHost = "*";
