@@ -76,6 +76,19 @@
       minimumDiskFreeEvaluator = 10;
       listenHost = "*";
       hydraURL = "https://${config.networking.fqdn}";
+			extraConfig =
+        let
+          key = config.sops.secrets."cache-key".path;
+        in
+        ''
+          binary_cache_secret_key_file = ${key}
+          compress_num_threads = 4
+          evaluator_workers = 4
+          evaluator_max_memory_size = 2048
+          max_output_size = ${toString (5*1024*1024*1024)} # sd card and raw images
+          # store_uri = auto?secret-key=${key}&write-nar-listing=1&ls-compression=zstd&log-compression=zstd
+          upload_logs_to_binary_cache = true
+        '';
     };
     nginx = {
       enable = true;
