@@ -133,12 +133,16 @@ in
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
         trusted-public-keys = [
-          "kbuild.tailf0ec0.ts.net:NMbE+ZsnodlZU//YNVf6vTXIQyuwOfZ1Ol29aPz56CE="
+					"hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
         ];
         trusted-substituters = mkIf cfg.trust-builder [
-          "https://kbuild.tailf0ec0.ts.net"
-          "ssh-ng://kbuild"
+				  "https://hydra.nixos.org/"
+					"https://hydra.goeranh.selfhosted"
         ];
+				allowed-users = [
+				  "goeranh"
+				  "root"
+				];
       };
       sshServe = mkIf cfg.remote-store {
         enable = true;
