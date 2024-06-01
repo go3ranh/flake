@@ -93,7 +93,7 @@
             }
           },
           "flakeathome" : {
-            "url" : "https://foregejo.goeranh.selfhosted/goeranh/flakeathome.git",
+            "url" : "https://forgejo.goeranh.selfhosted/goeranh/flakeathome.git",
             "vcs-config" : {
               "ref" : "main"
             }
