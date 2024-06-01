@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 {
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   sops = {
     # This will automatically import SSH keys as age keys
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
