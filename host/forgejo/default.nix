@@ -44,11 +44,6 @@
     openssh.enable = true;
     nginx = {
       enable = true;
-      # virtualHosts."10.0.0.21" = {
-      #   locations."/" = {
-      #     proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
-      #   };
-      # };
       virtualHosts."${config.networking.fqdn}" = {
         enableACME = true;
         default = true;
@@ -57,14 +52,14 @@
           proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
         };
       };
-      virtualHosts."hound.${config.networking.domain}" = {
-        enableACME = true;
-        default = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
-        };
-      };
+      # virtualHosts."hound.${config.networking.domain}" = {
+      #   enableACME = true;
+      #   default = true;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
+      #   };
+      # };
     };
     forgejo = {
       enable = true;
@@ -85,8 +80,8 @@
       package = pkgs.forgejo;
     };
 		hound = {
-			enable = false;
-			listen = "127.0.0.1:6080";
+			enable = true;
+			listen = "10.0.0.21:6080";
 			config = ''
 			{
         "dbpath" : "${config.services.hound.home}/db",
@@ -111,7 +106,8 @@
   networking = {
     hostName = "forgejo";
     useDHCP = false;
-    firewall.enable = lib.mkForce false;
+    # firewall.enable = lib.mkForce false;
+    firewall.allowedTCPPorts = [ 22 80 443 6080 ];
 
     interfaces.ens18.ipv4.addresses = [{
       address = "10.0.0.21";
