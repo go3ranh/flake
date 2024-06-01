@@ -50,6 +50,17 @@
   };
 
   services.openssh.enable = true;
+	nix.settings = {
+		allowed-uris = [
+			"github:NixOS/nixpkgs/"
+			"github:Mic92/sops-nix/"
+			"github:nix-community/"
+		];
+		allowed-users = [
+			"goeranh"
+			"hydra"
+		];
+	};
   services = {
     nix-serve = {
       enable = true;
