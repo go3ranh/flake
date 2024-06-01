@@ -787,31 +787,6 @@ in
     };
 
     systemd.services = {
-      autoupdate = mkIf cfg.update {
-        enable = true;
-        path = with pkgs; [
-          nixos-rebuild
-          git
-        ];
-        script = ''
-          					nixos-rebuild switch --flake fah#
-          				'';
-        startAt = "daily";
-      };
-      # tscert = mkIf config.services.nginx.enable {
-      #   enable = true;
-      #   path = with pkgs; [
-      #     tailscale
-      #   ];
-      #   script = ''
-      #               tailscale cert ${config.networking.fqdn}
-      #     				'';
-      #   startAt = "daily";
-      #   unitConfig = {
-      #     User = config.users.users.nginx.name;
-      #     WorkingDirectory = "/var/lib";
-      #   };
-      # };
     };
   };
 }
