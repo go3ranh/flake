@@ -283,7 +283,7 @@ in
     #printing.enable = true;
     #avahi.enable = true;
     #avahi.nssmdns = true;
-    openssh.enable = false;
+    openssh.enable = lib.mkForce false;
 
     mysql = {
       enable = true;
@@ -395,7 +395,7 @@ in
   boot.loader.efi.canTouchEfiVariables = false;
   boot.loader.generationsDir.copyKernels = true;
   boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.grub.enable = true;
+  boot.loader.grub.enable = lib.mkForce true;
   boot.loader.grub.copyKernels = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.zfsSupport = true;
