@@ -218,9 +218,6 @@ in
 
 
 
-  # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
   security = {
     rtkit.enable = true;
     polkit.enable = true;
@@ -261,8 +258,18 @@ in
   system.stateVersion = "23.11";
 
 
+  # Enable sound with pipewire.
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
   services = {
     fwupd.enable = true;
+		jack = {
+			jackd.enable = true;
+			alsa.enable = false;
+			loopback = {
+				enable = true;
+			};
+		};
     pipewire = {
       enable = true;
       alsa.enable = true;
