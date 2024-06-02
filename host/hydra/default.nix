@@ -49,18 +49,42 @@
     };
   };
 
-	nix.settings = {
-		allowed-uris = [
-			"github:NixOS/nixpkgs/"
-			"github:Mic92/sops-nix/"
-			"github:nix-community/"
-			"github:numtide/flake-utils/"
-			"github:nix-systems/default/"
+	nix = {
+		buildMachines = [
+			{
+				hostName = "localhost";
+				maxJobs = 1;
+				speedFactor = 2;
+				systems = [
+					"x86_64-linux"
+					"aarch64-linux"
+				];
+
+				supportedFeatures = [
+					 # "kvm"
+					 # "nixos-test"
+					"big-parallel"
+					"benchmark"
+				];
+			}
 		];
-		allowed-users = [
-			"goeranh"
-			"hydra"
-		];
+		settings = {
+			allowed-uris = [
+				"github:NixOS/nixpkgs/"
+				"github:Mic92/sops-nix/"
+				"github:nix-community/"
+				"github:numtide/flake-utils/"
+				"github:nix-systems/default/"
+			];
+			allowed-users = [
+				"@wheel"
+				"@builders"
+				"goeranh"
+				"hydra"
+				"hydra-queue-runner"
+				"hydra-www"
+			];
+		};
 	};
   services = {
     openssh.enable = true;
@@ -81,12 +105,12 @@
           key = config.sops.secrets."cache-key".path;
         in
         ''
-          binary_cache_secret_key_file = ${key}
+          # binary_cache_secret_key_file = ${key}
           compress_num_threads = 4
           evaluator_workers = 4
           evaluator_max_memory_size = 2048
           max_output_size = ${toString (5*1024*1024*1024)} # sd card and raw images
-          # store_uri = auto?secret-key=${key}&write-nar-listing=1&ls-compression=zstd&log-compression=zstd
+          store_uri = auto?secret-key=${key}&write-nar-listing=1&ls-compression=zstd&log-compression=zstd
           upload_logs_to_binary_cache = true
         '';
     };
