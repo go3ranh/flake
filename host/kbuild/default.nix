@@ -83,7 +83,7 @@ in
   nixpkgs.hostPlatform = "x86_64-linux";
 
   boot.loader.grub = {
-    enable = true;
+    enable = lib.mkForce true;
     device = "/dev/sda";
   };
 
