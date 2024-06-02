@@ -184,6 +184,7 @@ in
       externalInterface = "wlp0s20f3";
       enableIPv6 = false;
     };
+		wireless.enable = lib.mkForce false;
   };
 
   time.timeZone = "Europe/Berlin";
