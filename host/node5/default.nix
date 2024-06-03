@@ -227,6 +227,9 @@ in
   hardware.hackrf.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+	nix.settings.trusted-users = [
+	  "goeranh"
+	];
 
   environment.systemPackages = with pkgs; [
     usbutils
