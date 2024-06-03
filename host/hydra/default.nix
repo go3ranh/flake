@@ -85,6 +85,7 @@
 				"github:nix-community/"
 				"github:numtide/flake-utils/"
 				"github:nix-systems/default/"
+				"github:zhaofengli/attic/"
 			];
 			allowed-users = [
 				"@wheel"
