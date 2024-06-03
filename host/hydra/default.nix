@@ -167,7 +167,10 @@
 
       settings = {
         listen = "127.0.0.1:8183";
-        allowed-hosts = [ "attic.${config.networking.domain}" ];
+        allowed-hosts = [ 
+				  "attic.${config.networking.domain}"
+				  "${config.networking.fqdn}"
+				];
         api-endpoint = "https://attic.${config.networking.domain}";
         # compression.type = "none"; # let ZFS do the compressing
         database = {
