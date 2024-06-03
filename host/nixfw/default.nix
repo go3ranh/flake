@@ -171,6 +171,7 @@
               hound              IN  CNAME forgejo
               monitoring         IN  A     10.0.0.26
               hydra              IN  A     10.0.0.30
+              attic              IN  CNAME hydra
               node5              IN  A     10.200.0.2
               server-gitea       IN  A     100.87.18.24
               workstation        IN  A     10.200.0.3
