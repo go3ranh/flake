@@ -89,6 +89,7 @@
               ./host/${name}
               sops-nix.nixosModules.sops
               disko.nixosModules.disko
+							inputs.attic.nixosModules.atticd
               (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
               {
                 boot = {
