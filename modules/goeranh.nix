@@ -626,6 +626,10 @@ in
                     bind -n M-H previous-window
                     bind -n M-L next-window
                     bind -n M-Enter new-window
+                    bind -n M-a split-pane -v
+                    bind -n M-s split-pane -h
+										# clear screen
+                    bind -n C-l send-keys C-l
         '';
       };
     };
