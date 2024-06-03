@@ -106,6 +106,7 @@
         })
         { } [
         "forgejo"
+        "hedgedoc"
         "hetzner-wg"
         "hydra"
         "kanidm"
