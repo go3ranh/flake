@@ -61,22 +61,22 @@
 
 	nix = {
 		buildMachines = [
-			{
-				hostName = "localhost";
-				maxJobs = 1;
-				speedFactor = 2;
-				systems = [
-					"x86_64-linux"
-					"aarch64-linux"
-				];
+			# {
+			# 	hostName = "localhost";
+			# 	# maxJobs = 1;
+			# 	speedFactor = 2;
+			# 	systems = [
+			# 		"x86_64-linux"
+			# 		"aarch64-linux"
+			# 	];
 
-				supportedFeatures = [
-					 # "kvm"
-					 # "nixos-test"
-					"big-parallel"
-					"benchmark"
-				];
-			}
+			# 	supportedFeatures = [
+			# 		 # "kvm"
+			# 		 # "nixos-test"
+			# 		"big-parallel"
+			# 		#"benchmark"
+			# 	];
+			# }
 		];
 		settings = {
 			allowed-uris = [
@@ -154,7 +154,7 @@
           # binary_cache_secret_key_file = ${key}
           compress_num_threads = 4
           evaluator_workers = 4
-          evaluator_max_memory_size = 2048
+          evaluator_max_memory_size = 8192
           max_output_size = ${toString (5*1024*1024*1024)} # sd card and raw images
           store_uri = auto?secret-key=${key}&write-nar-listing=1&ls-compression=zstd&log-compression=zstd
           upload_logs_to_binary_cache = true
