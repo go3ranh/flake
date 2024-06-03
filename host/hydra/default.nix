@@ -86,6 +86,7 @@
 				"github:numtide/flake-utils/"
 				"github:nix-systems/default/"
 				"github:zhaofengli/attic/"
+				"github:ipetkov/crane/"
 			];
 			allowed-users = [
 				"@wheel"
