@@ -2,14 +2,21 @@
   description = "A very basic flake";
 
 	nixConfig = {
-    extra-substituters = [ "https://hydra.goeranh.selfhosted" ];
-    extra-trusted-public-keys = [ "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI=" ];
+    extra-substituters = [
+		  "https://hydra.goeranh.selfhosted"
+		  "https://attic.goeranh.selfhosted"
+		];
+    extra-trusted-public-keys = [
+		  "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
+		];
   };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
+		systems.url = "github:nix-systems/default";
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,8 +30,20 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+		flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "systems";
+    };
+		attic = {
+      url = "github:zhaofengli/attic";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-stable.follows = "nixpkgs-stable";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, attic, flake-utils, systems, nixpkgs, nixpkgs-stable, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsarm64 = nixpkgs.legacyPackages.aarch64-linux;
