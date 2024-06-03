@@ -87,6 +87,7 @@
 				"github:nix-systems/default/"
 				"github:zhaofengli/attic/"
 				"github:ipetkov/crane/"
+				"git+https://github.com/zhaofengli/nix-base32.git?rev=b850c6e9273d1c39bd93abb704a53345f5be92eb&submodules=1"
 			];
 			allowed-users = [
 				"@wheel"
