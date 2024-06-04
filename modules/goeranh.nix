@@ -209,7 +209,6 @@ in
           quickemu
           shotwell
           signal-desktop
-          spotify
           super-productivity
           thunderbird
           tor-browser-bundle-bin
@@ -221,6 +220,7 @@ in
 
           # discord
           # obsidian
+          # spotify
           # rambox
         ] else [ ])
         (if cfg.development then with nixpkgs.legacyPackages.${arch}; [
