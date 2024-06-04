@@ -139,6 +139,7 @@ in
         trusted-substituters = mkIf cfg.trust-builder [
 				  "https://hydra.nixos.org/"
 					"https://hydra.${config.networking.domain}"
+					"https://attic.${config.networking.domain}"
         ];
 				allowed-users = [
 				  "goeranh"
