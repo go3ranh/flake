@@ -182,16 +182,15 @@ in
       packages = builtins.concatLists [
         (with nixpkgs.legacyPackages.${arch}; [
           dig
+          file
           jq
+          rsync
           tcpdump
           whois
-          rsync
           # tailscale
-          file
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
-					qpwgraph
           chromium
           dbeaver-bin
           ferdium
@@ -206,9 +205,11 @@ in
           okular
           pika-backup
           poppler_utils
+					qpwgraph
           quickemu
           shotwell
           signal-desktop
+          spotify
           super-productivity
           thunderbird
           tor-browser-bundle-bin
@@ -221,7 +222,6 @@ in
           # discord
           # obsidian
           # rambox
-          # spotify
         ] else [ ])
         (if cfg.development then with nixpkgs.legacyPackages.${arch}; [
           binwalk
@@ -659,26 +659,26 @@ in
           [ self.packages.${arch}.customvim ]
           (with nixpkgs.legacyPackages.${arch}; [
 						attic-client
-            linuxKernel.packages.linux_zen.perf
-            wireguard-tools
-            bpftrace
             bash
             bat
+            bpftrace
             direnv
             fzf
             gettext
             gitFull
             gitui
             gnupg
-            pinentry
             gofu
             htop
+            linuxKernel.packages.linux_zen.perf
             nix-direnv
             nmap
+            pinentry
             ripgrep
             tmux
             unzip
             wget
+            wireguard-tools
             zellij
             zoxide
           ])

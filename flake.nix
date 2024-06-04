@@ -77,8 +77,8 @@
         { } [
         "dockerhost"
         "kbuild"
-        "node5"
         "nixfw"
+        "node5"
         "workstation"
         #"desktop"
       ] // builtins.foldl'
