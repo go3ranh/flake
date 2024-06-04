@@ -100,8 +100,8 @@
 
         					chain forward-wg {
         						ip6 saddr {fd4:10c9:3065:56db::/64 } ip6 daddr { fd4:10c9:3065:56db::/64, fd6:266a:7309:60ca::/64 } counter accept
-        						ip saddr 10.200.0.2 ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
-        						ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
+        						ip saddr { 10.200.0.2, 10.200.0.7 } ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
+        						# ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
         						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } tcp dport { 53 } counter accept
         						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } udp dport { 53 } counter accept
         					}
