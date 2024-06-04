@@ -634,6 +634,11 @@ in
                     bind -n C-l send-keys C-l
         '';
       };
+	    gnupg.agent = {
+	    	 enable = true;
+	    	 pinentryPackage = lib.mkIf cfg.desktop pkgs.pinentry-gnome3;
+	    	 enableSSHSupport = true;
+	    };
     };
 
     xdg.portal = lib.mkIf cfg.desktop {
