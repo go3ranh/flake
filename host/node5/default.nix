@@ -245,6 +245,11 @@ in
   programs.dconf.enable = true;
 
   programs.git.enable = true;
+	programs.gnupg.agent = {
+		 enable = true;
+		 pinentryPackage = pkgs.pinentry-curses;
+		 enableSSHSupport = true;
+	};
 
   networking.firewall.enable = true;
 
