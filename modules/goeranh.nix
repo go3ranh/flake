@@ -667,7 +667,7 @@ in
             direnv
             fzf
             gettext
-            git
+            gitFull
             gitui
             gnupg
             pinentry
