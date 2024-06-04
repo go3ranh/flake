@@ -191,6 +191,7 @@ in
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
+					qpwgraph
           chromium
           dbeaver-bin
           ferdium
@@ -657,6 +658,7 @@ in
         [
           [ self.packages.${arch}.customvim ]
           (with nixpkgs.legacyPackages.${arch}; [
+						attic-client
             linuxKernel.packages.linux_zen.perf
             wireguard-tools
             bpftrace
