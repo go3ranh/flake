@@ -236,6 +236,6 @@
       prefixLength = 24;
     }];
     defaultGateway = "10.0.0.1";
-    firewall.interfaces.ens18.allowedTCPPorts = [ 80 443 3030 ];
+    firewall.interfaces.ens18.allowedTCPPorts = [ 80 443 3030 9002 ];
   };
 }

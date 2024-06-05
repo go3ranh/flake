@@ -851,7 +851,7 @@ in
              positions_directory = "\${STATE_DIRECTORY}/positions/";
              global = {
                clients = [{
-                 url = "http://${backend_ip}:3100/loki/api/v1/push";
+                 url = "http://${backend_ip}:3030/loki/api/v1/push";
                }];
              };
              configs = [{
