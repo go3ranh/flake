@@ -32,7 +32,7 @@
   };
   networking = {
     hostName = "hydra";
-    firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.allowedTCPPorts = [ 22 80 443 9002 ];
     defaultGateway = "10.0.0.1";
     useDHCP = false;
     hostId = "e679682b";

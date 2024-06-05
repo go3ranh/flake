@@ -67,9 +67,33 @@
           }];
         }
         {
-          job_name = "nixfw-scrape";
+          job_name = "nixfw";
           static_configs = [{
             targets = [ "10.0.0.1:9002" ];
+          }];
+        }
+        {
+          job_name = "forgejo";
+          static_configs = [{
+            targets = [ "forgejo.goeranh.selfhosted:9002" ];
+          }];
+        }
+        {
+          job_name = "hydra";
+          static_configs = [{
+            targets = [ "hydra.goeranh.selfhosted:9002" ];
+          }];
+        }
+        {
+          job_name = "vaultwarden";
+          static_configs = [{
+            targets = [ "vaultwarden.goeranh.selfhosted:9002" ];
+          }];
+        }
+        {
+          job_name = "dockerhost";
+          static_configs = [{
+            targets = [ "dockerhost.goeranh.selfhosted:9002" ];
           }];
         }
         {

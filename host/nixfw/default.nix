@@ -63,7 +63,7 @@
         		ip6 saddr { fd4:10c9:3065:56db::/64 } counter accept
 
         		ip daddr { 10.16.23.95 } tcp dport 22 accept
-        		iifname "ens19" counter accept
+        		iifname "ens19" tcp dport 9002 counter accept
 
         		iifname { "ens19", "wg0", "wg1" } udp dport { 53 } accept
         		iifname { "ens19" } udp dport { 67 } accept

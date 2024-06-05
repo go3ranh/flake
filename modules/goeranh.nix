@@ -755,18 +755,151 @@ in
       enable = true;
       openFirewall = true;
     };
-    services.prometheus.exporters = mkIf cfg.monitoring {
-      node = {
-        enable = true;
-        enabledCollectors = [
-          "cpu"
-          "ethtool"
-          "netdev"
-          "systemd"
-        ];
-        port = 9002;
-      };
-    };
+
+		services = {
+			nginx.statusPage = true;
+			prometheus.exporters = {
+				# Export NginX if the NginX service is enabled
+				nginx = {
+					enable = config.services.nginx.enable;
+					listenAddress = "127.0.0.1";
+					telemetryPath = "/nginx";
+				};
+				node = {
+					enable = true;
+					enabledCollectors = [
+						"cpu"
+						"ethtool"
+						"netdev"
+						"systemd"
+					];
+					port = 9002;
+				};
+			};
+
+
+####### ###### begin
+####### ###### begin
+####### ###### begin
+        grafana-agent =
+       let
+         backend_ip = "10.0.0.26";
+       in
+       {
+         enable = true;
+         extraFlags = [ "-disable-reporting" ];
+         settings = {
+           # Use integrated exporters for supported services
+           # Other services use 'services.prometheus.exporters' above
+           integrations = {
+             agent.enabled = true;
+             apache_http = {
+               enabled = config.services.httpd.enable;
+               scrape_integration = config.services.httpd.enable;
+             };
+             # Postgres könnte noch Probleme wegen falscher Konfiguration machen, deshalb erstmal nicht aktiv
+             postgres_exporter = {
+               enabled = config.services.postgresql.enable;
+               scrape_integration = config.services.postgresql.enable;
+             };
+           };
+           # Configure scraping of metrics to send to prometheus
+           metrics = {
+             global = {
+               remote_write = [{
+                 name = "monitoring-backend";
+                 url = "http://${backend_ip}:9002/api/v1/write";
+                 # Set the instance label to the FQDN of the instance it originates from
+                 write_relabel_configs = [
+                   {
+                     target_label = "instance";
+                     replacement = "${config.networking.fqdn}";
+                   }
+                 ];
+               }];
+             };
+             configs = [{
+               name = "default";
+               # Generate a scrape config for all enabled prometheus exporters
+               # Applications natively providing metrics endpoints have to be manually configured
+               scrape_configs = (
+                 let
+                   exports = config.services.prometheus.exporters;
+                   active_exports = builtins.filter (exporter: builtins.isAttrs exports.${exporter} &&  exports.${exporter}.enable) (builtins.attrNames exports);
+                 in
+                 builtins.foldl' (
+                   result: export_name: with config.services.prometheus.exporters.${export_name};
+                     result ++ [{
+                       job_name = export_name;
+                       #metrics_path = "${telemetryPath}";
+                       static_configs = [{
+                         targets = [ "${listenAddress}:${toString port}" ];
+                         labels = {
+                           # TODO Don't know what's needed here
+                           exporter = export_name;
+                         };
+                       }];
+                     }])
+                 []
+                 active_exports
+               ) ++ [ ];
+             }];
+           };
+           # Configure scraping of logs to write to loki
+           # Docs: https://grafana.com/docs/loki/latest/send-data/promtail/configuration/#scrape_configs
+           logs = {
+             positions_directory = "\${STATE_DIRECTORY}/positions/";
+             global = {
+               clients = [{
+                 url = "http://${backend_ip}:3100/loki/api/v1/push";
+               }];
+             };
+             configs = [{
+               name = "default";
+               scrape_configs = [
+                 {
+                   job_name = "journal";
+                   journal = {
+                     labels = {
+                       job = "systemd-journal";
+                     };
+                     max_age = "12h";
+                   };
+                   relabel_configs = [
+                     {
+                       source_labels = [
+                         "__journal__systemd_unit"
+                       ];
+                       target_label = "systemd_unit";
+                     }
+                     {
+                       source_labels = [
+                         "__journal__hostname"
+                       ];
+                       target_label = "nodename";
+                     }
+                     {
+                       source_labels = [
+                         "__journal_syslog_identifier"
+                       ];
+                       target_label = "syslog_identifier";
+                     }
+                   ];
+                 }
+               ] ++ [ ];
+             }];
+           };
+         };
+       };
+
+####### ###### end
+####### ###### end
+####### ###### end
+
+
+			};
+
+
     services.promtail = mkIf cfg.monitoring {
       enable = true;
       configuration = {
