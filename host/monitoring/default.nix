@@ -97,6 +97,12 @@
           }];
         }
         {
+          job_name = "microhost";
+          static_configs = [{
+            targets = [ "microhost.goeranh.selfhosted:9002" ];
+          }];
+        }
+        {
           job_name = "workstation-scrape";
           static_configs = [{
             targets = [ "100.87.106.167:9002" ];
