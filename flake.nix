@@ -1,21 +1,21 @@
 {
   description = "A very basic flake";
 
-	nixConfig = {
+  nixConfig = {
     extra-substituters = [
-		  "https://hydra.goeranh.selfhosted"
-		  "https://attic.goeranh.selfhosted"
-		];
+      "https://hydra.goeranh.selfhosted"
+      "https://attic.goeranh.selfhosted"
+    ];
     extra-trusted-public-keys = [
-		  "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
-		];
+      "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
+    ];
   };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
-		systems.url = "github:nix-systems/default";
+    systems.url = "github:nix-systems/default";
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -30,11 +30,11 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-		flake-utils = {
+    flake-utils = {
       url = "github:numtide/flake-utils";
       inputs.systems.follows = "systems";
     };
-		attic = {
+    attic = {
       url = "github:zhaofengli/attic";
       inputs = {
         nixpkgs.follows = "nixpkgs";
@@ -89,7 +89,7 @@
               ./host/${name}
               sops-nix.nixosModules.sops
               disko.nixosModules.disko
-							inputs.attic.nixosModules.atticd
+              inputs.attic.nixosModules.atticd
               (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
               {
                 boot = {
@@ -119,13 +119,13 @@
 
       packages.x86_64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgs; };
       packages.aarch64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgsarm64; };
-			hydraJobs = lib.mapAttrs (_: lib.hydraJob) (
-				let
-				  getBuildEntryPoint = _: nixosSystem:
-						nixosSystem.config.system.build.toplevel;
-				in
-				lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-			);
+      hydraJobs = lib.mapAttrs (_: lib.hydraJob) (
+        let
+          getBuildEntryPoint = _: nixosSystem:
+            nixosSystem.config.system.build.toplevel;
+        in
+        lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
+      );
       devShells = {
         x86_64-linux = {
           default = pkgs.mkShell {

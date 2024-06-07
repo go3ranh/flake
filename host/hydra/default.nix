@@ -19,11 +19,11 @@
       };
     };
   };
-	users.users.atticd = {
-		isSystemUser = true;
-		group = "atticd";
-	};
-	users.groups.atticd = {};
+  users.users.atticd = {
+    isSystemUser = true;
+    group = "atticd";
+  };
+  users.groups.atticd = { };
   security = {
     sudo = {
       enable = true;
@@ -59,53 +59,53 @@
     };
   };
 
-	nix = {
-		buildMachines = [
-			# {
-			# 	hostName = "localhost";
-			# 	# maxJobs = 1;
-			# 	speedFactor = 2;
-			# 	systems = [
-			# 		"x86_64-linux"
-			# 		"aarch64-linux"
-			# 	];
+  nix = {
+    buildMachines = [
+      # {
+      # 	hostName = "localhost";
+      # 	# maxJobs = 1;
+      # 	speedFactor = 2;
+      # 	systems = [
+      # 		"x86_64-linux"
+      # 		"aarch64-linux"
+      # 	];
 
-			# 	supportedFeatures = [
-			# 		 # "kvm"
-			# 		 # "nixos-test"
-			# 		"big-parallel"
-			# 		#"benchmark"
-			# 	];
-			# }
-		];
-		settings = {
-			allowed-uris = [
-				"github:NixOS/nixpkgs/"
-				"github:Mic92/sops-nix/"
-				"github:nix-community/"
-				"github:numtide/flake-utils/"
-				"github:nix-systems/default/"
-				"github:zhaofengli/attic/"
-				"github:ipetkov/crane/"
-				"git+https://github.com/zhaofengli/nix-base32.git?rev=b850c6e9273d1c39bd93abb704a53345f5be92eb&submodules=1"
-			];
-			allowed-users = [
-				"@wheel"
-				"@builders"
-				"goeranh"
-				"hydra"
-				"hydra-queue-runner"
-				"hydra-www"
-			];
-		};
-	};
+      # 	supportedFeatures = [
+      # 		 # "kvm"
+      # 		 # "nixos-test"
+      # 		"big-parallel"
+      # 		#"benchmark"
+      # 	];
+      # }
+    ];
+    settings = {
+      allowed-uris = [
+        "github:NixOS/nixpkgs/"
+        "github:Mic92/sops-nix/"
+        "github:nix-community/"
+        "github:numtide/flake-utils/"
+        "github:nix-systems/default/"
+        "github:zhaofengli/attic/"
+        "github:ipetkov/crane/"
+        "git+https://github.com/zhaofengli/nix-base32.git?rev=b850c6e9273d1c39bd93abb704a53345f5be92eb&submodules=1"
+      ];
+      allowed-users = [
+        "@wheel"
+        "@builders"
+        "goeranh"
+        "hydra"
+        "hydra-queue-runner"
+        "hydra-www"
+      ];
+    };
+  };
   services = {
     openssh.enable = true;
     nix-serve = {
       enable = true;
       secretKeyFile = "/run/secrets/cache-key";
     };
-		postgresql = {
+    postgresql = {
       enable = true;
       enableJIT = true;
       identMap = ''
@@ -146,7 +146,7 @@
       minimumDiskFreeEvaluator = 10;
       listenHost = "*";
       hydraURL = "https://${config.networking.fqdn}";
-			extraConfig =
+      extraConfig =
         let
           key = config.sops.secrets."cache-key".path;
         in
@@ -160,17 +160,17 @@
           upload_logs_to_binary_cache = true
         '';
     };
-		atticd = {
+    atticd = {
       enable = true;
 
       credentialsFile = config.sops.secrets."attic-secret-key".path;
 
       settings = {
         listen = "127.0.0.1:8183";
-        allowed-hosts = [ 
-				  "attic.${config.networking.domain}"
-				  "${config.networking.fqdn}"
-				];
+        allowed-hosts = [
+          "attic.${config.networking.domain}"
+          "${config.networking.fqdn}"
+        ];
         api-endpoint = "https://attic.${config.networking.domain}";
         # compression.type = "none"; # let ZFS do the compressing
         database = {

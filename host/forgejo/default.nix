@@ -79,35 +79,35 @@
       };
       package = pkgs.forgejo;
     };
-		hound = {
-			enable = true;
-			listen = "127.0.0.1:6080";
-			config = ''
-			{
-        "dbpath" : "${config.services.hound.home}/db",
-        "repos" : {
-          "nixpkgs" : {
-            "url" : "https://github.com/nixos/nixpkgs",
-            "vcs-config" : {
-              "ref" : "nixos-unstable"
-            }
-          },
-          "flakeathome" : {
-            "url" : "https://forgejo.${config.networking.domain}/goeranh/flakeathome.git",
-            "vcs-config" : {
-              "ref" : "main"
-            }
-          },
-          "sturaflake" : {
-            "url" : "https://forgejo.${config.networking.domain}/goeranh/sturaflake",
-            "vcs-config" : {
-              "ref" : "master"
-            }
-          }
-        }
-      }
-			'';
-		};
+    hound = {
+      enable = true;
+      listen = "127.0.0.1:6080";
+      config = ''
+        			{
+                "dbpath" : "${config.services.hound.home}/db",
+                "repos" : {
+                  "nixpkgs" : {
+                    "url" : "https://github.com/nixos/nixpkgs",
+                    "vcs-config" : {
+                      "ref" : "nixos-unstable"
+                    }
+                  },
+                  "flakeathome" : {
+                    "url" : "https://forgejo.${config.networking.domain}/goeranh/flakeathome.git",
+                    "vcs-config" : {
+                      "ref" : "main"
+                    }
+                  },
+                  "sturaflake" : {
+                    "url" : "https://forgejo.${config.networking.domain}/goeranh/sturaflake",
+                    "vcs-config" : {
+                      "ref" : "master"
+                    }
+                  }
+                }
+              }
+        			'';
+    };
   };
   networking = {
     hostName = "forgejo";

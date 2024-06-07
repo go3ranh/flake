@@ -61,7 +61,7 @@
       #   };
       # };
     };
-		hedgedoc = {
+    hedgedoc = {
       enable = true;
       settings = {
         allowAnonymousEdits = true;

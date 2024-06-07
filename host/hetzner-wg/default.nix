@@ -191,43 +191,43 @@
           wireguardPeers = [
             {
               # node5
-							PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
-							AllowedIPs = [ "10.200.0.2" "fd4:10c9:3065:56db::2" ];
+              PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
+              AllowedIPs = [ "10.200.0.2" "fd4:10c9:3065:56db::2" ];
             }
             {
               # workstation
-							PublicKey = "Y76XADOksxcVc8oooxjOHgW4M1aPckMoMV4K844BYBw=";
-							AllowedIPs = [ "10.200.0.3" ];
+              PublicKey = "Y76XADOksxcVc8oooxjOHgW4M1aPckMoMV4K844BYBw=";
+              AllowedIPs = [ "10.200.0.3" ];
             }
             {
               # pitest
-							PublicKey = "F4yaZ9zabNpQSpV+fXAvla6klsv6SppG3Ic3IMlAxnE=";
-							AllowedIPs = [ "10.200.0.4" ];
+              PublicKey = "F4yaZ9zabNpQSpV+fXAvla6klsv6SppG3Ic3IMlAxnE=";
+              AllowedIPs = [ "10.200.0.4" ];
             }
             {
               # nixfw
-							PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
-							AllowedIPs = [ "fd4:10c9:3065:56db::3" "fd6:266a:7309:60ca::/64" "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
+              PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
+              AllowedIPs = [ "fd4:10c9:3065:56db::3" "fd6:266a:7309:60ca::/64" "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
             }
             {
               # iphone 6
-							PublicKey = "37dTDJ0/ThwTvJLHDzPSHq7bERSREAgnhCIgKAhc4Qc=";
-							AllowedIPs = [ "10.200.0.6" ];
+              PublicKey = "37dTDJ0/ThwTvJLHDzPSHq7bERSREAgnhCIgKAhc4Qc=";
+              AllowedIPs = [ "10.200.0.6" ];
             }
             {
               # iphone 13
-							PublicKey = "KvqfWEJYeBSQfPZ5c9J57izdG6HQ8rLWLaeINf0nHk4=";
-							AllowedIPs = [ "10.200.0.7" ];
+              PublicKey = "KvqfWEJYeBSQfPZ5c9J57izdG6HQ8rLWLaeINf0nHk4=";
+              AllowedIPs = [ "10.200.0.7" ];
             }
             {
               # pi5
-							PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
-							AllowedIPs = [ "10.200.0.8" ];
+              PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
+              AllowedIPs = [ "10.200.0.8" ];
             }
             {
               # kbuild
-							PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
-							AllowedIPs = [ "10.200.0.9" ];
+              PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
+              AllowedIPs = [ "10.200.0.9" ];
             }
           ];
         };
@@ -256,55 +256,55 @@
           };
           ipv6Prefixes = [
             {
-							AddressAutoconfiguration = true;
-							Prefix = "fd4:10c9:3065:56db::/64";
+              AddressAutoconfiguration = true;
+              Prefix = "fd4:10c9:3065:56db::/64";
             }
           ];
           ipv6RoutePrefixes = [
             {
-							Route = "fd4:10c9:3065:56db::/64";
+              Route = "fd4:10c9:3065:56db::/64";
             }
           ];
           routingPolicyRules = [
             {
-							Family = "ipv4";
-							From = "10.200.0.0/24";
-							To = "10.0.0.0/23";
-							Table = "wg-blade";
+              Family = "ipv4";
+              From = "10.200.0.0/24";
+              To = "10.0.0.0/23";
+              Table = "wg-blade";
             }
             {
-							Family = "ipv6";
-							From = "fd4:10c9:3065:56db::/64";
-							To = "fd6:266a:7309:60ca::/644";
-							Table = "wg-blade";
+              Family = "ipv6";
+              From = "fd4:10c9:3065:56db::/64";
+              To = "fd6:266a:7309:60ca::/644";
+              Table = "wg-blade";
             }
             {
-							Family = "ipv4";
-							From = "10.200.0.0/24";
-							To = "10.200.0.0/24";
-							Table = "wg-wg";
+              Family = "ipv4";
+              From = "10.200.0.0/24";
+              To = "10.200.0.0/24";
+              Table = "wg-wg";
             }
           ];
           routes = [
             {
-							Gateway = "10.200.0.5";
-							Destination = "10.0.0.0/23";
-							Table = "wg-blade";
+              Gateway = "10.200.0.5";
+              Destination = "10.0.0.0/23";
+              Table = "wg-blade";
             }
             {
-							Gateway = "fd4:10c9:3065:56db::3";
-							Destination = "fd6:266a:7309:60ca::/64";
-							Table = "wg-blade";
+              Gateway = "fd4:10c9:3065:56db::3";
+              Destination = "fd6:266a:7309:60ca::/64";
+              Table = "wg-blade";
             }
             {
-							Gateway = "fd4:10c9:3065:56db::3";
-							Destination = "fd6:266a:7309:60ca::/64";
-							Table = "wg-blade";
+              Gateway = "fd4:10c9:3065:56db::3";
+              Destination = "fd6:266a:7309:60ca::/64";
+              Table = "wg-blade";
             }
             {
-							Gateway = "10.200.0.1";
-							Destination = "10.200.0.0/24";
-							Table = "wg-wg";
+              Gateway = "10.200.0.1";
+              Destination = "10.200.0.0/24";
+              Table = "wg-wg";
             }
           ];
         };
