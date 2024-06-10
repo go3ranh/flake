@@ -557,7 +557,7 @@ in
         }
       ];
       bash = {
-        enableCompletion = true;
+        completion.enable = true;
         interactiveShellInit = ''
           					source ${self.packages.${arch}.settings.bashrc.outPath}
           					source ${self.packages.${arch}.settings.goeranh.outPath}
