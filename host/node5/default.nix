@@ -312,6 +312,9 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "kvm-amd" ];
+	boot.kernelParams = [
+	  "i915.enable_psr=0"
+	];
 
   fileSystems = {
     "/" = {
