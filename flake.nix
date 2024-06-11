@@ -111,6 +111,7 @@
         "hydra"
         "kanidm"
         "monitoring"
+        "nextcloud"
         "nixfw2"
         "nixtesthost"
         "vaultwarden"

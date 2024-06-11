@@ -8,6 +8,7 @@ keys:
   - &nixfw age1j7ua3ze7kjep7lpc32nptz809d69cuxttnc5sz952q93vp5fzdss5shsnx
   - &dockerhost age19nwhfx3ntpeev93lptd5f8gfcnpshuxhfjjphqagcgntdvkylqmsu322t2
   - &hydra age1uj9gz4mkfqj4mctqmuyhu9nm882ux0wt0ncrfaavtcprygnuma9qhc0gl7
+  - &nextcloud age1qu4hve8vj6n6x74gvk2thv87pqle3fv5n0r4x0am59ud0kudz9jqg6emz0
   - &servers
     - *node5
     - *pitest
@@ -56,3 +57,9 @@ creation_rules:
     - pgp: *admins
       age:
       - *hydra
+
+  - path_regex: host/nextcloud/[^/]+\.yaml$
+    key_groups:
+    - pgp: *admins
+      age:
+      - *nextcloud
