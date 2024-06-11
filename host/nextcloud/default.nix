@@ -5,7 +5,7 @@
     defaultSopsFile = ./secrets.yaml;
     defaultSopsFormat = "yaml";
     secrets = {
-      "dbpass" = {
+      "adminpass" = {
         owner = "nextcloud";
         group = "nextcloud";
         mode = "0440";
@@ -67,13 +67,14 @@
         enableACME = true;
         default = true;
         forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://localhost";
-        };
+        # locations."/" = {
+        #   proxyPass = "http://localhost";
+        # };
       };
     };
 		nextcloud = {
-			enable = false;
+			enable = true;
+			package = pkgs.nextcloud29;
 			hostName = "${config.networking.fqdn}";
 			#nginx.enable = true;
 			https = true;
@@ -83,14 +84,15 @@
 			settings = {
 				overwriteProtocol = "https";
 			};
+			caching = {
+				redis = true;
+			};
+			configureRedis = true;
+			database.createLocally = true;
 			config = {
 				dbtype = "pgsql";
-				dbuser = "nextcloud";
-				dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
-				dbname = "nextcloud";
-				dbpassFile = "/var/nextcloud-db-pass";
 
-				adminpassFile = "/var/nextcloud-admin-pass";
+				adminpassFile = "${config.sops.secrets.adminpass.path}";
 				adminuser = "admin";
 			};
 		};
