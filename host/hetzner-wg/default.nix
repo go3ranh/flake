@@ -127,7 +127,7 @@
       autoStart = true;
       privateNetwork = true;
       hostBridge = "br0";
-      localAddress = "10.10.0.2/24";
+      localAddress = "10.20.0.2/24";
       config = { config, pkgs, ... }: {
 
         system.stateVersion = "23.11";

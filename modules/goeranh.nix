@@ -170,6 +170,7 @@ in
       };
     };
     nixpkgs.config.permittedInsecurePackages = [
+		  "electron"
     ];
     users.users.goeranh = {
       isNormalUser = true;
