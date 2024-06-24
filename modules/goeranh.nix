@@ -202,7 +202,7 @@ in
           gnome3.gnome-terminal
           gpa
           libreoffice
-          logseq
+          #logseq
           newsflash
           okular
           pika-backup
@@ -211,7 +211,7 @@ in
           quickemu
           shotwell
           signal-desktop
-          super-productivity
+          #super-productivity
           thunderbird
           tor-browser-bundle-bin
           vieb
@@ -739,7 +739,6 @@ in
       LC_TIME = "de_DE.UTF-8";
     };
 
-    nixpkgs.config.allowUnfree = true;
     networking.firewall.enable = true;
     networking.nftables.enable = true;
     networking.nameservers = [ "10.0.0.1" ];
