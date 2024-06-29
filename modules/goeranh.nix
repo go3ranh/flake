@@ -194,6 +194,7 @@ in
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
           chromium
+          calibre
           dbeaver-bin
           ferdium
           filezilla
