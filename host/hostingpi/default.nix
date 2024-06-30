@@ -62,7 +62,7 @@ in
   };
 
   networking = {
-    hostName = "pitest"; # Define your hostname.
+    hostName = "hostingpi"; # Define your hostname.
     nftables.enable = true;
     useDHCP = false;
     firewall = {
