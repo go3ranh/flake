@@ -3,11 +3,11 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://hydra.goeranh.selfhosted"
-      "https://attic.goeranh.selfhosted"
+      # "https://hydra.goeranh.selfhosted"
+      # "https://attic.goeranh.selfhosted"
     ];
     extra-trusted-public-keys = [
-      "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
+      # "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
     ];
   };
 
