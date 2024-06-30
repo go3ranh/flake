@@ -222,6 +222,7 @@ in
     trust-builder = true;
     development = true;
     update = true;
+    monitoring = false;
   };
 
   hardware.hackrf.enable = true;
