@@ -229,6 +229,11 @@
               PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
               AllowedIPs = [ "10.200.0.9" ];
             }
+            {
+              # hosting
+              PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
+              AllowedIPs = [ "10.200.0.10" ];
+            }
           ];
         };
         "20-br0" = {
