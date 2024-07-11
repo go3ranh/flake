@@ -3,25 +3,25 @@ with lib;
 let
   domain = "goeranh.selfhosted";
   gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
-    gnome.baobab # disk usage analyzer
-    gnome.cheese # photo booth
+    baobab # disk usage analyzer
+    cheese # photo booth
     #eog         # image viewer
     #epiphany    # web browser
-    gnome.simple-scan # document scanner
+    simple-scan # document scanner
     #totem       # video player
-    gnome.yelp # help viewer
-    gnome.evince # document viewer
-    gnome.geary # email client
+    yelp # help viewer
+    evince # document viewer
+    geary # email client
 
     # these should be self explanatory
-    gnome.gnome-calendar
-    gnome.gnome-clocks
-    gnome.gnome-contacts
-    gnome.gnome-font-viewer
-    gnome.gnome-logs
-    gnome.gnome-maps
-    gnome.gnome-music
-    gnome.gnome-weather
+    gnome-calendar
+    #gnome-clocks
+    #gnome-contacts
+    gnome-font-viewer
+    #gnome-logs
+    #gnome-maps
+    #gnome-music
+    #gnome-weather
     gnome-connections
   ];
   pkgs = nixpkgs.legacyPackages.${arch};
@@ -200,7 +200,7 @@ in
           filezilla
           firefox
           gajim
-          gnome3.gnome-terminal
+          gnome-terminal
           gpa
           libreoffice
           #logseq
