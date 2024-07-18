@@ -12,8 +12,7 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     systems.url = "github:nix-systems/default";
 
@@ -34,16 +33,8 @@
       url = "github:numtide/flake-utils";
       inputs.systems.follows = "systems";
     };
-    attic = {
-      url = "github:zhaofengli/attic";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        nixpkgs-stable.follows = "nixpkgs-stable";
-        flake-utils.follows = "flake-utils";
-      };
-    };
   };
-  outputs = { self, attic, flake-utils, systems, nixpkgs, nixpkgs-stable, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, flake-utils, systems, nixpkgs, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsarm64 = nixpkgs.legacyPackages.aarch64-linux;
@@ -89,7 +80,6 @@
               ./host/${name}
               sops-nix.nixosModules.sops
               disko.nixosModules.disko
-              inputs.attic.nixosModules.atticd
               (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
               {
                 boot = {
