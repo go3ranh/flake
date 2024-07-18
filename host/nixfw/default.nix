@@ -226,8 +226,10 @@
           };
           wireguardPeers = [
             {
+							wireguardPeerConfig = {
               PublicKey = "hcqq9ayewp2ZuNvqI/BZ+y31G6yuosdmkIFJwO24hUg=";
               AllowedIPs = [ "fd4:10c9:3065:56db::/64" "10.220.0.2" "10.0.1.0/24" ];
+            };
             }
           ];
         };
@@ -242,10 +244,12 @@
           };
           wireguardPeers = [
             {
+							wireguardPeerConfig = {
               PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
               AllowedIPs = [ "fd4:10c9:3065:56db::/64" "10.200.0.0/24" ];
               Endpoint = "49.13.134.146:1194";
               PersistentKeepalive = 30;
+							};
             }
           ];
         };
@@ -271,8 +275,10 @@
           ];
           routes = [
             {
+							routeConfig = {
               Gateway = "10.220.0.2";
               Destination = "10.0.1.0/24";
+							};
             }
           ];
           networkConfig = {
@@ -310,9 +316,11 @@
           };
           ipv6Prefixes = [
             {
+							ipv6PrefixConfig = {
               AddressAutoconfiguration = true;
               # Assign = true;
               Prefix = "fd6:266a:7309:60ca::/64";
+							};
             }
           ];
           extraConfig = ''

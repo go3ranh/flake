@@ -4,24 +4,24 @@ let
   domain = "goeranh.selfhosted";
   gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
     baobab # disk usage analyzer
-    cheese # photo booth
+    gnome.cheese # photo booth
     #eog         # image viewer
     #epiphany    # web browser
     simple-scan # document scanner
     #totem       # video player
     yelp # help viewer
     evince # document viewer
-    geary # email client
+    gnome.geary # email client
 
     # these should be self explanatory
-    gnome-calendar
+    gnome.gnome-calendar
     #gnome-clocks
     #gnome-contacts
-    gnome-font-viewer
-    #gnome-logs
-    #gnome-maps
-    #gnome-music
-    #gnome-weather
+    gnome.gnome-font-viewer
+    gnome.gnome-logs
+    gnome.gnome-maps
+    gnome.gnome-music
+    gnome.gnome-weather
     gnome-connections
   ];
   pkgs = nixpkgs.legacyPackages.${arch};
@@ -200,7 +200,7 @@ in
           filezilla
           firefox
           gajim
-          gnome-terminal
+          gnome.gnome-terminal
           gpa
           libreoffice
           #logseq
@@ -560,7 +560,6 @@ in
         }
       ];
       bash = {
-        completion.enable = true;
         interactiveShellInit = ''
           					source ${self.packages.${arch}.settings.bashrc.outPath}
           					source ${self.packages.${arch}.settings.goeranh.outPath}

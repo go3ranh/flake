@@ -190,49 +190,67 @@
           };
           wireguardPeers = [
             {
+            wireguardPeerConfig = {
               # node5
               PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
               AllowedIPs = [ "10.200.0.2" "fd4:10c9:3065:56db::2" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # workstation
               PublicKey = "Y76XADOksxcVc8oooxjOHgW4M1aPckMoMV4K844BYBw=";
               AllowedIPs = [ "10.200.0.3" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # pitest
               PublicKey = "F4yaZ9zabNpQSpV+fXAvla6klsv6SppG3Ic3IMlAxnE=";
               AllowedIPs = [ "10.200.0.4" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # nixfw
               PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
               AllowedIPs = [ "fd4:10c9:3065:56db::3" "fd6:266a:7309:60ca::/64" "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # iphone 6
               PublicKey = "37dTDJ0/ThwTvJLHDzPSHq7bERSREAgnhCIgKAhc4Qc=";
               AllowedIPs = [ "10.200.0.6" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # iphone 13
               PublicKey = "KvqfWEJYeBSQfPZ5c9J57izdG6HQ8rLWLaeINf0nHk4=";
               AllowedIPs = [ "10.200.0.7" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # pi5
               PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
               AllowedIPs = [ "10.200.0.8" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # kbuild
               PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
               AllowedIPs = [ "10.200.0.9" ];
+            };
             }
             {
+            wireguardPeerConfig = {
               # hosting
               PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
               AllowedIPs = [ "10.200.0.10" ];
+            };
             }
           ];
         };
@@ -261,55 +279,73 @@
           };
           ipv6Prefixes = [
             {
+							ipv6PrefixConfig = {
               AddressAutoconfiguration = true;
               Prefix = "fd4:10c9:3065:56db::/64";
+            };
             }
           ];
           ipv6RoutePrefixes = [
             {
+							ipv6RoutePrefixConfig = {
               Route = "fd4:10c9:3065:56db::/64";
+							};
             }
           ];
           routingPolicyRules = [
             {
+            routingPolicyRuleConfig = {
               Family = "ipv4";
               From = "10.200.0.0/24";
               To = "10.0.0.0/23";
               Table = "wg-blade";
+            };
             }
             {
+            routingPolicyRuleConfig = {
               Family = "ipv6";
               From = "fd4:10c9:3065:56db::/64";
               To = "fd6:266a:7309:60ca::/644";
               Table = "wg-blade";
+            };
             }
             {
+            routingPolicyRuleConfig = {
               Family = "ipv4";
               From = "10.200.0.0/24";
               To = "10.200.0.0/24";
               Table = "wg-wg";
+            };
             }
           ];
           routes = [
             {
+							routeConfig = {
               Gateway = "10.200.0.5";
               Destination = "10.0.0.0/23";
               Table = "wg-blade";
+							};
             }
             {
+							routeConfig = {
               Gateway = "fd4:10c9:3065:56db::3";
               Destination = "fd6:266a:7309:60ca::/64";
               Table = "wg-blade";
+							};
             }
             {
+							routeConfig = {
               Gateway = "fd4:10c9:3065:56db::3";
               Destination = "fd6:266a:7309:60ca::/64";
               Table = "wg-blade";
+							};
             }
             {
+							routeConfig = {
               Gateway = "10.200.0.1";
               Destination = "10.200.0.0/24";
               Table = "wg-wg";
+							};
             }
           ];
         };
