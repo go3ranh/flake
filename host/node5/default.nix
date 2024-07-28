@@ -323,6 +323,9 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" "kvm-amd" ];
+	boot.kernel.sysctl = {
+		"vm.swappiness" = 80;
+	};
 	boot.kernelParams = [
 	  "i915.enable_psr=0"
 	];
