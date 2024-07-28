@@ -169,14 +169,10 @@ in
         ];
       };
     };
-    nixpkgs.config.permittedInsecurePackages = [
-		  "electron"
-    ];
     users.users.goeranh = {
       isNormalUser = true;
       extraGroups = [ "wheel" "libvirtd" "docker" "networkmanager" "dialout" "plugdev" ];
       openssh.authorizedKeys.keys = mkIf cfg.server [
-        #"ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaU3idFwbk0uY4jooS9dwdBvNLnWfgFRmc7hkSeubSAWnT5J6NM8L8NZrT1ZoiYfebsKmwIn111BGfohZkC6wA= homelab key goeranh"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHZP250IoyRgSYNc/0xilSxJcY36gFnPnm2r7vZlKX6C"
 				"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEkaHbbPLiWNg7pbidfv06d9GsOk4QUVivfIazriZ3EG" # handy
@@ -189,7 +185,6 @@ in
           rsync
           tcpdump
           whois
-          # tailscale
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           bitwarden
@@ -203,7 +198,7 @@ in
           gnome.gnome-terminal
           gpa
           libreoffice
-          #logseq
+          logseq
           newsflash
           okular
           pika-backup
@@ -212,7 +207,6 @@ in
           quickemu
           shotwell
           signal-desktop
-          #super-productivity
           thunderbird
           tor-browser-bundle-bin
           vieb
@@ -220,31 +214,17 @@ in
           virt-viewer
           vlc
           wike
-
-          # discord
-          # obsidian
-          # spotify
-          # rambox
         ] else [ ])
         (if cfg.development then with nixpkgs.legacyPackages.${arch}; [
           binwalk
           file
           ghidra
-          #gnome-builder
           libxcrypt
           meson
           gnumake
           cmake
           ninja
           nodejs
-
-          # gitkraken
-          # jetbrains.clion
-          #jetbrains.idea-community
-          # jetbrains.datagrip
-          # jetbrains.jdk
-          # jetbrains.phpstorm
-          # jetbrains.webstorm
         ] else [ ])
         (if cfg.gaming then with nixpkgs.legacyPackages.${arch}; [
           lutris
@@ -377,22 +357,6 @@ in
               use-tree-view = "true";
             };
 
-            # [org/gnome/nautilus/list-view]
-            # default-column-order=['name', 'size', 'type', 'owner', 'group', 'permissions', 'where', 'date_modified', 'date_modified_with_time', 'date_accessed', 'date_created', 'recency', 'detailed_type']
-            # default-visible-columns=['name', 'size', 'type', 'owner', 'group', 'permissions', 'date_modified']
-            # default-zoom-level='small'
-
-            # [org/gnome/nautilus/preferences]
-            # default-folder-viewer='list-view'
-            # migrated-gtk-settings=true
-            # search-filter-time-type='last_modified'
-            # search-view='list-view'
-
-            # [org/gnome/settings-daemon/plugins/color]
-            # night-light-enabled=false
-            # night-light-schedule-automatic=false
-            # night-light-schedule-from=6.0
-            # night-light-temperature=uint32 2427
             "org/gnome/settings-daemon/plugins/media-keys" = {
               control-center = [ "<Super>i" ];
               custom-keybindings = [
@@ -561,9 +525,9 @@ in
       ];
       bash = {
         interactiveShellInit = ''
-          					source ${self.packages.${arch}.settings.bashrc.outPath}
-          					source ${self.packages.${arch}.settings.goeranh.outPath}
-          				'';
+          source ${self.packages.${arch}.settings.bashrc.outPath}
+          source ${self.packages.${arch}.settings.goeranh.outPath}
+        '';
       };
       tmux = {
         enable = true;
@@ -578,62 +542,62 @@ in
           vim-tmux-navigator
         ];
         extraConfig = ''
-                              bind '§' splitw -hc '#{pane_current_path}'
-                              bind -n M-z resize-pane -Z
-                              #open copy mode y
-                              bind y copy-mode
-                              #vi scrolling
-                              set-window-option -g mode-keys vi
-                              # set -g pane-border-status top
-                              # set -g pane-border-format " [ ###P #T ] "
-                              #u/f pageup/pagedown
-                              bind -T copy-mode u send -X page-up
-                              bind -T copy-mode f send -X page-down
-                    					is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
-                        | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
-
-                      bind-key -n 'M-h' if-shell "$is_vim" 'send-keys M-h'  'select-pane -L'
-                      bind-key -n 'M-j' if-shell "$is_vim" 'send-keys M-j'  'select-pane -D'
-                      bind-key -n 'M-k' if-shell "$is_vim" 'send-keys M-k'  'select-pane -U'
-                      bind-key -n 'M-l' if-shell "$is_vim" 'send-keys M-l'  'select-pane -R'
-
-                      # Forwarding <C-\\> needs different syntax, depending on tmux version
-                      tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
-                      if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
-                        "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
-                      if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
-                        "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
-
-                      bind-key -T copy-mode-vi 'M-h' select-pane -L
-                      bind-key -T copy-mode-vi 'M-j' select-pane -D
-                      bind-key -T copy-mode-vi 'M-k' select-pane -U
-                      bind-key -T copy-mode-vi 'M-l' select-pane -R
-                      bind-key -T copy-mode-vi 'M-\' select-pane -l
+          bind '§' splitw -hc '#{pane_current_path}'
+          bind -n M-z resize-pane -Z
+          #open copy mode y
+          bind y copy-mode
+          #vi scrolling
+          set-window-option -g mode-keys vi
+          # set -g pane-border-status top
+          # set -g pane-border-format " [ ###P #T ] "
+          #u/f pageup/pagedown
+          bind -T copy-mode u send -X page-up
+          bind -T copy-mode f send -X page-down
+          is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+          | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
           
-                    # use bind keys
-                              # bind -n M-h select-pane -L
-                              # bind -n M-l select-pane -R
-                              # bind -n M-k select-pane -U
-                              # bind -n M-j select-pane -D
-                              # bind -n M-H select-pane -L
-                              # bind -n M-L select-pane -R
-                              # bind -n M-K select-pane -U
-                              # bind -n M-J select-pane -D
-                              # bind -n M-O display-popup
-                              # bind -n M-t display-popup
-                              # bind u display-popup
-                              # bind h select-pane -L
-                              # bind j select-pane -D
-                              # bind k select-pane -U
-                              # bind l select-pane -R
-                              # 
-                              bind -n M-H previous-window
-                              bind -n M-L next-window
-                              bind -n M-Enter new-window
-                              bind -n M-a split-pane -v
-                              bind -n M-s split-pane -h
-          										# clear screen
-                              bind -n C-l send-keys C-l
+          bind-key -n 'M-h' if-shell "$is_vim" 'send-keys M-h'  'select-pane -L'
+          bind-key -n 'M-j' if-shell "$is_vim" 'send-keys M-j'  'select-pane -D'
+          bind-key -n 'M-k' if-shell "$is_vim" 'send-keys M-k'  'select-pane -U'
+          bind-key -n 'M-l' if-shell "$is_vim" 'send-keys M-l'  'select-pane -R'
+          
+          # Forwarding <C-\\> needs different syntax, depending on tmux version
+          tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
+          if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
+          "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
+          if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
+          "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+          
+          bind-key -T copy-mode-vi 'M-h' select-pane -L
+          bind-key -T copy-mode-vi 'M-j' select-pane -D
+          bind-key -T copy-mode-vi 'M-k' select-pane -U
+          bind-key -T copy-mode-vi 'M-l' select-pane -R
+          bind-key -T copy-mode-vi 'M-\' select-pane -l
+          
+          # use bind keys
+          # bind -n M-h select-pane -L
+          # bind -n M-l select-pane -R
+          # bind -n M-k select-pane -U
+          # bind -n M-j select-pane -D
+          # bind -n M-H select-pane -L
+          # bind -n M-L select-pane -R
+          # bind -n M-K select-pane -U
+          # bind -n M-J select-pane -D
+          # bind -n M-O display-popup
+          # bind -n M-t display-popup
+          # bind u display-popup
+          # bind h select-pane -L
+          # bind j select-pane -D
+          # bind k select-pane -U
+          # bind l select-pane -R
+          # 
+          bind -n M-H previous-window
+          bind -n M-L next-window
+          bind -n M-Enter new-window
+          bind -n M-a split-pane -v
+          bind -n M-s split-pane -h
+          # clear screen
+          bind -n C-l send-keys C-l
         '';
       };
       gnupg.agent = {
@@ -711,10 +675,6 @@ in
         };
       };
     };
-    services.gnome = mkIf cfg.desktop {
-      tracker.enable = true;
-      tracker-miners.enable = true;
-    };
     services.xserver = mkIf cfg.desktop {
       enable = true;
       displayManager.gdm.enable = true;
@@ -739,200 +699,31 @@ in
       LC_TIME = "de_DE.UTF-8";
     };
 
-    networking.firewall.enable = true;
-    networking.nftables.enable = true;
-    networking.nameservers = [ "10.0.0.1" ];
-    networking.domain = "${domain}";
-    networking.search = [ "${domain}" ];
+	  networking = {
+      firewall.enable = true;
+      nftables.enable = true;
+      nameservers = [ "10.0.0.1" ];
+      domain = "${domain}";
+      search = [ "${domain}" ];
+	  };
 
     console.keyMap = "de";
 
-    services.resolved = {
-      enable = true;
-      domains = [ "${config.networking.domain}" ];
-      fallbackDns = [ "10.0.0.1" "9.9.9.9" ];
-    };
-    services.openssh = mkIf cfg.server {
-      enable = true;
-      openFirewall = true;
-    };
-
     services = {
-      nginx.statusPage = true;
-      #prometheus.exporters = {
-      #  # Export NginX if the NginX service is enabled
-      #  nginx = {
-      #    enable = config.services.nginx.enable;
-      #    listenAddress = "127.0.0.1";
-      #    telemetryPath = "/nginx";
-      #  };
-      #  node = {
-      #    enable = true;
-      #    enabledCollectors = [
-      #      "cpu"
-      #      "ethtool"
-      #      "netdev"
-      #      "systemd"
-      #    ];
-      #    port = 9002;
-      #  };
-      #};
-
-
-      ####### ###### begin
-      ####### ###### begin
-      ####### ###### begin
-      #grafana-agent =
-      #  let
-      #    backend_ip = "10.0.0.26";
-      #  in
-      #  {
-      #    enable = true;
-      #    extraFlags = [ "-disable-reporting" ];
-      #    settings = {
-      #      # Use integrated exporters for supported services
-      #      # Other services use 'services.prometheus.exporters' above
-      #      integrations = {
-      #        agent.enabled = true;
-      #        apache_http = {
-      #          enabled = config.services.httpd.enable;
-      #          scrape_integration = config.services.httpd.enable;
-      #        };
-      #        # Postgres könnte noch Probleme wegen falscher Konfiguration machen, deshalb erstmal nicht aktiv
-      #        postgres_exporter = {
-      #          enabled = config.services.postgresql.enable;
-      #          scrape_integration = config.services.postgresql.enable;
-      #        };
-      #      };
-      #      # Configure scraping of metrics to send to prometheus
-      #      metrics = {
-      #        global = {
-      #          remote_write = [{
-      #            name = "monitoring-backend";
-      #            url = "http://${backend_ip}:9002/api/v1/write";
-      #            # Set the instance label to the FQDN of the instance it originates from
-      #            write_relabel_configs = [
-      #              {
-      #                target_label = "instance";
-      #                replacement = "${config.networking.fqdn}";
-      #              }
-      #            ];
-      #          }];
-      #        };
-      #        configs = [{
-      #          name = "default";
-      #          # Generate a scrape config for all enabled prometheus exporters
-      #          # Applications natively providing metrics endpoints have to be manually configured
-      #          scrape_configs = (
-      #            let
-      #              exports = config.services.prometheus.exporters;
-      #              active_exports = builtins.filter (exporter: builtins.isAttrs exports.${exporter} && exports.${exporter}.enable) (builtins.attrNames exports);
-      #            in
-      #            builtins.foldl'
-      #              (
-      #                result: export_name: with config.services.prometheus.exporters.${export_name};
-      #                result ++ [{
-      #                  job_name = export_name;
-      #                  #metrics_path = "${telemetryPath}";
-      #                  static_configs = [{
-      #                    targets = [ "${listenAddress}:${toString port}" ];
-      #                    labels = {
-      #                      # TODO Don't know what's needed here
-      #                      exporter = export_name;
-      #                    };
-      #                  }];
-      #                }]
-      #              )
-      #              [ ]
-      #              active_exports
-      #          ) ++ [ ];
-      #        }];
-      #      };
-      #      # Configure scraping of logs to write to loki
-      #      # Docs: https://grafana.com/docs/loki/latest/send-data/promtail/configuration/#scrape_configs
-      #      logs = {
-      #        positions_directory = "\${STATE_DIRECTORY}/positions/";
-      #        global = {
-      #          clients = [{
-      #            url = "http://${backend_ip}:3030/loki/api/v1/push";
-      #          }];
-      #        };
-      #        configs = [{
-      #          name = "default";
-      #          scrape_configs = [
-      #            {
-      #              job_name = "journal";
-      #              journal = {
-      #                labels = {
-      #                  job = "systemd-journal";
-      #                };
-      #                max_age = "12h";
-      #              };
-      #              relabel_configs = [
-      #                {
-      #                  source_labels = [
-      #                    "__journal__systemd_unit"
-      #                  ];
-      #                  target_label = "systemd_unit";
-      #                }
-      #                {
-      #                  source_labels = [
-      #                    "__journal__hostname"
-      #                  ];
-      #                  target_label = "nodename";
-      #                }
-      #                {
-      #                  source_labels = [
-      #                    "__journal_syslog_identifier"
-      #                  ];
-      #                  target_label = "syslog_identifier";
-      #                }
-      #              ];
-      #            }
-      #          ] ++ [ ];
-      #        }];
-      #      };
-      #    };
-      #  };
-
-      ####### ###### end
-      ####### ###### end
-      ####### ###### end
-
-
-    };
-
-
-    services.promtail = mkIf cfg.monitoring {
-      enable = true;
-      configuration = {
-        server = {
-          http_listen_port = 3031;
-          grpc_listen_port = 0;
-        };
-        positions = {
-          filename = "/tmp/positions.yaml";
-        };
-        clients = [{
-          url = "http://monitoring.${domain}:3030/loki/api/v1/push";
-        }];
-        scrape_configs = [
-          {
-            job_name = "journal";
-            journal = {
-              max_age = "12h";
-              labels = {
-                job = "systemd-journal";
-                host = "${config.networking.hostName}";
-              };
-            };
-            relabel_configs = [{
-              source_labels = [ "__journal__systemd_unit" ];
-              target_label = "unit";
-            }];
-          }
-        ];
+      gnome = mkIf cfg.desktop {
+        tracker.enable = true;
+        tracker-miners.enable = true;
       };
+      resolved = {
+        enable = true;
+        domains = [ "${config.networking.domain}" ];
+        fallbackDns = [ "10.0.0.1" "9.9.9.9" ];
+      };
+      openssh = mkIf cfg.server {
+        enable = true;
+        openFirewall = true;
+      };
+      nginx.statusPage = true;
     };
 
     systemd.services = { };
