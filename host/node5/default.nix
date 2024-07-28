@@ -373,6 +373,10 @@ in
     })
     zfsRoot.bootDevices));
 
+  zramSwap = {
+    enable = true;
+	};
+
   swapDevices = (map
     (diskName: {
       device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.swap;
