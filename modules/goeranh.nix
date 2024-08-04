@@ -257,6 +257,7 @@ in
               font-antialiasing = "grayscale";
               font-hinting = "slight";
               show-battery-percentage = true;
+              cursor-theme = "Adwaita";
             };
 
             "org/gnome/desktop/peripherals/touchpad" = {
@@ -655,6 +656,7 @@ in
           ])
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
+            gnome.adwaita-icon-theme
           ] else [ ])
         ];
       etc = {
