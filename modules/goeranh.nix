@@ -702,9 +702,9 @@ in
 	  networking = {
       firewall.enable = true;
       nftables.enable = true;
-      nameservers = [ "10.0.0.1" ];
+      #nameservers = [ "10.0.0.1" ];
       domain = "${domain}";
-      search = [ "${domain}" ];
+      #search = [ "${domain}" ];
 	  };
 
     console.keyMap = "de";
@@ -717,7 +717,7 @@ in
       resolved = {
         enable = true;
         domains = [ "${config.networking.domain}" ];
-        fallbackDns = [ "10.0.0.1" "9.9.9.9" ];
+        fallbackDns = [ "9.9.9.9" ];
       };
       openssh = mkIf cfg.server {
         enable = true;
