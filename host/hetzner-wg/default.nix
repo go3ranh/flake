@@ -48,6 +48,47 @@
         PasswordAuthentication = false;
       };
     };
+		frr = {
+		  zebra = {
+		    enable = true;
+		  };
+		  bgp = {
+		    enable = true;
+		    config = ''
+		      interface br0
+		      interface wg0
+					ip prefix-list NO-PUBLIC-IP deny 49.13.134.146/32
+          ip prefix-list NO-PUBLIC-IP permit any
+
+					route-map BLOCK-PUBLIC-IP deny 10
+          match ip address prefix-list NO-PUBLIC-IP
+          route-map BLOCK-PUBLIC-IP permit 20
+					route-map RPKI permit 10
+
+          match rpki invalid
+          match rpki valid
+
+		      router bgp 65500
+		        bgp router-id 10.200.0.1
+		        bgp bestpath as-path multipath-relax
+		        neighbor 10.200.0.100 remote-as internal
+		        neighbor 10.200.0.100 timers 5 10
+						neighbor 10.200.0.100 bfd
+		        neighbor 10.200.0.100 route-map BLOCK-PUBLIC-IP out
+		        neighbor 10.200.0.100 route-map RPKI in
+		        address-family ipv4 unicast
+		          ! redistribute connected route-map BLOCK-PUBLIC-IP
+		          redistribute static route-map BLOCK-PUBLIC-IP
+							network 10.200.0.0/24
+							network 10.200.0.0/24
+		        exit-address-family
+		        ! address-family ipv6 unicast
+		        !   redistribute connected
+		        ! exit-address-family
+		      exit
+		    '';                                                   
+		  };                                                            
+		};                                                                    
   };
   networking = {
     hostName = "hetzner-wg";
@@ -86,11 +127,12 @@
         						# allow wireguard traffic
         						ip daddr 49.13.134.146 udp dport { 1194 } counter accept
         						# ip daddr 49.13.134.146 tcp dport { 22 } counter accept
-        						ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
+        						ip saddr { 10.200.0.0/24, 10.0.0.0/24 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter accept
         						iifname "wg0" ip6 saddr { fd4:10c9:3065:56db::2 } counter accept
         						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
+        						ip saddr { 10.200.0.100 } tcp dport { 179 } counter accept
 
-        						counter drop
+        						counter accept
         					}
 
         					chain output {
@@ -99,18 +141,18 @@
         					}
 
         					chain forward-wg {
-        						ip6 saddr {fd4:10c9:3065:56db::/64 } ip6 daddr { fd4:10c9:3065:56db::/64, fd6:266a:7309:60ca::/64 } counter accept
-        						ip saddr { 10.200.0.2, 10.200.0.7 } ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
-        						# ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
-        						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } tcp dport { 53 } counter accept
-        						ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } udp dport { 53 } counter accept
+        						#ip6 saddr {fd4:10c9:3065:56db::/64 } ip6 daddr { fd4:10c9:3065:56db::/64, fd6:266a:7309:60ca::/64 } counter accept
+        						#ip saddr { 10.200.0.2, 10.200.0.7 } ip daddr { 10.200.0.0/24, 10.0.0.0/24, 10.0.1.0/24 } ip protocol { tcp, udp, icmp } counter accept
+        						## ip saddr 10.200.0.7 ip daddr { 10.0.0.132 } ip protocol tcp counter accept
+        						#ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } tcp dport { 53 } counter accept
+        						#ip saddr { 10.200.0.0/24 } ip daddr { 10.0.0.1 } udp dport { 53 } counter accept
         					}
         					chain forward {
         						type filter hook forward priority 0;
         						ct state {established, related} accept
         						#iifname wg0 oifname wg0 counter accept
-        						iifname "wg0" oifname "wg0" jump forward-wg
-        						counter drop
+        						#iifname "wg0" oifname "wg0" jump forward-wg
+        						counter accept
         					}
         				}
         			'';
@@ -196,27 +238,27 @@
               AllowedIPs = [ "10.200.0.2" "fd4:10c9:3065:56db::2" ];
             };
             }
-            {
-            wireguardPeerConfig = {
-              # workstation
-              PublicKey = "Y76XADOksxcVc8oooxjOHgW4M1aPckMoMV4K844BYBw=";
-              AllowedIPs = [ "10.200.0.3" ];
-            };
-            }
-            {
-            wireguardPeerConfig = {
-              # pitest
-              PublicKey = "F4yaZ9zabNpQSpV+fXAvla6klsv6SppG3Ic3IMlAxnE=";
-              AllowedIPs = [ "10.200.0.4" ];
-            };
-            }
-            {
-            wireguardPeerConfig = {
-              # nixfw
-              PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
-              AllowedIPs = [ "fd4:10c9:3065:56db::3" "fd6:266a:7309:60ca::/64" "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
-            };
-            }
+            # {
+            # wireguardPeerConfig = {
+            #   # workstation
+            #   PublicKey = "Y76XADOksxcVc8oooxjOHgW4M1aPckMoMV4K844BYBw=";
+            #   AllowedIPs = [ "10.200.0.3" ];
+            # };
+            # }
+            # {
+            # wireguardPeerConfig = {
+            #   # pitest
+            #   PublicKey = "F4yaZ9zabNpQSpV+fXAvla6klsv6SppG3Ic3IMlAxnE=";
+            #   AllowedIPs = [ "10.200.0.4" ];
+            # };
+            # }
+            # {
+            # wireguardPeerConfig = {
+            #   # nixfw
+            #   PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
+            #   AllowedIPs = [ "fd4:10c9:3065:56db::3" "fd6:266a:7309:60ca::/64" "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
+            # };
+            # }
             {
             wireguardPeerConfig = {
               # iphone 6
@@ -238,19 +280,26 @@
               AllowedIPs = [ "10.200.0.8" ];
             };
             }
+            # {
+            # wireguardPeerConfig = {
+            #   # kbuild
+            #   PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
+            #   AllowedIPs = [ "10.200.0.9" ];
+            # };
+            # }
             {
-            wireguardPeerConfig = {
-              # kbuild
-              PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
-              AllowedIPs = [ "10.200.0.9" ];
-            };
+              wireguardPeerConfig = {
+                # hosting
+                PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
+                AllowedIPs = [ "10.200.0.10" ];
+              };
             }
             {
-            wireguardPeerConfig = {
-              # hosting
-              PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
-              AllowedIPs = [ "10.200.0.10" ];
-            };
+              wireguardPeerConfig = {
+                # uplink wg server
+                PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
+                AllowedIPs = [ "10.200.0.100" "10.0.0.0/22" "192.168.178.0/24" ];
+              };
             }
           ];
         };
@@ -277,77 +326,6 @@
             IPv6AcceptRA = false;
             IPv6SendRA = true;
           };
-          ipv6Prefixes = [
-            {
-							ipv6PrefixConfig = {
-              AddressAutoconfiguration = true;
-              Prefix = "fd4:10c9:3065:56db::/64";
-            };
-            }
-          ];
-          ipv6RoutePrefixes = [
-            {
-							ipv6RoutePrefixConfig = {
-              Route = "fd4:10c9:3065:56db::/64";
-							};
-            }
-          ];
-          routingPolicyRules = [
-            {
-            routingPolicyRuleConfig = {
-              Family = "ipv4";
-              From = "10.200.0.0/24";
-              To = "10.0.0.0/23";
-              Table = "wg-blade";
-            };
-            }
-            {
-            routingPolicyRuleConfig = {
-              Family = "ipv6";
-              From = "fd4:10c9:3065:56db::/64";
-              To = "fd6:266a:7309:60ca::/644";
-              Table = "wg-blade";
-            };
-            }
-            {
-            routingPolicyRuleConfig = {
-              Family = "ipv4";
-              From = "10.200.0.0/24";
-              To = "10.200.0.0/24";
-              Table = "wg-wg";
-            };
-            }
-          ];
-          routes = [
-            {
-							routeConfig = {
-              Gateway = "10.200.0.5";
-              Destination = "10.0.0.0/23";
-              Table = "wg-blade";
-							};
-            }
-            {
-							routeConfig = {
-              Gateway = "fd4:10c9:3065:56db::3";
-              Destination = "fd6:266a:7309:60ca::/64";
-              Table = "wg-blade";
-							};
-            }
-            {
-							routeConfig = {
-              Gateway = "fd4:10c9:3065:56db::3";
-              Destination = "fd6:266a:7309:60ca::/64";
-              Table = "wg-blade";
-							};
-            }
-            {
-							routeConfig = {
-              Gateway = "10.200.0.1";
-              Destination = "10.200.0.0/24";
-              Table = "wg-wg";
-							};
-            }
-          ];
         };
         "eth0" = {
           matchConfig.Name = "eth0";
