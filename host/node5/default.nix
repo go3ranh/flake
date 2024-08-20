@@ -31,7 +31,7 @@ in
             {
 							wireguardPeerConfig = {
 								PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
-								AllowedIPs = [ "10.200.0.0/24" ];
+								AllowedIPs = [ "10.0.0.0/8" ];
 								Endpoint = "49.13.134.146:1194";
 								PersistentKeepalive = 30;
 							};
@@ -73,18 +73,18 @@ in
           DHCP = "no";
           # gateway = [ "10.200.0.5" ];
           routes = [
-            # {
-						# 	routeConfig = {
-						# 		Gateway = "10.200.0.5";
-						# 		Destination = "10.0.0.0/24";
-						# 	};
-            # }
-            # {
-						# 	routeConfig = {
-						# 		Gateway = "10.200.0.5";
-						# 		Destination = "10.0.1.0/24";
-						# 	};
-            # }
+            {
+							routeConfig = {
+								Gateway = "10.200.0.100";
+								Destination = "10.0.0.0/24";
+							};
+            }
+            {
+							routeConfig = {
+								Gateway = "10.200.0.100";
+								Destination = "10.1.1.0/24";
+							};
+            }
             # {
 						# 	routeConfig = {
 						# 		Gateway = "10.200.0.5";
