@@ -3,13 +3,13 @@
 #	exit 1
 #fi
 
-sshcommand="ssh -i /root/.ssh/freebsdbackup root@10.0.0.5"
+sshcommand="ssh -i /root/.ssh/freebsdbackup root@10.1.1.10"
 
-remote=$($sshcommand "zfs list -t snap -r zroot/backup/node5 | tail -n 1 | awk '{print \$1}' | awk -F'@' '{print \$2}'")
+remote=$($sshcommand "zfs list -t snap -r storage/backups/node5 | tail -n 1 | awk '{print \$1}' | awk -F'@' '{print \$2}'")
 local=$(zfs list -t snap -r rpool/nixos/home | tail -n 1 | awk '{print $1}')
 remote="rpool/nixos/home@$remote"
 if [ "$local" != "$remote" ]; then
-	zfs send --raw -i $remote $local | $sshcommand "zfs recv zroot/backup/node5"
+	zfs send --raw -i $remote $local | $sshcommand "zfs recv storage/backups/node5"
 	if [ $? -ne 0 ]; then
 		echo "an error occured"
 	fi
