@@ -216,7 +216,7 @@
             wireguardPeerConfig = {
               # node5
               PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
-              AllowedIPs = [ "10.200.0.2" "fd4:10c9:3065:56db::2" ];
+              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.2" "fd4:10c9:3065:56db::2" ];
             };
             }
             # {
@@ -244,21 +244,21 @@
             wireguardPeerConfig = {
               # iphone 6
               PublicKey = "37dTDJ0/ThwTvJLHDzPSHq7bERSREAgnhCIgKAhc4Qc=";
-              AllowedIPs = [ "10.200.0.6" ];
+              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.6" ];
             };
             }
             {
             wireguardPeerConfig = {
               # iphone 13
               PublicKey = "KvqfWEJYeBSQfPZ5c9J57izdG6HQ8rLWLaeINf0nHk4=";
-              AllowedIPs = [ "10.200.0.7" ];
+              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.7" ];
             };
             }
             {
             wireguardPeerConfig = {
               # pi5
               PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
-              AllowedIPs = [ "10.200.0.8" ];
+              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.8" ];
             };
             }
             # {
@@ -272,23 +272,17 @@
               wireguardPeerConfig = {
                 # hosting
                 PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
-                AllowedIPs = [ "10.200.0.10" ];
+                AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.10" ];
               };
             }
             {
               wireguardPeerConfig = {
                 # uplink wg server
                 PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
-                AllowedIPs = [ "10.200.0.100" "10.0.0.0/22" "192.168.178.0/24" ];
+                AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
               };
             }
           ];
-        };
-        "20-br0" = {
-          netdevConfig = {
-            Kind = "bridge";
-            Name = "br0";
-          };
         };
       };
       networks = {
@@ -296,7 +290,8 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.1/24"
-            "fd4:10c9:3065:56db::1/64"
+						"fdbc:e12e:3ccc::1/48"
+            #"fd4:10c9:3065:56db::1/64"
           ];
           routes = [
             {
@@ -313,7 +308,7 @@
             }
           ];
           networkConfig = {
-            IPMasquerade = "ipv4";
+            IPMasquerade = "both";
             IPForward = true;
             DHCPServer = true;
             DNS = "10.0.0.1, 9.9.9.9";
@@ -333,17 +328,6 @@
           ];
           networkConfig = {
             IPv6AcceptRA = false;
-          };
-        };
-        "40-br0" = {
-          matchConfig.Name = "br0";
-          bridgeConfig = { };
-          networkConfig.LinkLocalAddressing = "no";
-          address = [
-            "10.20.0.1/24"
-          ];
-          networkConfig = {
-            ConfigureWithoutCarrier = true;
           };
         };
       };
