@@ -99,25 +99,6 @@
     usePredictableInterfaceNames = false;
 
     nftables = {
-      # tables = {
-      # 	filter = {
-      # 		family = "inet";
-      # 		enable = true;
-      # 		content = ''
-      #       chain input {
-      #         type filter hook input priority 0;
-      #         iifname lo accept
-      #         ct state {established, related} accept
-
-      #         # allow wireguard traffic
-      #         ip daddr 49.13.134.146 udp dport { 51820 } counter name wireguard-udp accept
-
-      #         ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter name node5-ping accept
-      #         ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter name node5-traffic accept
-      #       }
-      # 		'';
-      # 	};
-      # };
       ruleset = ''
         			  table inet filter {
         					chain input {
