@@ -70,21 +70,20 @@ in
           address = [
             "10.200.0.2/24"
           ];
-          DHCP = "no";
           # gateway = [ "10.200.0.5" ];
           routes = [
-            {
-							routeConfig = {
-								Gateway = "10.200.0.100";
-								Destination = "10.0.0.0/24";
-							};
-            }
-            {
-							routeConfig = {
-								Gateway = "10.200.0.100";
-								Destination = "10.1.1.0/24";
-							};
-            }
+            # {
+						# 	routeConfig = {
+						# 		Gateway = "10.200.0.100";
+						# 		Destination = "10.0.0.0/24";
+						# 	};
+            # }
+            # {
+						# 	routeConfig = {
+						# 		Gateway = "10.200.0.100";
+						# 		Destination = "10.1.1.0/24";
+						# 	};
+            # }
             # {
 						# 	routeConfig = {
 						# 		Gateway = "10.200.0.5";
@@ -93,7 +92,7 @@ in
             # }
           ];
           networkConfig = {
-            IPv6AcceptRA = false;
+            IPv6AcceptRA = true;
           };
         };
         wg1 = {
