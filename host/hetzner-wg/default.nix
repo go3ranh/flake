@@ -216,7 +216,7 @@
             wireguardPeerConfig = {
               # node5
               PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
-              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.2" "fd4:10c9:3065:56db::2" ];
+              AllowedIPs = [ "fd8:393:5efa:343::2/64" "10.200.0.2" "fd4:10c9:3065:56db::2" ];
             };
             }
             # {
@@ -244,21 +244,21 @@
             wireguardPeerConfig = {
               # iphone 6
               PublicKey = "37dTDJ0/ThwTvJLHDzPSHq7bERSREAgnhCIgKAhc4Qc=";
-              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.6" ];
+              AllowedIPs = [ "10.200.0.6" ];
             };
             }
             {
             wireguardPeerConfig = {
               # iphone 13
               PublicKey = "KvqfWEJYeBSQfPZ5c9J57izdG6HQ8rLWLaeINf0nHk4=";
-              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.7" ];
+              AllowedIPs = [ "10.200.0.7" ];
             };
             }
             {
             wireguardPeerConfig = {
               # pi5
               PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
-              AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.8" ];
+              AllowedIPs = [ "fd8:393:5efa:343::8/64" "10.200.0.8" ];
             };
             }
             # {
@@ -272,14 +272,14 @@
               wireguardPeerConfig = {
                 # hosting
                 PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
-                AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.10" ];
+                AllowedIPs = [ "10.200.0.10" ];
               };
             }
             {
               wireguardPeerConfig = {
                 # uplink wg server
                 PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
-                AllowedIPs = [ "fdbc:e12e:3ccc::1/48" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
+                AllowedIPs = [ "fd14:5d1a:7fd7:34e8::/64" "fd8:393:5efa:343::100/64" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
               };
             }
           ];
@@ -290,7 +290,7 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.1/24"
-						"fdbc:e12e:3ccc::1/48"
+						"fd8:393:5efa:343::1/64"
             #"fd4:10c9:3065:56db::1/64"
           ];
           routes = [
@@ -306,11 +306,17 @@
 								Destination = "10.1.1.0/24";
 							};
             }
+            {
+							routeConfig = {
+								Gateway = "fd8:393:5efa:343::100";
+								Destination = "fd14:5d1a:7fd7:34e8::/64";
+							};
+            }
           ];
           networkConfig = {
             IPMasquerade = "both";
             IPForward = true;
-            DHCPServer = true;
+            #DHCPServer = true;
             DNS = "10.0.0.1, 9.9.9.9";
 
             IPv6AcceptRA = false;
