@@ -608,6 +608,9 @@ in
       };
     };
 
+    services.flatpak = lib.mkIf cfg.desktop {
+			enable = true;
+		};
     xdg.portal = lib.mkIf cfg.desktop {
       enable = true;
       xdgOpenUsePortal = true;
@@ -645,6 +648,7 @@ in
             linuxKernel.packages.linux_zen.perf
             nix-direnv
             nmap
+            nh
             pinentry
             ripgrep
             tmux
