@@ -187,18 +187,18 @@ in
           whois
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
-          bitwarden
+          # bitwarden
           chromium
           calibre
           dbeaver-bin
           ferdium
           filezilla
           firefox
-          gajim
+          #gajim
           gnome.gnome-terminal
-          gpa
+          #gpa
           libreoffice
-          logseq
+          #logseq
           newsflash
           okular
           pika-backup
