@@ -277,10 +277,10 @@ in
   services = {
     fwupd.enable = true;
     jack = {
-      jackd.enable = true;
+      jackd.enable = false;
       alsa.enable = false;
       loopback = {
-        enable = true;
+        enable = false;
       };
     };
     pipewire = {
@@ -288,12 +288,12 @@ in
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      jack.enable = false;
+      jack.enable = true;
     };
     gnome = {
       gnome-keyring.enable = true;
     };
-    #printing.enable = true;
+    printing.enable = true;
     #avahi.enable = true;
     #avahi.nssmdns = true;
     openssh.enable = lib.mkForce false;
@@ -389,16 +389,16 @@ in
     enable = true;
 	};
 
-  swapDevices = (map
-    (diskName: {
-      device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.swap;
-      discardPolicy = "both";
-      randomEncryption = {
-        enable = true;
-        allowDiscards = true;
-      };
-    })
-    zfsRoot.bootDevices);
+  # swapDevices = (map
+  #   (diskName: {
+  #     device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.swap;
+  #     discardPolicy = "both";
+  #     randomEncryption = {
+  #       enable = true;
+  #       allowDiscards = true;
+  #     };
+  #   })
+  #   zfsRoot.bootDevices);
 
   #networking.useDHCP = lib.mkDefault true;
 
