@@ -383,7 +383,7 @@ in
 
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
               binding = "<Shift><Super>f";
-              command = "nice -n 40 firefox";
+              command = "nice -n 40 flatpak run io.github.zen_browser.zen";
               name = "firefox";
             };
 
