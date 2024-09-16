@@ -43,6 +43,13 @@
             IPv6AcceptRA = false;
           };
         };
+        eth = {
+          matchConfig.Name = "enp0s31f6";
+          DHCP = "ipv4";
+          networkConfig = {
+            IPv6AcceptRA = true;
+          };
+        };
       };
 		};
 	};
@@ -84,10 +91,10 @@
   };
 
   # services.printing.enable = true;
-	programs.hyprland = {
-    enable = true;
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-  };
+	# programs.hyprland = {
+  #   enable = true;
+  #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+  # };
 
   goeranh = {
     desktop = true;
@@ -100,7 +107,7 @@
     tmux
     wget
 
-		hyprpaper
+		# hyprpaper
 		kitty
 		libnotify
 		mako
