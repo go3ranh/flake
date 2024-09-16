@@ -228,13 +228,13 @@
               AllowedIPs = [ "fd8:393:5efa:343::2/64" "10.200.0.2" "fd4:10c9:3065:56db::2" ];
             };
             }
-            # {
-            # wireguardPeerConfig = {
-            #   # workstation
-            #   PublicKey = "Y76XADOksxcVc8oooxjOHgW4M1aPckMoMV4K844BYBw=";
-            #   AllowedIPs = [ "10.200.0.3" ];
-            # };
-            # }
+            {
+            wireguardPeerConfig = {
+              # workstation
+              PublicKey = "oVPpcobnyHiXoO6nRT537GgTR2wGljg7bOsTUpoN5Wo=";
+              AllowedIPs = [ "10.200.0.12" ];
+            };
+            }
             # {
             # wireguardPeerConfig = {
             #   # pitest
