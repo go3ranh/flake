@@ -31,32 +31,32 @@ in
             {
 							wireguardPeerConfig = {
 								PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
-								AllowedIPs = [ "10.200.0.0/24" ];
+								AllowedIPs = [ "fd8:393:5efa:343::/64" "fd14:5d1a:7fd7:34e8::" "10.0.0.0/8" ];
 								Endpoint = "49.13.134.146:1194";
 								PersistentKeepalive = 30;
 							};
             }
           ];
         };
-        "11-wg1" = {
-          netdevConfig = {
-            Kind = "wireguard";
-            Name = "wg1";
-            MTUBytes = "1300";
-          };
-          wireguardConfig = {
-            PrivateKeyFile = "/var/lib/wireguard/private";
-          };
-          wireguardPeers = [
-            {
-							wireguardPeerConfig = {
-								PublicKey = "/xN0cEPxD9mS/Zq2DCfPfn9AxlpZxODBrXtJdeNr4gw=";
-								AllowedIPs = [ "10.230.0.0/24" ];
-								Endpoint = "goeranh.de:1194";
-							};
-            }
-          ];
-        };
+        # "11-wg1" = {
+        #   netdevConfig = {
+        #     Kind = "wireguard";
+        #     Name = "wg1";
+        #     MTUBytes = "1300";
+        #   };
+        #   wireguardConfig = {
+        #     PrivateKeyFile = "/var/lib/wireguard/private";
+        #   };
+        #   wireguardPeers = [
+        #     {
+				# 			wireguardPeerConfig = {
+				# 				PublicKey = "/xN0cEPxD9mS/Zq2DCfPfn9AxlpZxODBrXtJdeNr4gw=";
+				# 				AllowedIPs = [ "10.230.0.0/24" ];
+				# 				Endpoint = "goeranh.de:1194";
+				# 			};
+        #     }
+        #   ];
+        # };
         "20-br0" = {
           netdevConfig = {
             Kind = "bridge";
@@ -69,20 +69,26 @@ in
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.2/24"
+						"fd8:393:5efa:343::2/64"
           ];
-          DHCP = "no";
           # gateway = [ "10.200.0.5" ];
           routes = [
+            {
+							routeConfig = {
+								Gateway = "fd8:393:5efa:343::100";
+								Destination = "fd14:5d1a:7fd7:34e8::/64";
+							};
+            }
+            {
+							routeConfig = {
+								Gateway = "10.200.0.100";
+								Destination = "10.0.0.0/24";
+							};
+            }
             # {
 						# 	routeConfig = {
-						# 		Gateway = "10.200.0.5";
-						# 		Destination = "10.0.0.0/24";
-						# 	};
-            # }
-            # {
-						# 	routeConfig = {
-						# 		Gateway = "10.200.0.5";
-						# 		Destination = "10.0.1.0/24";
+						# 		Gateway = "10.200.0.100";
+						# 		Destination = "10.1.1.0/24";
 						# 	};
             # }
             # {
@@ -93,19 +99,19 @@ in
             # }
           ];
           networkConfig = {
-            IPv6AcceptRA = false;
+            IPv6AcceptRA = true;
           };
         };
-        wg1 = {
-          matchConfig.Name = "wg1";
-          address = [
-            "10.230.0.2/24"
-          ];
-          DHCP = "no";
-          networkConfig = {
-            IPv6AcceptRA = false;
-          };
-        };
+        # wg1 = {
+        #   matchConfig.Name = "wg1";
+        #   address = [
+        #     "10.230.0.2/24"
+        #   ];
+        #   DHCP = "no";
+        #   networkConfig = {
+        #     IPv6AcceptRA = false;
+        #   };
+        # };
         "40-br0" = {
           matchConfig.Name = "br0";
           bridgeConfig = { };
@@ -271,10 +277,10 @@ in
   services = {
     fwupd.enable = true;
     jack = {
-      jackd.enable = true;
+      jackd.enable = false;
       alsa.enable = false;
       loopback = {
-        enable = true;
+        enable = false;
       };
     };
     pipewire = {
@@ -282,12 +288,12 @@ in
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      jack.enable = false;
+      jack.enable = true;
     };
     gnome = {
       gnome-keyring.enable = true;
     };
-    #printing.enable = true;
+    printing.enable = true;
     #avahi.enable = true;
     #avahi.nssmdns = true;
     openssh.enable = lib.mkForce false;
@@ -383,16 +389,16 @@ in
     enable = true;
 	};
 
-  swapDevices = (map
-    (diskName: {
-      device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.swap;
-      discardPolicy = "both";
-      randomEncryption = {
-        enable = true;
-        allowDiscards = true;
-      };
-    })
-    zfsRoot.bootDevices);
+  # swapDevices = (map
+  #   (diskName: {
+  #     device = zfsRoot.devNodes + diskName + zfsRoot.partitionScheme.swap;
+  #     discardPolicy = "both";
+  #     randomEncryption = {
+  #       enable = true;
+  #       allowDiscards = true;
+  #     };
+  #   })
+  #   zfsRoot.bootDevices);
 
   #networking.useDHCP = lib.mkDefault true;
 

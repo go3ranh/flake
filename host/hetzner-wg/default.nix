@@ -48,47 +48,47 @@
         PasswordAuthentication = false;
       };
     };
-		frr = {
-		  zebra = {
-		    enable = true;
-		  };
-		  bgp = {
-		    enable = true;
-		    config = ''
-		      interface br0
-		      interface wg0
-					ip prefix-list NO-PUBLIC-IP deny 49.13.134.146/32
-          ip prefix-list NO-PUBLIC-IP permit any
+		# frr = {
+		#   zebra = {
+		#     enable = true;
+		#   };
+		#   bgp = {
+		#     enable = true;
+		#     config = ''
+		#       interface br0
+		#       interface wg0
+		# 			ip prefix-list NO-PUBLIC-IP deny 49.13.134.146/32
+    #       ip prefix-list NO-PUBLIC-IP permit any
 
-					route-map BLOCK-PUBLIC-IP deny 10
-          match ip address prefix-list NO-PUBLIC-IP
-          route-map BLOCK-PUBLIC-IP permit 20
-					route-map RPKI permit 10
+		# 			route-map BLOCK-PUBLIC-IP deny 10
+    #       match ip address prefix-list NO-PUBLIC-IP
+    #       route-map BLOCK-PUBLIC-IP permit 20
+		# 			route-map RPKI permit 10
 
-          match rpki invalid
-          match rpki valid
+    #       match rpki invalid
+    #       match rpki valid
 
-		      router bgp 65500
-		        bgp router-id 10.200.0.1
-		        bgp bestpath as-path multipath-relax
-		        neighbor 10.200.0.100 remote-as internal
-		        neighbor 10.200.0.100 timers 5 10
-						neighbor 10.200.0.100 bfd
-		        neighbor 10.200.0.100 route-map BLOCK-PUBLIC-IP out
-		        neighbor 10.200.0.100 route-map RPKI in
-		        address-family ipv4 unicast
-		          ! redistribute connected route-map BLOCK-PUBLIC-IP
-		          redistribute static route-map BLOCK-PUBLIC-IP
-							network 10.200.0.0/24
-							network 10.200.0.0/24
-		        exit-address-family
-		        ! address-family ipv6 unicast
-		        !   redistribute connected
-		        ! exit-address-family
-		      exit
-		    '';                                                   
-		  };                                                            
-		};                                                                    
+		#       router bgp 65500
+		#         bgp router-id 10.200.0.1
+		#         bgp bestpath as-path multipath-relax
+		#         neighbor 10.200.0.100 remote-as internal
+		#         neighbor 10.200.0.100 timers 5 10
+		# 				neighbor 10.200.0.100 bfd
+		#         neighbor 10.200.0.100 route-map BLOCK-PUBLIC-IP out
+		#         neighbor 10.200.0.100 route-map RPKI in
+		#         address-family ipv4 unicast
+		#           ! redistribute connected route-map BLOCK-PUBLIC-IP
+		#           redistribute static route-map BLOCK-PUBLIC-IP
+		# 					network 10.200.0.0/24
+		# 					network 10.200.0.0/24
+		#         exit-address-family
+		#         ! address-family ipv6 unicast
+		#         !   redistribute connected
+		#         ! exit-address-family
+		#       exit
+		#     '';                                                   
+		#   };                                                            
+		# };                                                                    
   };
   networking = {
     hostName = "hetzner-wg";
@@ -99,25 +99,6 @@
     usePredictableInterfaceNames = false;
 
     nftables = {
-      # tables = {
-      # 	filter = {
-      # 		family = "inet";
-      # 		enable = true;
-      # 		content = ''
-      #       chain input {
-      #         type filter hook input priority 0;
-      #         iifname lo accept
-      #         ct state {established, related} accept
-
-      #         # allow wireguard traffic
-      #         ip daddr 49.13.134.146 udp dport { 51820 } counter name wireguard-udp accept
-
-      #         ip saddr { 10.200.0.2, 10.200.0.5 } ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem, echo-request } counter name node5-ping accept
-      #         ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter name node5-traffic accept
-      #       }
-      # 		'';
-      # 	};
-      # };
       ruleset = ''
         			  table inet filter {
         					chain input {
@@ -235,7 +216,7 @@
             wireguardPeerConfig = {
               # node5
               PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
-              AllowedIPs = [ "10.200.0.2" "fd4:10c9:3065:56db::2" ];
+              AllowedIPs = [ "fd8:393:5efa:343::2/64" "10.200.0.2" "fd4:10c9:3065:56db::2" ];
             };
             }
             # {
@@ -277,7 +258,7 @@
             wireguardPeerConfig = {
               # pi5
               PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
-              AllowedIPs = [ "10.200.0.8" ];
+              AllowedIPs = [ "fd8:393:5efa:343::8/64" "10.200.0.8" ];
             };
             }
             # {
@@ -298,16 +279,10 @@
               wireguardPeerConfig = {
                 # uplink wg server
                 PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
-                AllowedIPs = [ "10.200.0.100" "10.0.0.0/22" "192.168.178.0/24" ];
+                AllowedIPs = [ "fd14:5d1a:7fd7:34e8::/64" "fd8:393:5efa:343::100/64" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
               };
             }
           ];
-        };
-        "20-br0" = {
-          netdevConfig = {
-            Kind = "bridge";
-            Name = "br0";
-          };
         };
       };
       networks = {
@@ -315,12 +290,33 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.1/24"
-            "fd4:10c9:3065:56db::1/64"
+						"fd8:393:5efa:343::1/64"
+            #"fd4:10c9:3065:56db::1/64"
+          ];
+          routes = [
+            {
+							routeConfig = {
+								Gateway = "10.200.0.100";
+								Destination = "10.0.0.0/24";
+							};
+            }
+            {
+							routeConfig = {
+								Gateway = "10.200.0.100";
+								Destination = "10.1.1.0/24";
+							};
+            }
+            {
+							routeConfig = {
+								Gateway = "fd8:393:5efa:343::100";
+								Destination = "fd14:5d1a:7fd7:34e8::/64";
+							};
+            }
           ];
           networkConfig = {
-            IPMasquerade = "ipv4";
+            IPMasquerade = "both";
             IPForward = true;
-            DHCPServer = true;
+            #DHCPServer = true;
             DNS = "10.0.0.1, 9.9.9.9";
 
             IPv6AcceptRA = false;
@@ -338,17 +334,6 @@
           ];
           networkConfig = {
             IPv6AcceptRA = false;
-          };
-        };
-        "40-br0" = {
-          matchConfig.Name = "br0";
-          bridgeConfig = { };
-          networkConfig.LinkLocalAddressing = "no";
-          address = [
-            "10.20.0.1/24"
-          ];
-          networkConfig = {
-            ConfigureWithoutCarrier = true;
           };
         };
       };

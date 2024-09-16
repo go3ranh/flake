@@ -55,6 +55,15 @@
             sops-nix.nixosModules.sops
           ];
         };
+        printpi = lib.nixosSystem rec {
+          system = "aarch64-linux";
+          modules = [
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.printpi.config; })
+            (import ./host/printpi/default.nix { inherit lib inputs; config = self.nixosConfigurations.printpi.config; pkgs = pkgsarm64; })
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            sops-nix.nixosModules.sops
+          ];
+        };
       } // builtins.foldl'
         (result: name: result // {
           "${name}" = lib.nixosSystem rec {

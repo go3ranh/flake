@@ -187,44 +187,45 @@ in
           whois
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
-          bitwarden
           chromium
-          calibre
           dbeaver-bin
           ferdium
           filezilla
           firefox
-          gajim
           gnome.gnome-terminal
-          gpa
           libreoffice
-          logseq
-          newsflash
           okular
           pika-backup
           poppler_utils
-          qpwgraph
-          quickemu
           shotwell
           signal-desktop
           thunderbird
           tor-browser-bundle-bin
-          vieb
           virt-manager
           virt-viewer
           vlc
-          wike
+
+          # bitwarden
+          # calibre
+          # gajim
+          # gpa
+          # logseq
+          # newsflash
+          # qpwgraph
+          # quickemu
+          # vieb
+          # wike
         ] else [ ])
         (if cfg.development then with nixpkgs.legacyPackages.${arch}; [
           binwalk
           file
-          ghidra
-          libxcrypt
-          meson
-          gnumake
-          cmake
-          ninja
-          nodejs
+          # ghidra
+          # libxcrypt
+          # meson
+          # gnumake
+          # cmake
+          # ninja
+          # nodejs
         ] else [ ])
         (if cfg.gaming then with nixpkgs.legacyPackages.${arch}; [
           lutris
@@ -382,7 +383,7 @@ in
 
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
               binding = "<Shift><Super>f";
-              command = "nice -n 40 firefox";
+              command = "nice -n 40 flatpak run io.github.zen_browser.zen";
               name = "firefox";
             };
 
@@ -608,6 +609,9 @@ in
       };
     };
 
+    services.flatpak = lib.mkIf cfg.desktop {
+			enable = true;
+		};
     xdg.portal = lib.mkIf cfg.desktop {
       enable = true;
       xdgOpenUsePortal = true;
@@ -645,6 +649,7 @@ in
             linuxKernel.packages.linux_zen.perf
             nix-direnv
             nmap
+            nh
             pinentry
             ripgrep
             tmux
