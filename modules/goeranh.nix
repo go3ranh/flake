@@ -690,6 +690,7 @@ in
       xkb = {
         layout = "de";
         variant = "";
+        options = "caps:escape";
       };
     };
     i18n.defaultLocale = "en_US.UTF-8";

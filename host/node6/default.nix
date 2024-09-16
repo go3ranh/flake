@@ -10,6 +10,40 @@
   systemd = {
     network = {
       enable = true;
+      netdevs = {
+        "10-wg0" = {
+          netdevConfig = {
+            Kind = "wireguard";
+            Name = "wg0";
+            MTUBytes = "1300";
+          };
+          wireguardConfig = {
+            PrivateKeyFile = "/var/lib/wireguard/private";
+          };
+          wireguardPeers = [
+            {
+							wireguardPeerConfig = {
+								PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
+								AllowedIPs = [ "10.0.0.0/8" ];
+								Endpoint = "49.13.134.146:1194";
+								PersistentKeepalive = 30;
+							};
+            }
+          ];
+        };
+      };
+      networks = {
+        wg0 = {
+          matchConfig.Name = "wg0";
+          address = [
+            "10.200.0.12/24"
+          ];
+          DHCP = "no";
+          networkConfig = {
+            IPv6AcceptRA = false;
+          };
+        };
+      };
 		};
 	};
   networking = {
