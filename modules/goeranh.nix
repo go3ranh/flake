@@ -185,6 +185,7 @@ in
           rsync
           tcpdump
           whois
+          neomutt
         ])
         (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
           chromium
