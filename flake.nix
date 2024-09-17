@@ -49,7 +49,7 @@
         hostingpi = lib.nixosSystem rec {
           system = "aarch64-linux";
           modules = [
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.pitest.config; })
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.hostingpi.config; })
             (import ./host/hostingpi/default.nix { inherit lib inputs; config = self.nixosConfigurations.hostingpi.config; pkgs = pkgsarm64; })
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
