@@ -222,74 +222,54 @@
           };
           wireguardPeers = [
             {
-            wireguardPeerConfig = {
               # node5
               PublicKey = "fyJDrrVSaU6ZBsYY19FPT++PPwX8Muyw9wkA+YxoET0=";
               AllowedIPs = [ "fd8:393:5efa:343::2/64" "10.200.0.2" "fd4:10c9:3065:56db::2" ];
-            };
             }
             {
-            wireguardPeerConfig = {
               # workstation
               PublicKey = "oVPpcobnyHiXoO6nRT537GgTR2wGljg7bOsTUpoN5Wo=";
               AllowedIPs = [ "10.200.0.12" ];
-            };
             }
             # {
-            # wireguardPeerConfig = {
             #   # pitest
             #   PublicKey = "F4yaZ9zabNpQSpV+fXAvla6klsv6SppG3Ic3IMlAxnE=";
             #   AllowedIPs = [ "10.200.0.4" ];
-            # };
             # }
             # {
-            # wireguardPeerConfig = {
             #   # nixfw
             #   PublicKey = "gmCG/K+cVYNdz9R7raBcU+OpGF+lQ9ClCGhfbC3THmY=";
             #   AllowedIPs = [ "fd4:10c9:3065:56db::3" "fd6:266a:7309:60ca::/64" "10.200.0.5" "10.0.0.0/24" "10.0.1.0/24" "10.16.17.0/21" ];
-            # };
             # }
             {
-            wireguardPeerConfig = {
               # iphone 6
               PublicKey = "37dTDJ0/ThwTvJLHDzPSHq7bERSREAgnhCIgKAhc4Qc=";
               AllowedIPs = [ "10.200.0.6" ];
-            };
             }
             {
-            wireguardPeerConfig = {
               # iphone 13
               PublicKey = "KvqfWEJYeBSQfPZ5c9J57izdG6HQ8rLWLaeINf0nHk4=";
               AllowedIPs = [ "10.200.0.7" ];
-            };
             }
             {
-            wireguardPeerConfig = {
               # pi5
               PublicKey = "h6IOeJC8u5ASiXkLkylrHgGrlYc2xdBnwsVg5SX59FQ=";
               AllowedIPs = [ "fd8:393:5efa:343::8/64" "10.200.0.8" ];
-            };
             }
             # {
-            # wireguardPeerConfig = {
             #   # kbuild
             #   PublicKey = "o9QBwnoCsK2LV1b0ppjbKlRZMoE8Z73a6uAfsoq/T3o==";
             #   AllowedIPs = [ "10.200.0.9" ];
-            # };
             # }
             {
-              wireguardPeerConfig = {
                 # hosting
                 PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
                 AllowedIPs = [ "10.200.0.10" ];
-              };
             }
             {
-              wireguardPeerConfig = {
                 # uplink wg server
                 PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
                 AllowedIPs = [ "fd14:5d1a:7fd7:34e8::/64" "fd8:393:5efa:343::100/64" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
-              };
             }
           ];
         };
@@ -304,22 +284,16 @@
           ];
           routes = [
             {
-							routeConfig = {
 								Gateway = "10.200.0.100";
 								Destination = "10.0.0.0/24";
-							};
             }
             {
-							routeConfig = {
 								Gateway = "10.200.0.100";
 								Destination = "10.1.1.0/24";
-							};
             }
             {
-							routeConfig = {
 								Gateway = "fd8:393:5efa:343::100";
 								Destination = "fd14:5d1a:7fd7:34e8::/64";
-							};
             }
           ];
           networkConfig = {
