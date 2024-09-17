@@ -324,9 +324,11 @@
           ];
           networkConfig = {
             IPMasquerade = "both";
-            IPForward = true;
+						IPv4Forwarding = true;
+						IPv6Forwarding = true;
             #DHCPServer = true;
-            DNS = "10.0.0.1, 9.9.9.9";
+            DNS = "10.0.0.1";
+						#DNS = "9.9.9.9";
 
             IPv6AcceptRA = false;
             IPv6SendRA = true;
