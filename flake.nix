@@ -12,7 +12,7 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     systems.url = "github:nix-systems/default";
 		hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
