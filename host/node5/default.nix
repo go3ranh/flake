@@ -98,6 +98,9 @@ in
 						# 	};
             # }
           ];
+					dns = [
+					  "10.200.0.100"
+					];
           networkConfig = {
             IPv6AcceptRA = true;
           };
@@ -275,6 +278,10 @@ in
   hardware.pulseaudio.enable = false;
   services = {
     fwupd.enable = true;
+		resolved = lib.mkForce {
+			enable = true;
+			fallbackDns = [ "10.200.0.100" ]; #"9.9.9.9" ];
+		};
     jack = {
       jackd.enable = false;
       alsa.enable = false;
