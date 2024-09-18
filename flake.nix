@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     systems.url = "github:nix-systems/default";
-		hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -58,7 +58,7 @@
         (result: name: result // {
           "${name}" = lib.nixosSystem rec {
             system = "x86_64-linux";
-						specialArgs = { inherit inputs; };
+            specialArgs = { inherit inputs; };
             modules = [
               ./host/${name}
               sops-nix.nixosModules.sops

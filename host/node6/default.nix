@@ -1,9 +1,9 @@
 { inputs, config, lib, pkgs, ... }:
 
 {
-	boot.plymouth = {
-	  enable = true;
-	};
+  boot.plymouth = {
+    enable = true;
+  };
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -22,12 +22,10 @@
           };
           wireguardPeers = [
             {
-							wireguardPeerConfig = {
-								PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
-								AllowedIPs = [ "10.0.0.0/8" ];
-								Endpoint = "49.13.134.146:1194";
-								PersistentKeepalive = 30;
-							};
+              PublicKey = "fvGBgD6oOqtcgbbLXDRptL1QomkSlKh29I9EhYQx1iw=";
+              AllowedIPs = [ "10.0.0.0/8" ];
+              Endpoint = "49.13.134.146:1194";
+              PersistentKeepalive = 30;
             }
           ];
         };
@@ -51,12 +49,12 @@
           };
         };
       };
-		};
-	};
+    };
+  };
   networking = {
-		hostName = "node6";
+    hostName = "node6";
     networkmanager.enable = true;
-	};
+  };
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
 
@@ -90,7 +88,7 @@
   };
 
   # services.printing.enable = true;
-	# programs.hyprland = {
+  # programs.hyprland = {
   #   enable = true;
   #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   # };
@@ -106,24 +104,24 @@
     tmux
     wget
 
-		# hyprpaper
-		kitty
-		libnotify
-		mako
-		qt5.qtwayland
-		qt6.qtwayland
-		swayidle
-		swaylock-effects
-		wlogout
-		wl-clipboard
-		wofi
-		waybar
+    # hyprpaper
+    kitty
+    libnotify
+    mako
+    qt5.qtwayland
+    qt6.qtwayland
+    swayidle
+    swaylock-effects
+    wlogout
+    wl-clipboard
+    wofi
+    waybar
   ];
 
 
   zramSwap = {
     enable = true;
-	};
+  };
 
   system.stateVersion = "24.05"; # Did you read the comment?
 
@@ -133,31 +131,36 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
+    {
+      device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
       fsType = "btrfs";
-      options = [ "subvol=root"  "compress=zstd"];
+      options = [ "subvol=root" "compress=zstd" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
+    {
+      device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
       fsType = "btrfs";
-      options = [ "subvol=home"  "compress=zstd"];
+      options = [ "subvol=home" "compress=zstd" ];
     };
 
   fileSystems."/var" =
-    { device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
+    {
+      device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
       fsType = "btrfs";
-      options = [ "subvol=var"  "compress=zstd"];
+      options = [ "subvol=var" "compress=zstd" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
+    {
+      device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
       fsType = "btrfs";
       options = [ "subvol=nix" "compress=zstd" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/12CE-A600";
+    {
+      device = "/dev/disk/by-uuid/12CE-A600";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
@@ -169,7 +172,7 @@
   # networking.interfaces.wlp4s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-	hardware = {
+  hardware = {
     cpu.intel.updateMicrocode = true;
     enableRedistributableFirmware = true;
     #enableAllFirmware = true;
