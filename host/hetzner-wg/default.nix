@@ -35,16 +35,16 @@
   ];
 
   boot.loader = {
-		efi = {
-			canTouchEfiVariables = true;
-			efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
-		};
-		grub = {
-			efiSupport = true;
-#efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
-			device = "nodev";
-			enable = true;
-		};
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi"; # ← use the same mount point here.
+    };
+    grub = {
+      efiSupport = true;
+      #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
+      device = "nodev";
+      enable = true;
+    };
     systemd-boot.enable = lib.mkForce false;
   };
 
@@ -57,47 +57,47 @@
         PasswordAuthentication = false;
       };
     };
-		# frr = {
-		#   zebra = {
-		#     enable = true;
-		#   };
-		#   bgp = {
-		#     enable = true;
-		#     config = ''
-		#       interface br0
-		#       interface wg0
-		# 			ip prefix-list NO-PUBLIC-IP deny 49.13.134.146/32
+    # frr = {
+    #   zebra = {
+    #     enable = true;
+    #   };
+    #   bgp = {
+    #     enable = true;
+    #     config = ''
+    #       interface br0
+    #       interface wg0
+    # 			ip prefix-list NO-PUBLIC-IP deny 49.13.134.146/32
     #       ip prefix-list NO-PUBLIC-IP permit any
 
-		# 			route-map BLOCK-PUBLIC-IP deny 10
+    # 			route-map BLOCK-PUBLIC-IP deny 10
     #       match ip address prefix-list NO-PUBLIC-IP
     #       route-map BLOCK-PUBLIC-IP permit 20
-		# 			route-map RPKI permit 10
+    # 			route-map RPKI permit 10
 
     #       match rpki invalid
     #       match rpki valid
 
-		#       router bgp 65500
-		#         bgp router-id 10.200.0.1
-		#         bgp bestpath as-path multipath-relax
-		#         neighbor 10.200.0.100 remote-as internal
-		#         neighbor 10.200.0.100 timers 5 10
-		# 				neighbor 10.200.0.100 bfd
-		#         neighbor 10.200.0.100 route-map BLOCK-PUBLIC-IP out
-		#         neighbor 10.200.0.100 route-map RPKI in
-		#         address-family ipv4 unicast
-		#           ! redistribute connected route-map BLOCK-PUBLIC-IP
-		#           redistribute static route-map BLOCK-PUBLIC-IP
-		# 					network 10.200.0.0/24
-		# 					network 10.200.0.0/24
-		#         exit-address-family
-		#         ! address-family ipv6 unicast
-		#         !   redistribute connected
-		#         ! exit-address-family
-		#       exit
-		#     '';                                                   
-		#   };                                                            
-		# };                                                                    
+    #       router bgp 65500
+    #         bgp router-id 10.200.0.1
+    #         bgp bestpath as-path multipath-relax
+    #         neighbor 10.200.0.100 remote-as internal
+    #         neighbor 10.200.0.100 timers 5 10
+    # 				neighbor 10.200.0.100 bfd
+    #         neighbor 10.200.0.100 route-map BLOCK-PUBLIC-IP out
+    #         neighbor 10.200.0.100 route-map RPKI in
+    #         address-family ipv4 unicast
+    #           ! redistribute connected route-map BLOCK-PUBLIC-IP
+    #           redistribute static route-map BLOCK-PUBLIC-IP
+    # 					network 10.200.0.0/24
+    # 					network 10.200.0.0/24
+    #         exit-address-family
+    #         ! address-family ipv6 unicast
+    #         !   redistribute connected
+    #         ! exit-address-family
+    #       exit
+    #     '';                                                   
+    #   };                                                            
+    # };                                                                    
   };
   networking = {
     hostName = "hetzner-wg";
@@ -262,14 +262,14 @@
             #   AllowedIPs = [ "10.200.0.9" ];
             # }
             {
-                # hosting
-                PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
-                AllowedIPs = [ "10.200.0.10" ];
+              # hosting
+              PublicKey = "QLmN/DuZHvTwF3hQOR6ZHBZhVtVS00Hga250nMX/Ez0=";
+              AllowedIPs = [ "10.200.0.10" ];
             }
             {
-                # uplink wg server
-                PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
-                AllowedIPs = [ "fd14:5d1a:7fd7:34e8::/64" "fd8:393:5efa:343::100/64" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
+              # uplink wg server
+              PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
+              AllowedIPs = [ "fd14:5d1a:7fd7:34e8::/64" "fd8:393:5efa:343::100/64" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
             }
           ];
         };
@@ -279,30 +279,30 @@
           matchConfig.Name = "wg0";
           address = [
             "10.200.0.1/24"
-						"fd8:393:5efa:343::1/64"
+            "fd8:393:5efa:343::1/64"
             #"fd4:10c9:3065:56db::1/64"
           ];
           routes = [
             {
-								Gateway = "10.200.0.100";
-								Destination = "10.0.0.0/24";
+              Gateway = "10.200.0.100";
+              Destination = "10.0.0.0/24";
             }
             {
-								Gateway = "10.200.0.100";
-								Destination = "10.1.1.0/24";
+              Gateway = "10.200.0.100";
+              Destination = "10.1.1.0/24";
             }
             {
-								Gateway = "fd8:393:5efa:343::100";
-								Destination = "fd14:5d1a:7fd7:34e8::/64";
+              Gateway = "fd8:393:5efa:343::100";
+              Destination = "fd14:5d1a:7fd7:34e8::/64";
             }
           ];
           networkConfig = {
             IPMasquerade = "both";
-						IPv4Forwarding = true;
-						IPv6Forwarding = true;
+            IPv4Forwarding = true;
+            IPv6Forwarding = true;
             #DHCPServer = true;
             DNS = "10.0.0.1";
-						#DNS = "9.9.9.9";
+            #DNS = "9.9.9.9";
 
             IPv6AcceptRA = false;
             IPv6SendRA = true;

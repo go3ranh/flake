@@ -1,21 +1,11 @@
 {
   description = "A very basic flake";
 
-  nixConfig = {
-    extra-substituters = [
-      # "https://hydra.goeranh.selfhosted"
-      # "https://attic.goeranh.selfhosted"
-    ];
-    extra-trusted-public-keys = [
-      # "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
-    ];
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     systems.url = "github:nix-systems/default";
-		hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -49,7 +39,7 @@
         hostingpi = lib.nixosSystem rec {
           system = "aarch64-linux";
           modules = [
-            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.pitest.config; })
+            (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.hostingpi.config; })
             (import ./host/hostingpi/default.nix { inherit lib inputs; config = self.nixosConfigurations.hostingpi.config; pkgs = pkgsarm64; })
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             sops-nix.nixosModules.sops
@@ -68,7 +58,7 @@
         (result: name: result // {
           "${name}" = lib.nixosSystem rec {
             system = "x86_64-linux";
-						specialArgs = { inherit inputs; };
+            specialArgs = { inherit inputs; };
             modules = [
               ./host/${name}
               sops-nix.nixosModules.sops
@@ -77,13 +67,9 @@
           };
         })
         { } [
-        "dockerhost"
-        "kbuild"
         "nixfw"
         "node5"
         "node6"
-        "workstation"
-        #"desktop"
       ] // builtins.foldl'
         (result: name: result // {
           "${name}" = lib.nixosSystem rec {
@@ -107,28 +93,12 @@
           };
         })
         { } [
-        "forgejo"
-        "hedgedoc"
         "hetzner-wg"
-        "hydra"
-        "kanidm"
-        "monitoring"
-        "nextcloud"
-        "nixfw2"
-        "nixtesthost"
-        "vaultwarden"
       ];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
       packages.x86_64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgs; };
       packages.aarch64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgsarm64; };
-      hydraJobs = lib.mapAttrs (_: lib.hydraJob) (
-        let
-          getBuildEntryPoint = _: nixosSystem:
-            nixosSystem.config.system.build.toplevel;
-        in
-        lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-      );
       devShells = {
         x86_64-linux = {
           default = pkgs.mkShell {

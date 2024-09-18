@@ -4,24 +4,24 @@ let
   domain = "goeranh.selfhosted";
   gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
     baobab # disk usage analyzer
-    gnome.cheese # photo booth
+    cheese # photo booth
     #eog         # image viewer
     #epiphany    # web browser
     simple-scan # document scanner
     #totem       # video player
     yelp # help viewer
     evince # document viewer
-    gnome.geary # email client
+    geary # email client
 
     # these should be self explanatory
-    gnome.gnome-calendar
+    gnome-calendar
     #gnome-clocks
     #gnome-contacts
-    gnome.gnome-font-viewer
-    gnome.gnome-logs
-    gnome.gnome-maps
-    gnome.gnome-music
-    gnome.gnome-weather
+    gnome-font-viewer
+    gnome-logs
+    gnome-maps
+    gnome-music
+    gnome-weather
     gnome-connections
   ];
   pkgs = nixpkgs.legacyPackages.${arch};
@@ -175,7 +175,7 @@ in
       openssh.authorizedKeys.keys = mkIf cfg.server [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHZP250IoyRgSYNc/0xilSxJcY36gFnPnm2r7vZlKX6C"
-				"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEkaHbbPLiWNg7pbidfv06d9GsOk4QUVivfIazriZ3EG" # handy
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEkaHbbPLiWNg7pbidfv06d9GsOk4QUVivfIazriZ3EG" # handy
       ];
       packages = builtins.concatLists [
         (with nixpkgs.legacyPackages.${arch}; [
@@ -193,7 +193,7 @@ in
           ferdium
           filezilla
           firefox
-          gnome.gnome-terminal
+          gnome-terminal
           libreoffice
           okular
           pika-backup
@@ -611,8 +611,8 @@ in
     };
 
     services.flatpak = lib.mkIf cfg.desktop {
-			enable = true;
-		};
+      enable = true;
+    };
     xdg.portal = lib.mkIf cfg.desktop {
       enable = true;
       xdgOpenUsePortal = true;
@@ -662,7 +662,7 @@ in
           ])
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
-            gnome.adwaita-icon-theme
+            adwaita-icon-theme
           ] else [ ])
         ];
       etc = {
@@ -708,13 +708,13 @@ in
       LC_TIME = "de_DE.UTF-8";
     };
 
-	  networking = {
+    networking = {
       firewall.enable = true;
       nftables.enable = true;
       #nameservers = [ "10.0.0.1" ];
       domain = "${domain}";
       #search = [ "${domain}" ];
-	  };
+    };
 
     console.keyMap = "de";
 
