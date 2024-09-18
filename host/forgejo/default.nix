@@ -52,14 +52,6 @@
           proxyPass = "http://unix:${config.services.forgejo.settings.server.HTTP_ADDR}";
         };
       };
-      virtualHosts."hound.${config.networking.domain}" = {
-        enableACME = true;
-        #default = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://localhost:6080";
-        };
-      };
     };
     forgejo = {
       enable = true;
@@ -78,35 +70,6 @@
         log.LEVEL = "Warn";
       };
       package = pkgs.forgejo;
-    };
-    hound = {
-      enable = true;
-      listen = "127.0.0.1:6080";
-      config = ''
-        			{
-                "dbpath" : "${config.services.hound.home}/db",
-                "repos" : {
-                  "nixpkgs" : {
-                    "url" : "https://github.com/nixos/nixpkgs",
-                    "vcs-config" : {
-                      "ref" : "nixos-unstable"
-                    }
-                  },
-                  "flakeathome" : {
-                    "url" : "https://forgejo.${config.networking.domain}/goeranh/flakeathome.git",
-                    "vcs-config" : {
-                      "ref" : "main"
-                    }
-                  },
-                  "sturaflake" : {
-                    "url" : "https://forgejo.${config.networking.domain}/goeranh/sturaflake",
-                    "vcs-config" : {
-                      "ref" : "master"
-                    }
-                  }
-                }
-              }
-        			'';
     };
   };
   networking = {
