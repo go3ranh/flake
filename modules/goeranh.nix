@@ -4,24 +4,24 @@ let
   domain = "goeranh.selfhosted";
   gnomeexclude = with nixpkgs.legacyPackages.${arch}; [
     baobab # disk usage analyzer
-    gnome.cheese # photo booth
+    cheese # photo booth
     #eog         # image viewer
     #epiphany    # web browser
     simple-scan # document scanner
     #totem       # video player
     yelp # help viewer
     evince # document viewer
-    gnome.geary # email client
+    geary # email client
 
     # these should be self explanatory
-    gnome.gnome-calendar
+    gnome-calendar
     #gnome-clocks
     #gnome-contacts
-    gnome.gnome-font-viewer
-    gnome.gnome-logs
-    gnome.gnome-maps
-    gnome.gnome-music
-    gnome.gnome-weather
+    gnome-font-viewer
+    gnome-logs
+    gnome-maps
+    gnome-music
+    gnome-weather
     gnome-connections
   ];
   pkgs = nixpkgs.legacyPackages.${arch};
@@ -193,7 +193,7 @@ in
           ferdium
           filezilla
           firefox
-          gnome.gnome-terminal
+          gnome-terminal
           libreoffice
           okular
           pika-backup
@@ -662,7 +662,7 @@ in
           ])
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
-            gnome.adwaita-icon-theme
+            adwaita-icon-theme
           ] else [ ])
         ];
       etc = {
