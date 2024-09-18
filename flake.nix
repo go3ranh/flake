@@ -122,13 +122,6 @@
 
       packages.x86_64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgs; };
       packages.aarch64-linux = import ./packages.nix { inherit inputs lib self; archpkgs = pkgsarm64; };
-      hydraJobs = lib.mapAttrs (_: lib.hydraJob) (
-        let
-          getBuildEntryPoint = _: nixosSystem:
-            nixosSystem.config.system.build.toplevel;
-        in
-        lib.mapAttrs getBuildEntryPoint self.nixosConfigurations
-      );
       devShells = {
         x86_64-linux = {
           default = pkgs.mkShell {
