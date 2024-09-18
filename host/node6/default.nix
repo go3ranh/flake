@@ -62,7 +62,6 @@
 
   programs.git.enable = true;
 
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   services = {
     fwupd.enable = true;
@@ -132,6 +131,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+	boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_11;
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/30783b24-0831-4621-a16a-7a9daac30a12";
