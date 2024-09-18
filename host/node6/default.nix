@@ -62,7 +62,6 @@
 
   programs.git.enable = true;
 
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   services = {
     fwupd.enable = true;

@@ -1,16 +1,6 @@
 {
   description = "A very basic flake";
 
-  nixConfig = {
-    extra-substituters = [
-      # "https://hydra.goeranh.selfhosted"
-      # "https://attic.goeranh.selfhosted"
-    ];
-    extra-trusted-public-keys = [
-      # "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
-    ];
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
@@ -77,13 +67,9 @@
           };
         })
         { } [
-        "dockerhost"
-        "kbuild"
         "nixfw"
         "node5"
         "node6"
-        "workstation"
-        #"desktop"
       ] // builtins.foldl'
         (result: name: result // {
           "${name}" = lib.nixosSystem rec {
@@ -107,16 +93,7 @@
           };
         })
         { } [
-        "forgejo"
-        "hedgedoc"
         "hetzner-wg"
-        "hydra"
-        "kanidm"
-        "monitoring"
-        "nextcloud"
-        "nixfw2"
-        "nixtesthost"
-        "vaultwarden"
       ];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 

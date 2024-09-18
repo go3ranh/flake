@@ -265,7 +265,8 @@
           networkConfig = {
             #IPMasquerade = true;
             IPv6AcceptRA = false;
-            IPForward = true;
+            IPv4Forwarding = true;
+            IPv6Forwarding = true;
           };
         };
         wg1 = {
@@ -282,7 +283,8 @@
             }
           ];
           networkConfig = {
-            IPForward = true;
+            IPv4Forwarding = true;
+            IPv6Forwarding = true;
           };
         };
         ens18 = {
