@@ -289,8 +289,9 @@ in
               move-to-workspace-5 = [ "<Primary><Shift><Alt>percent" ];
               move-to-workspace-left = [ "<Primary><Shift><Alt>h" ];
               move-to-workspace-right = [ "<Primary><Shift><Alt>l" ];
-              switch-applications = [];
-              switch-applications-backward = [];
+              # error: Please create empty array with mkEmptyArray.
+              # switch-applications = [];
+              # switch-applications-backward = [];
               switch-to-workspace-1 = [ "<Primary><Alt>1" ];
               switch-to-workspace-2 = [ "<Primary><Alt>2" ];
               switch-to-workspace-3 = [ "<Primary><Alt>3" ];
