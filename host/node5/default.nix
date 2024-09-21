@@ -405,7 +405,7 @@ in
 
   boot.supportedFilesystems = [ "zfs" "ntfs" ];
   networking.hostId = "2b34dd1b";
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  #boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   boot.loader.efi.efiSysMountPoint = with builtins;
     (zfsRoot.mirroredEfi + (head zfsRoot.bootDevices) + zfsRoot.partitionScheme.efiBoot);
   boot.zfs.devNodes = zfsRoot.devNodes;
