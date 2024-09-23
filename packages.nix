@@ -321,15 +321,7 @@
     '';
 
     goeranh = archpkgs.writeText ".goeranh" ''
-      alias :q="exit"
-      alias :Q="exit"
-      alias tml="tmux ls"
-      alias tma="tmux ls && tmux a || tmux"
-      alias lls="/bin/ls --color"
-      alias vim="nvim"
       export EDITOR="nvim"
-      alias open="xdg-open"
-      alias cd="z"
       
       #open tmux session with pwd as session name
       function tmn (){
