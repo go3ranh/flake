@@ -271,6 +271,11 @@
               PublicKey = "CDCHstc28M2dTE0ujkI6KuxhL1aBAhHc+kIIlGECATM=";
               AllowedIPs = [ "fd14:5d1a:7fd7:34e8::/64" "fd8:393:5efa:343::100/64" "10.200.0.100" "10.0.0.0/24" "10.1.1.0/24" "192.168.178.0/24" ];
             }
+            {
+              # windows desktop
+              PublicKey = "QLd9jaLSE0nrJdbWJBaP9dfuSF9hYVXYG5MDEtb4uFc=";
+              AllowedIPs = [ "10.200.0.15" ];
+            }
           ];
         };
       };
