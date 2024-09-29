@@ -674,6 +674,7 @@ in
           (if cfg.desktop then with nixpkgs.legacyPackages.${arch}; [
             signal-desktop
             adwaita-icon-theme
+            moonlight-qt
           ] else [ ])
         ];
       etc = {
