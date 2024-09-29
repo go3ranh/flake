@@ -532,11 +532,6 @@ in
           source ${self.packages.${arch}.settings.bashrc.outPath}
           source ${self.packages.${arch}.settings.goeranh.outPath}
         '';
-        undistractMe = {
-          enable = true;
-          playSound = true;
-          timeout = 30;
-        };
         shellAliases = {
           ":q" = "exit";
           ":Q" = "exit";
@@ -545,7 +540,7 @@ in
           "lls" = "/bin/ls --color";
           "vim" = "nvim";
           "open" = "xdg-open";
-          "cd" = "z";
+          # "cd" = "z";
         };
       };
       tmux = {
