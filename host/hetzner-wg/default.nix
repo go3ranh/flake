@@ -154,37 +154,6 @@
     };
   };
 
-  containers = {
-    public-ssh = {
-      autoStart = true;
-      privateNetwork = true;
-      hostBridge = "br0";
-      localAddress = "10.20.0.2/24";
-      config = { config, pkgs, ... }: {
-
-        system.stateVersion = "23.11";
-
-        users.users.goeranh = {
-          isNormalUser = true;
-        };
-        services.openssh.enable = true;
-        environment.systemPackages = with pkgs; [
-          htop
-        ];
-
-        networking = {
-          defaultGateway.address = "10.10.0.1";
-          firewall = {
-            enable = true;
-            allowedTCPPorts = [ 22 ];
-          };
-        };
-
-        environment.etc."resolv.conf".text = "nameserver 8.8.8.8";
-      };
-    };
-  };
-
   systemd = {
     services = {
       wireguard-setup = {
