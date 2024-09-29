@@ -5,7 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     systems.url = "github:nix-systems/default";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -25,7 +24,7 @@
       inputs.systems.follows = "systems";
     };
   };
-  outputs = { self, flake-utils, systems, nixpkgs, hyprland, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
+  outputs = { self, flake-utils, systems, nixpkgs, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsarm64 = nixpkgs.legacyPackages.aarch64-linux;
