@@ -302,7 +302,7 @@
     description = "goeranh settings / dotfiles";
     bashrc = archpkgs.writeText ".bashrc" ''
             			FZF_ALT_C_COMMAND= eval "$(${archpkgs.fzf.outPath}/bin/fzf --bash)"
-      						eval "$(${archpkgs.zoxide.outPath}/bin/zoxide init bash)"
+      						#eval "$(${archpkgs.zoxide.outPath}/bin/zoxide init bash)"
       						. ${archpkgs.git.outPath}/share/bash-completion/completions/git
                   export XDG_CONFIG_HOME="/home/goeranh/.config"
                   export XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS:/home/goeranh/.config"
