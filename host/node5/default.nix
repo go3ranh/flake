@@ -265,6 +265,19 @@ in
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   services = {
+		postgresql = {
+			enable = true;
+			ensureUsers = [
+				{
+					name = "goeranh";
+					ensureClauses = {
+						superuser = true;
+						createrole = true;
+						createdb = true;
+					};
+				}
+			];
+		};
     fwupd.enable = true;
     resolved = lib.mkForce {
       enable = true;
