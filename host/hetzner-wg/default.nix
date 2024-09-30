@@ -43,12 +43,69 @@
 
   users.users.goeranh.initialPassword = "testtest";
 
+	containers = {
+		forgejo = {
+			config = { config, pkgs, lib, ... }:{
+				system.stateVersion = "24.05";
+				networking = {
+					hostName = "forgejo";
+					defaultGateway.address = "192.168.22.1";
+					firewall.allowedTCPPorts = [ 22 3000 ];
+				};
+
+				services = {
+					openssh.enable = true;
+					forgejo = {
+						enable = true;
+						settings = {
+							session.COOKIE_SECURE = true;
+							server = {
+								DOMAIN = "git.goeranh.de";
+								ROOT_URL = "https://git.goeranh.de";
+							};
+							service = {
+								DISABLE_REGISTRATION = false;
+								REQUIRE_SIGNIN_VIEW = true;
+							};
+						};
+					};
+				};
+			};
+			autoStart = true;
+      privateNetwork = true;
+			hostBridge = "br0";
+			localAddress = "192.168.22.2/24";
+		};
+	};
+
+	security.acme = {
+		defaults = {
+			server = lib.mkForce "https://acme-v02.api.letsencrypt.org/directory";
+			#server = lib.mkForce "https://acme-staging-v02.api.letsencrypt.org/directory";
+		};
+	};
   services = {
+		nginx = {
+			enable = true;
+			virtualHosts."git.goeranh.de" = {
+				enableACME = true;
+				forceSSL = true;
+				locations."/" = {
+					proxyPass = "http://192.168.22.2:3000/";
+				};
+			};
+		};
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
       };
+			listenAddresses = [
+			{
+				addr = "10.200.0.1";
+				port = 22;
+			}
+			];
     };
     # frr = {
     #   zebra = {
@@ -94,6 +151,8 @@
   };
   networking = {
     hostName = "hetzner-wg";
+    domain = lib.mkForce "goeranh.de";
+		nameservers = [ "9.9.9.9" ];
 
     useDHCP = false;
     # allow wireguard port
@@ -104,7 +163,7 @@
       ruleset = ''
         			  table inet filter {
         					chain input {
-        						type filter hook input priority 0;
+        						type filter hook input priority 0; policy drop;
         						iifname lo accept
         						ct state {established, related} accept
         						# allow wireguard traffic
@@ -115,7 +174,7 @@
         						ip saddr { 10.200.0.2 } tcp dport { 22, 80, 443 } counter accept
         						ip saddr { 10.200.0.100 } tcp dport { 179 } counter accept
 
-        						counter accept
+        						ip daddr 49.13.134.146 tcp dport { 22, 80, 443 } counter accept
         					}
 
         					chain output {
@@ -133,6 +192,8 @@
         					chain forward {
         						type filter hook forward priority 0;
         						ct state {established, related} accept
+										iifname "br0" oifname "br0" accept
+        						iifname "eth0" ip daddr 192.168.22.2 tcp dport 22 accept
         						#iifname wg0 oifname wg0 counter accept
         						#iifname "wg0" oifname "wg0" jump forward-wg
         						counter accept
@@ -144,6 +205,14 @@
       enable = true;
       internalInterfaces = [ "br0" ];
       externalInterface = "eth0";
+
+			forwardPorts = [
+			  {
+					destination = "192.168.22.2:22";
+					proto = "tcp";
+					sourcePort = 22;
+				}
+			];
     };
   };
 
