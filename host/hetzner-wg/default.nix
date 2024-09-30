@@ -240,6 +240,12 @@
             }
           ];
         };
+				"20-br0" = {
+          netdevConfig = {
+            Kind = "bridge";
+            Name = "br0";
+          };
+        };
       };
       networks = {
         wg0 = {
@@ -286,6 +292,17 @@
           ];
           networkConfig = {
             IPv6AcceptRA = false;
+          };
+        };
+				"40-br0" = {
+          matchConfig.Name = "br0";
+          bridgeConfig = { };
+          networkConfig.LinkLocalAddressing = "no";
+          address = [
+            "192.168.22.1/24"
+          ];
+          networkConfig = {
+            ConfigureWithoutCarrier = true;
           };
         };
       };
