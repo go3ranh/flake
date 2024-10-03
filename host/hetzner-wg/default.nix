@@ -307,6 +307,11 @@
               PublicKey = "QLd9jaLSE0nrJdbWJBaP9dfuSF9hYVXYG5MDEtb4uFc=";
               AllowedIPs = [ "10.200.0.15" ];
             }
+            {
+              # ipad
+              PublicKey = "WjOVzS9O1raWjhDRpIjY1p7NZEUYWN61wNYcvvSlel8=";
+              AllowedIPs = [ "10.200.0.16" ];
+            }
           ];
         };
         "20-br0" = {
