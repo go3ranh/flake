@@ -134,10 +134,8 @@ in
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
         trusted-public-keys = [
-          "hydra.goeranh.selfhosted:izMfkAqpPQB0mp/ApBzCyj8rGANmjz12T0c91GJSYZI="
         ];
         trusted-substituters = mkIf cfg.trust-builder [
-          "https://hydra.nixos.org/"
           # "https://hydra.${config.networking.domain}"
           # "https://attic.${config.networking.domain}"
         ];
