@@ -340,6 +340,10 @@
       function iplookup (){
       		${archpkgs.curl}/bin/curl http://ip-api.com/$1
       }
+
+      function flakehosts (){
+      		nix flake show --json | jq .nixosConfigurations | jq 'keys[]'
+      }
       
       function motd (){
       	#6 - matrix; 25 - zelt
