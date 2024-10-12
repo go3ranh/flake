@@ -300,7 +300,7 @@ in
     gnome = {
       gnome-keyring.enable = true;
     };
-    printing.enable = true;
+    printing.enable = false;
     #avahi.enable = true;
     #avahi.nssmdns = true;
     openssh.enable = lib.mkForce false;
