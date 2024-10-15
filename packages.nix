@@ -312,6 +312,7 @@
                   eval "$(direnv hook bash)"
                   HISTFILESIZE=100000
                   HISTSIZE=100000
+									HISTTIMEFORMAT="%F %T "
       
                   shopt -s histappend
                   shopt -s checkwinsize
