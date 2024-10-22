@@ -107,47 +107,11 @@
         }
       ];
     };
-    # frr = {
-    #   zebra = {
-    #     enable = true;
-    #   };
-    #   bgp = {
-    #     enable = true;
-    #     config = ''
-    #       interface br0
-    #       interface wg0
-    # 			ip prefix-list NO-PUBLIC-IP deny 49.13.134.146/32
-    #       ip prefix-list NO-PUBLIC-IP permit any
-
-    # 			route-map BLOCK-PUBLIC-IP deny 10
-    #       match ip address prefix-list NO-PUBLIC-IP
-    #       route-map BLOCK-PUBLIC-IP permit 20
-    # 			route-map RPKI permit 10
-
-    #       match rpki invalid
-    #       match rpki valid
-
-    #       router bgp 65500
-    #         bgp router-id 10.200.0.1
-    #         bgp bestpath as-path multipath-relax
-    #         neighbor 10.200.0.100 remote-as internal
-    #         neighbor 10.200.0.100 timers 5 10
-    # 				neighbor 10.200.0.100 bfd
-    #         neighbor 10.200.0.100 route-map BLOCK-PUBLIC-IP out
-    #         neighbor 10.200.0.100 route-map RPKI in
-    #         address-family ipv4 unicast
-    #           ! redistribute connected route-map BLOCK-PUBLIC-IP
-    #           redistribute static route-map BLOCK-PUBLIC-IP
-    # 					network 10.200.0.0/24
-    # 					network 10.200.0.0/24
-    #         exit-address-family
-    #         ! address-family ipv6 unicast
-    #         !   redistribute connected
-    #         ! exit-address-family
-    #       exit
-    #     '';                                                   
-    #   };                                                            
-    # };                                                                    
+    frr = {
+      ospf = {
+        enable = true;
+      };
+    };                                                                    
   };
   networking = {
     hostName = "hetzner-wg";
