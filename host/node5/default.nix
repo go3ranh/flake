@@ -213,6 +213,10 @@ in
         group = "root";
         mode = "0400";
       };
+      "nixAccessTokens" = {
+        group = config.users.groups.keys.name;
+        mode = "0440";
+      };
     };
   };
 
@@ -238,6 +242,9 @@ in
   hardware.hackrf.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+  nix.extraOptions = ''
+    	!include ${config.sops.secrets.nixAccessTokens.path}
+    	'';
   nix.settings.trusted-users = [
     "goeranh"
   ];
@@ -253,6 +260,7 @@ in
   ];
 
   virtualisation.libvirtd.enable = true;
+  virtualisation.podman.enable = true;
   programs.dconf.enable = true;
   programs.nh = {
     enable = true;
@@ -271,6 +279,13 @@ in
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   services = {
+    fprintd = {
+      enable = true;
+      tod = {
+        enable = true;
+        driver = pkgs.libfprint-2-tod1-goodix;
+      };
+    };
     postgresql = {
       enable = true;
       ensureUsers = [
