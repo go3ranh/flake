@@ -174,11 +174,11 @@
         "nixvim": "nixvim"
       },
       "locked": {
-        "lastModified": 1729872691,
-        "narHash": "sha256-nIxSg+R5Xgl0Fg6VLDUmMltRCh2smdeHkOvDZ8wUS3A=",
+        "lastModified": 1729890524,
+        "narHash": "sha256-/S/rK/ZEUq51+5FFsMbi3Fe6NOFI3f8g/yYt96O4638=",
         "ref": "refs/heads/main",
-        "rev": "d0dac1762367a5e78613e7e28cf6eb2204c22f80",
-        "revCount": 6,
+        "rev": "332124138c81e871486ba3268384d780572d7873",
+        "revCount": 7,
         "type": "git",
         "url": "https://git.goeranh.de/goeranh/nixvim.git"
       },
