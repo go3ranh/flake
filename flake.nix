@@ -67,6 +67,7 @@
         })
         { } [
         "nixfw"
+        "builder"
         "node5"
         "node6"
       ] // builtins.foldl'
