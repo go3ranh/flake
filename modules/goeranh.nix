@@ -219,7 +219,8 @@ in
         (if cfg.development then with nixpkgs.legacyPackages.${arch}; [
           binwalk
           file
-					jetbrains.idea-community
+          jetbrains.idea-community
+          insomnia
           # ghidra
           # libxcrypt
           # meson
