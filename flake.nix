@@ -71,7 +71,6 @@
         })
         { } [
         "nixfw"
-        "builder"
         "node5"
         "node6"
       ] // builtins.foldl'
@@ -98,6 +97,7 @@
         })
         { } [
         "hetzner-wg"
+        "builder"
       ];
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
