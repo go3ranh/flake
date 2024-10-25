@@ -3,22 +3,39 @@
 {
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-label/nixos";
-      fsType = "ext4";
+  disko.devices = {
+    disk = {
+      sda = {
+        device = "/dev/sda";
+        type = "disk";
+        content = {
+          type = "gpt";
+          partitions = {
+            boot = {
+              size = "1M";
+              type = "EF02"; # for grub MBR
+            };
+            root = {
+              size = "100%";
+              name = "nixos";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/";
+              };
+            };
+          };
+        };
+      };
     };
-
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-label/boot";
-      fsType = "vfat";
-    };
-
+  };
 
   boot = {
+    loader.grub = {
+      enable = false;
+    };
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot.enable = lib.mkForce false;
       efi.canTouchEfiVariables = true;
     };
     initrd = {
@@ -32,7 +49,7 @@
   networking = {
     hostName = "build";
     useDHCP = lib.mkForce false;
-		nftables.enable = true;
+    nftables.enable = true;
   };
   time.timeZone = "Europe/Berlin";
 
@@ -48,14 +65,12 @@
     remote-store = false;
   };
 
-  services = {
-  };
+  services = { };
 
   systemd = {
     network = {
       enable = true;
-      netdevs = {
-      };
+      netdevs = { };
       networks = {
         ens18 = {
           matchConfig.Name = "ens18";
@@ -72,10 +87,9 @@
         };
       };
     };
-    services = {
-    };
+    services = { };
   };
 
-  system.stateVersion = "24.05";
+  system.stateVersion = lib.mkForce "24.05";
 }
 
