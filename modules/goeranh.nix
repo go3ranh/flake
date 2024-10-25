@@ -125,7 +125,7 @@ in
         acceptTerms = true;
       };
     };
-		time.timeZone = "Europe/Berlin";
+    time.timeZone = "Europe/Berlin";
     nix = {
       registry = {
         fah.flake = self;

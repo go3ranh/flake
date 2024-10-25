@@ -111,7 +111,7 @@
       ospf = {
         enable = true;
       };
-    };                                                                    
+    };
   };
   networking = {
     hostName = "hetzner-wg";
