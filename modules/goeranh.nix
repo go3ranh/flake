@@ -235,6 +235,9 @@ in
         ] else [ ])
       ];
     };
+    fonts.packages = [ (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" "NerdFontsSymbolsOnly" ]; }) ];
+    #fonts.packages = [ (pkgs.nerdfonts) ];
+
 
     programs = {
       # steam = mkIf cfg.gaming {
@@ -644,7 +647,8 @@ in
       gnome.excludePackages = mkIf cfg.desktop gnomeexclude;
       systemPackages = builtins.concatLists
         [
-          [ self.packages.${arch}.customvim ]
+          #[ self.packages.${arch}.customvim ]
+          [ self.inputs.myvim.packages.x86_64-linux.nixvim ]
           (with nixpkgs.legacyPackages.${arch}; [
             attic-client
             bash
