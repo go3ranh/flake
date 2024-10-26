@@ -9,6 +9,10 @@
       url = "git+https://git.goeranh.de/goeranh/nixvim.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ifstate = {
+      url = "git+https://codeberg.org/m4rc3l/ifstate.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -28,7 +32,7 @@
       inputs.systems.follows = "nixpkgs";
     };
   };
-  outputs = { self, flake-utils, systems, nixpkgs, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix, myvim }@inputs:
+  outputs = { self, flake-utils, systems, nixpkgs, nixos-generators, flake-schemas, nixos-hardware, disko, sops-nix, myvim, ifstate }@inputs:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       pkgsarm64 = nixpkgs.legacyPackages.aarch64-linux;
@@ -81,6 +85,8 @@
               ./host/${name}
               sops-nix.nixosModules.sops
               disko.nixosModules.disko
+              ifstate.nixosModules.default
+              { nixpkgs.overlays = [ ifstate.overlays.default ]; }
               (import ./modules/goeranh.nix { inherit self inputs lib nixpkgs; arch = system; config = self.nixosConfigurations.${name}.config; })
               {
                 boot = {
