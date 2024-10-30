@@ -32,7 +32,7 @@
 
   boot = {
     loader.grub = {
-      enable = false;
+      enable = true;
     };
     loader = {
       systemd-boot.enable = lib.mkForce false;
@@ -65,7 +65,24 @@
     remote-store = false;
   };
 
-  services = { };
+  nix = {
+    sshServe = {
+      enable = true;
+      keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICt3IRfe/ysPl8jKMgYYlo2EEDnoyyQ/bY2u6qqMuWsQ goeranh@node5"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF+45vPiX86aXqAosIcy8KAYKOswkGbZyJadJR61YZ9Z root@node5"
+      ];
+      write = true;
+    };
+
+  };
+
+  services = {
+    nix-serve = {
+      enable = true;
+      openFirewall = true;
+    };
+  };
 
   systemd = {
     network = {
