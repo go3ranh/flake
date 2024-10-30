@@ -262,10 +262,10 @@ in
   virtualisation.libvirtd.enable = true;
   virtualisation.podman.enable = true;
   programs.dconf.enable = true;
-  nix  = {
-      gc = {
-        automatic = lib.mkForce false;
-      };
+  nix = {
+    gc = {
+      automatic = lib.mkForce false;
+    };
   };
   programs.nh = {
     enable = true;
