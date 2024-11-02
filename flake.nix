@@ -6,7 +6,7 @@
     flake-schemas.url = "github:DeterminateSystems/flake-schemas";
     systems.url = "github:nix-systems/default";
     myvim = {
-      url = "git+https://git.goeranh.de/goeranh/nixvim.git";
+      url = "git+ssh://forgejo@git.goeranh.de/goeranh/nixvim.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ifstate = {
