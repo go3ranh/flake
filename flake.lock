@@ -333,11 +333,11 @@
         "rev": "3d6894b8d1685e2c182aed9728127183b320626e",
         "revCount": 11,
         "type": "git",
-        "url": "https://git.goeranh.de/goeranh/nixvim.git"
+        "url": "ssh://forgejo@git.goeranh.de/goeranh/nixvim.git"
       },
       "original": {
         "type": "git",
-        "url": "https://git.goeranh.de/goeranh/nixvim.git"
+        "url": "ssh://forgejo@git.goeranh.de/goeranh/nixvim.git"
       }
     },
     "nix-darwin": {
