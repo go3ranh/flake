@@ -327,11 +327,11 @@
         "nixvim": "nixvim"
       },
       "locked": {
-        "lastModified": 1730659718,
-        "narHash": "sha256-PRmZi4x6I7h6vEQEhCT4sz75Q/HXNZhBSBiuDkVzGng=",
+        "lastModified": 1730660027,
+        "narHash": "sha256-TfFeJ1JJ7LPf4lVhWfvft3QInQMPXXwY3CqbhZw51PM=",
         "ref": "refs/heads/main",
-        "rev": "476e6ae6cd7871287f99a8f61f90fc020c940bd1",
-        "revCount": 12,
+        "rev": "d935581adffff9a5415481865b4c05c6d44b85ca",
+        "revCount": 13,
         "type": "git",
         "url": "ssh://forgejo@git.goeranh.de/goeranh/nixvim.git"
       },
