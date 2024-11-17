@@ -729,6 +729,7 @@ in
       firewall.enable = true;
       nftables.enable = true;
       #nameservers = [ "10.0.0.1" ];
+      nameservers = [ "9.9.9.9" ];
       domain = "${domain}";
       #search = [ "${domain}" ];
     };
