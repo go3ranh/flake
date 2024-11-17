@@ -86,9 +86,9 @@ in
             # 		Destination = "10.16.17.0/21";
             # }
           ];
-          dns = [
-            "10.200.0.100"
-          ];
+          # dns = [
+          #   "10.200.0.100"
+          # ];
           networkConfig = {
             IPv6AcceptRA = true;
           };
