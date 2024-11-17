@@ -738,8 +738,8 @@ in
 
     services = {
       gnome = mkIf cfg.desktop {
-        tracker.enable = true;
-        tracker-miners.enable = true;
+        tinysparql.enable = true;
+        localsearch.enable = true;
       };
       resolved = {
         enable = true;
